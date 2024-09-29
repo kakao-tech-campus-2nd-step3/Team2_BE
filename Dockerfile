@@ -1,13 +1,18 @@
+FROM gradle:8.10-jdk21 AS build
+
+COPY --chown=gradle:gradle . /home/gradle/project
+
+WORKDIR /home/gradle/project
+
+RUN gradle build -x test
+
 FROM amd64/amazoncorretto:21
 
-ARG JAR_FILE=build/libs/*.jar
+COPY --from=build /home/gradle/project/build/libs/*.jar /app.jar
 
-WORKDIR /app
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-jar", "/app.jar"]
 
-COPY ${JAR_FILE} app.jar
 
-RUN yum install -y procps lsof
 
-EXPOSE 8080
 
-ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-jar", "-Dspring.profiles.active=dev", "/app/app.jar"]
+

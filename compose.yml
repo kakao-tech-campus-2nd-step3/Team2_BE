@@ -1,0 +1,24 @@
+
+
+services:
+  db:
+    image: mysql:latest  #MySQL 이미지 버전맞춰서하면될듯
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+  app:
+    image: aeatbe # 사전에 빌드된 Spring Boot 애플리케이션 이미지
+    container_name: AEat
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: db경로 #db경로
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "8080:8080"
