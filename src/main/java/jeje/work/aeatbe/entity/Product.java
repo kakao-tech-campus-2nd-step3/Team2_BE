@@ -1,9 +1,16 @@
 package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "products")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Product {
 
     @Id
@@ -39,77 +46,5 @@ public class Product {
 
     @Lob
     private String ingredients;
-
-    public Product() {
-    }
-
-    public Product(
-            int id,
-            String allergens,
-            String nutritionalInfo,
-            String productImageUrl,
-            String metaImageUrl,
-            String typeName,
-            String manufacturer,
-            String seller,
-            String capacity,
-            String productName,
-            String ingredients) {
-        this.id = id;
-        this.allergens = allergens;
-        this.nutritionalInfo = nutritionalInfo;
-        this.productImageUrl = productImageUrl;
-        this.metaImageUrl = metaImageUrl;
-        this.typeName = typeName;
-        this.manufacturer = manufacturer;
-        this.seller = seller;
-        this.capacity = capacity;
-        this.productName = productName;
-        this.ingredients = ingredients;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getAllergens() {
-        return allergens;
-    }
-
-    public String getNutritionalInfo() {
-        return nutritionalInfo;
-    }
-
-    public String getProductImageUrl() {
-        return productImageUrl;
-    }
-
-    public String getMetaImageUrl() {
-        return metaImageUrl;
-    }
-
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
-    public String getSeller() {
-        return seller;
-    }
-
-    public String getCapacity() {
-        return capacity;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public String getIngredients() {
-        return ingredients;
-    }
 
 }
