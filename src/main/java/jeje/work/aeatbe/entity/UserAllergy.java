@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "users_allergies")
 @Getter
-public class UserAllergy {
+public class UserAllergy extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
