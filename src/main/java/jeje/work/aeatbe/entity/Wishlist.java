@@ -6,12 +6,9 @@ import lombok.*;
 @Entity
 @Table(name = "wishlists")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode
-public class Wishlist {
+public class Wishlist extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

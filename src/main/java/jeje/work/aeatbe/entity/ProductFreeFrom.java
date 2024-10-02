@@ -7,8 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Table(name = "products_freefrom")
-public class ProductFreeFrom {
+@Table(name = "products_free_from")
+public class ProductFreeFrom extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

@@ -7,12 +7,9 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "articles")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode
-public class Article {
+public class Article extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

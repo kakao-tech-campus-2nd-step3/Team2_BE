@@ -6,12 +6,9 @@ import lombok.*;
 @Entity
 @Table(name = "allergy_categories")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode
-public class AllergyCategory {
+public class AllergyCategory extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

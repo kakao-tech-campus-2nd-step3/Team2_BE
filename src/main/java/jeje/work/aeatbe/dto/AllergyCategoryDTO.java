@@ -5,8 +5,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class AllergyCategoryDTO {
 
     private int id;
