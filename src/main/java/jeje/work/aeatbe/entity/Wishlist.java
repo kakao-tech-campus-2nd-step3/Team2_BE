@@ -6,7 +6,6 @@ import lombok.*;
 @Entity
 @Table(name = "wishlists")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Wishlist extends BaseEntity{

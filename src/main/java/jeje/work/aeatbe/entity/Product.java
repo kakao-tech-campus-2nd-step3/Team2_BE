@@ -6,7 +6,6 @@ import lombok.*;
 @Entity
 @Table(name = "products")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product extends BaseEntity{
