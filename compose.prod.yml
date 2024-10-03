@@ -1,0 +1,29 @@
+# compose.prod.yml
+
+# $docker compose -f compose.yml -f compose.prod.yml -p aeat_prod up --build
+
+
+services:
+  db:
+    volumes:
+      - db-data:/var/lib/mysql  # 볼륨 연결
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Dockerfile 파일 경로
+    image: aeatbe
+    container_name: AEat_prod
+    depends_on:
+      - db
+    environment:
+      SPRING_PROFILES_ACTIVE: production
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "8080:8080"
+
+volumes:
+  db-data:
+    driver: local

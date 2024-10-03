@@ -8,25 +8,4 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
-      - "3306:3306" #block before production(to-do)
-    volumes:
-      - db-data:/var/lib/mysql
-
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile  # Dockerfile 파일 경로
-    image: aeatbe
-    container_name: AEat
-    depends_on:
-      - db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydb  # db 서비스에 맞춰 수정
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
-    ports:
-      - "8080:8080"
-
-volumes:
-  db-data:
-    driver: local
+      - "3306:3306"
