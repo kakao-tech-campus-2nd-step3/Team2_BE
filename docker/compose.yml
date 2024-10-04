@@ -1,0 +1,11 @@
+services:
+  db:
+    image: mysql:latest  #MySQL 이미지 버전맞춰서하면될듯
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
