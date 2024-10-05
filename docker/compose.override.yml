@@ -1,38 +1,9 @@
 # docker-compose.override.yml
-
-# ===================== 데이터 지속성 설정 가이드 =====================
-#
-# 현재 설정: 애플리케이션 종료 시 모든 데이터가 초기화됩니다.
-#
-# 데이터 유지를 원하시면,
-# 아래 세 가지 설정을 변경해주세요:
-#
-# 1. DB 볼륨 설정 (24-26줄)
-#    - 현재: volumes: [] (빈 볼륨)
-#    - 변경: volumes 주석 해제 -> DB 데이터를 실제 파일시스템에 저장
-#
-# 2. JPA 설정 (30-32줄)
-#    - 현재: create-drop (매번 스키마 삭제 후 생성)
-#    - 변경: create로 수정 -> 기존 데이터 유지
-#
-# 3. 볼륨 정의 (35-37줄)
-#    - 현재: 주석 처리됨
-#    - 변경: 주석 해제 -> 도커 볼륨 활성화
-# author: jjh4450git@gmail.com
-
 services:
   db:
-    volumes: []
-  #    volumes:
-  #      - db-data:/var/lib/mysql  # 도커 볼륨과 MySQL 데이터 디렉토리 연결
+    volumes:
+      - aeatbe-data:/var/lib/mysql
 
-  app:
-    environment:
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
-#      SPRING_JPA_HIBERNATE_DDL_AUTO: create  # 기존 데이터 유지, 스키마만 업데이트
-
-
-# 도커 볼륨 정의 - 데이터 영구 저장을 위해 필요
-#volumes:
-#  db-data:
-#    driver: local
+volumes:
+  aeatbe-data:
+    driver: local
