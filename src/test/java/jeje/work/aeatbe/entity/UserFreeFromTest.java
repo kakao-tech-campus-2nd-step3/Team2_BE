@@ -15,8 +15,8 @@ public class UserFreeFromTest {
     @Test
     @DisplayName("UserFreeFrom 객체 생성 검증")
     void testUserFreeFromCreation() {
-        User user = new User(); // User 객체 생성
-        FreeFromCategory freeFromCategory = new FreeFromCategory(); // FreeFromCategory 객체 생성
+        User user = new User();
+        FreeFromCategory freeFromCategory = new FreeFromCategory();
 
         UserFreeFrom userFreeFrom = new UserFreeFrom(1, user, freeFromCategory);
 

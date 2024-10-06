@@ -15,8 +15,8 @@ public class UserAllergyTest {
     @Test
     @DisplayName("UserAllergy 객체 생성 검증")
     void testUserAllergyCreation() {
-        User user = new User(); // User 객체 생성
-        AllergyCategory allergyCategory = new AllergyCategory(); // AllergyCategory 객체 생성
+        User user = new User();
+        AllergyCategory allergyCategory = new AllergyCategory();
 
         UserAllergy userAllergy = new UserAllergy(1, user, allergyCategory);
 
