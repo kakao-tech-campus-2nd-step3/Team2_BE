@@ -2,6 +2,7 @@
 
 # $docker compose -f compose.yml -f compose.prod.yml -p aeat_prod up --build
 
+version: '3.8'
 
 services:
   db:
@@ -16,8 +17,13 @@ services:
       dockerfile: ./docker/Dockerfile  # Dockerfile 파일 경로
     image: aeatbe
     container_name: AEat_prod
+    deploy:
+      resources:
+        limits:
+          memory: 1014M
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: production
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
