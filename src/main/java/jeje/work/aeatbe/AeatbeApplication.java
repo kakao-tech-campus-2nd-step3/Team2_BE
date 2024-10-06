@@ -10,3 +10,4 @@ public class AeatbeApplication {
     SpringApplication.run(AeatbeApplication.class, args);
   }
 }
+//ci 테스트테스트 테스트
