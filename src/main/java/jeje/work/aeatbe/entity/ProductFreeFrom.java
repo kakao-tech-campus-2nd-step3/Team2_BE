@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@EqualsAndHashCode
 @Table(name = "products_free_from")
 public class ProductFreeFrom extends BaseEntity{
     @Id
