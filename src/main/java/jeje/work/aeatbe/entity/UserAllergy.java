@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users_allergies")
+@EqualsAndHashCode
 @Getter
 public class UserAllergy extends BaseEntity{
     @Id
