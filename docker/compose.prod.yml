@@ -1,0 +1,38 @@
+# compose.prod.yml
+
+# $docker compose -f compose.yml -f compose.prod.yml -p aeat_prod up --build
+
+version: '3.8'
+
+services:
+  db:
+    volumes:
+      - aeatbe-data-prod:/var/lib/mysql  # 볼륨 연결
+    container_name: db_prod
+    ports: []
+
+  app:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile  # Dockerfile 파일 경로
+    image: aeatbe
+    container_name: AEat_prod
+    deploy:
+      resources:
+        limits:
+          memory: 1014M
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: production
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      SPRING_DATASOURCE_URL: jdbc:mysql://db_prod:3306/mydb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "8080:8081"
+
+volumes:
+  aeatbe-data-prod:
+    driver: local

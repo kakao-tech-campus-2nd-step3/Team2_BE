@@ -1,0 +1,47 @@
+name: Continuous Integration
+on:
+  pull_request:
+    branches:
+      - dev
+      - weekly/*
+      - Review
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 8.10
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Install dependencies
+        run: ./gradlew build -x test
+
+#      - name: Run Lint check (Checkstyle)
+#        run: ./gradlew check
+
+      - name: Run Tests
+        run: ./gradlew test
+
+#      - name: Run Integration Tests
+#        run: ./gradlew integrationTest
+
+      - name: Package the application
+        run: ./gradlew assemble
