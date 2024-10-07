@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//dto, 엔티티 테스트
 @DataJpaTest
 public class EntityRepositoryTests {
 
