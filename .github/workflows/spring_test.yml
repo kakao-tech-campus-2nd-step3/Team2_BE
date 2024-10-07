@@ -31,8 +31,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       
-      - name: change execution permission
-        run: chmod +x ./gradlew
+      - name: pre setting
+        run: | 
+         chmod +x ./gradlew
+         docker compose up
 
       - name: Install dependencies
         run: ./gradlew build -x test
