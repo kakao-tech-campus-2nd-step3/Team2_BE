@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class FreeFromCategory extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "free_from_type", length = 25, nullable = false)
     private String freeFromType;
