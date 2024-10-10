@@ -4,6 +4,8 @@ import java.util.Optional;
 import jeje.work.aeatbe.entity.Article;
 import jeje.work.aeatbe.entity.ArticleLike;
 import jeje.work.aeatbe.entity.User;
+import jeje.work.aeatbe.exception.NotFoundColumnException;
+import jeje.work.aeatbe.exception.NotFoundUserException;
 import jeje.work.aeatbe.repository.ArticleLikeRepository;
 import jeje.work.aeatbe.repository.ArticleRepository;
 import jeje.work.aeatbe.repository.UserRepository;
@@ -33,9 +35,9 @@ public class ArticleLikeService {
      */
     public void likeArticle(Long userId, Long articleId) {
         User user = userRepository.findById(userId)
-            .orElseThrow(()->new IllegalArgumentException("확인할 수 없는 사용자입니다."));
+            .orElseThrow(()->new NotFoundUserException("확인할 수 없는 사용자입니다."));
         Article article = articleRepository.findById(articleId)
-            .orElseThrow(()->new IllegalArgumentException("확인할 수 없는 컬럼입니다."));
+            .orElseThrow(()->new NotFoundColumnException("확인할 수 없는 컬럼입니다."));
 
         ArticleLike like = new ArticleLike(user, article);
         articleLikeRepository.save(like);
