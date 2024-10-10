@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FreeFromCategoryRepository extends JpaRepository<FreeFromCategory, Integer> {
+public interface FreeFromCategoryRepository extends JpaRepository<FreeFromCategory, Long> {
 
 }
