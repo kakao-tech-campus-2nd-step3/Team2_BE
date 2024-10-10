@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class ArticleDTO {
 
-    private int id;
+    private Long id;
     private String title;
     private Timestamp date;
     private String author;

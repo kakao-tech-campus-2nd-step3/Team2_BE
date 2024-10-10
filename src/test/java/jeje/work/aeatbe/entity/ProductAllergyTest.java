@@ -18,7 +18,7 @@ public class ProductAllergyTest {
         Product product = new Product();
         AllergyCategory allergyCategory = new AllergyCategory();
 
-        ProductAllergy productAllergy = new ProductAllergy(1, product, allergyCategory);
+        ProductAllergy productAllergy = new ProductAllergy(1L, product, allergyCategory);
 
         assertEquals(1, productAllergy.getId());
         assertEquals(product, productAllergy.getProduct());
@@ -43,9 +43,9 @@ public class ProductAllergyTest {
         AllergyCategory allergy1 = new AllergyCategory();
         AllergyCategory allergy2 = new AllergyCategory();
 
-        ProductAllergy productAllergy1 = new ProductAllergy(1, product1, allergy1);
-        ProductAllergy productAllergy2 = new ProductAllergy(1, product1, allergy1);
-        ProductAllergy productAllergy3 = new ProductAllergy(2, product2, allergy2);
+        ProductAllergy productAllergy1 = new ProductAllergy(1L, product1, allergy1);
+        ProductAllergy productAllergy2 = new ProductAllergy(1L, product1, allergy1);
+        ProductAllergy productAllergy3 = new ProductAllergy(2L, product2, allergy2);
 
         assertEquals(productAllergy1, productAllergy2);
         assertNotEquals(productAllergy1, productAllergy3);
