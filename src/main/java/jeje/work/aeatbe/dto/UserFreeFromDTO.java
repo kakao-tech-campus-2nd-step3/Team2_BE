@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserFreeFromDTO {
-    private int id;
-    private int userId;
-    private int freeFromId;
+    private Long id;
+    private Long userId;
+    private Long freeFromId;
 }

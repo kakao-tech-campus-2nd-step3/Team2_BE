@@ -7,6 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductAllergyDTO {
-    private int id;
-    private int productId;
+    private Long id;
+    private Long productId;
 }

@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 public class ProductDTO {
 
-    private int id;
+    private Long id;
     private String allergens;
     private String nutritionalInfo;
     private String productImageUrl;

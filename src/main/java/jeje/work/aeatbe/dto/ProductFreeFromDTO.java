@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductFreeFromDTO {
-    private int id;
-    private int productId;
-    private int freeFromId;
+    private Long id;
+    private Long productId;
+    private Long freeFromId;
 }

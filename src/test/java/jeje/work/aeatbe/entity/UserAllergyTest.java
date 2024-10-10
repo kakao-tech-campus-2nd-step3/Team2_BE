@@ -18,7 +18,7 @@ public class UserAllergyTest {
         User user = new User();
         AllergyCategory allergyCategory = new AllergyCategory();
 
-        UserAllergy userAllergy = new UserAllergy(1, user, allergyCategory);
+        UserAllergy userAllergy = new UserAllergy(1L, user, allergyCategory);
 
         assertEquals(1, userAllergy.getId());
         assertEquals(user, userAllergy.getUser());
@@ -43,9 +43,9 @@ public class UserAllergyTest {
         AllergyCategory allergy1 = new AllergyCategory();
         AllergyCategory allergy2 = new AllergyCategory();
 
-        UserAllergy userAllergy1 = new UserAllergy(1, user1, allergy1);
-        UserAllergy userAllergy2 = new UserAllergy(1, user1, allergy1);
-        UserAllergy userAllergy3 = new UserAllergy(2, user2, allergy2);
+        UserAllergy userAllergy1 = new UserAllergy(1L, user1, allergy1);
+        UserAllergy userAllergy2 = new UserAllergy(1L, user1, allergy1);
+        UserAllergy userAllergy3 = new UserAllergy(2L, user2, allergy2);
 
         assertEquals(userAllergy1, userAllergy2);
         assertNotEquals(userAllergy1, userAllergy3);

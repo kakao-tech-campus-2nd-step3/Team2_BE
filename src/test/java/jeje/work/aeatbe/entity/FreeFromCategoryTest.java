@@ -11,13 +11,13 @@ public class FreeFromCategoryTest {
 
     @BeforeEach
     void setup() {
-        freeFromCategory = new FreeFromCategory(1, "Gluten-Free");
+        freeFromCategory = new FreeFromCategory(1L, "Gluten-Free");
     }
 
     @Test
     @DisplayName("FreeFromCategory 객체 생성 테스트")
     void testFreeFromCategoryCreation() {
-        FreeFromCategory newCategory = new FreeFromCategory(1, "Gluten-Free");
+        FreeFromCategory newCategory = new FreeFromCategory(1L, "Gluten-Free");
 
         assertThat(newCategory.getId()).isEqualTo(1);
         assertThat(newCategory.getFreeFromType()).isEqualTo("Gluten-Free");
@@ -26,7 +26,7 @@ public class FreeFromCategoryTest {
     @Test
     @DisplayName("Null 필드 검증 테스트")
     void testFreeFromCategoryNullalbe() {
-        freeFromCategory = new FreeFromCategory(1, null);
+        freeFromCategory = new FreeFromCategory(1L, null);
 
         assertThat(freeFromCategory.getFreeFromType()).isNull();
     }
