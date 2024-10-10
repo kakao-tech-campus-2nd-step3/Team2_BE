@@ -6,13 +6,13 @@ import lombok.*;
 @Entity
 @Table(name = "allergy_categories")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class AllergyCategory extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "allergy_type", nullable = false, length = 25)
     private String allergyType;
