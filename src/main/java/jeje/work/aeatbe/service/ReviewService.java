@@ -34,10 +34,12 @@ public class ReviewService {
             Long userId = 1L;
             reviews = reviewRepository.findByUserId(userId);
 
-        } else if (productId != null) {
+        } else{
             reviews = reviewRepository.findByProductId(productId);
-        } else {
-            throw new IllegalArgumentException("product_id는 필수입니다.");
+        }
+
+        if (reviews.isEmpty()) {
+            throw new IllegalArgumentException("해당 product_id로 조회된 리뷰가 없습니다.");
         }
 
         return reviews.stream()
@@ -91,7 +93,6 @@ public class ReviewService {
         );
 
         reviewRepository.save(updateReview);
-
     }
 
     public void deleteReviews(Long id) {
