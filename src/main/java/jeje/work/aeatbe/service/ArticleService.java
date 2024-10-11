@@ -18,10 +18,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArticleService {
 
-    @Autowired
-    private ArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
 
-    // Article 생성 로직
+    public ArticleService(ArticleRepository articleRepository){
+        this.articleRepository = articleRepository;
+    }
+
+    /**
+     * 새로운 칼럼을 데이터베이스에 저장
+     *
+     * @param articleDTO 생성할 칼럼의 정보가 포함된 DTO
+     * @return 생성된 칼럼의 DTO
+     */
     public ArticleDTO createArticle(ArticleDTO articleDTO) {
         Article article = new Article(
             articleDTO.getId(),
@@ -37,16 +45,26 @@ public class ArticleService {
         return articleDTO;
     }
 
-    // 칼럼 리스트 반환 로직
+    /**
+     * 필터링 및 페이지네이션이 적용된 칼럼 목록 반환
+     *
+     * @param category 칼럼의 카테고리
+     * @param title 칼럼의 제목
+     * @param subtitle 칼럼의 소제목
+     * @param sortby 정렬 기준
+     * @param pageToken 페이지 토큰
+     * @param maxResults 한 페이지당 가져올 최대 칼럼 개수
+     * @return 필터링된 칼럼 목록과 페이지 정보가 포함된 DTO
+     */
     public ArticleListResponseDTO getArticles(String category, String title, String subtitle, String sortby, String pageToken, int maxResults) {
         List<SimpleArticleDTO> filteredArticles = articleRepository.findAll().stream()
-            .filter(article -> category == null || article.getTags().contains(category)) // 카테고리 필터링
-            .filter(article -> title == null || article.getTitle().contains(title))       // 제목 필터링
-            .filter(article -> subtitle == null || extractSubtitle(article.getContent()).contains(subtitle)) // 소제목 필터링
-            .sorted(getComparator(sortby)) // 정렬 기준에 따른 정렬
-            .skip(getPageOffset(pageToken, maxResults)) // 페이지네이션 처리
+            .filter(article -> category == null || article.getTags().contains(category))
+            .filter(article -> title == null || article.getTitle().contains(title))
+            .filter(article -> subtitle == null || extractSubtitle(article.getContent()).contains(subtitle))
+            .sorted(getComparator(sortby))
+            .skip(getPageOffset(pageToken, maxResults))
             .limit(maxResults)
-            .map(this::convertToSimpleDTO) // SimpleArticleDTO로 변환
+            .map(this::convertToSimpleDTO)
             .collect(Collectors.toList());
 
         int totalResults = (int) articleRepository.count();
@@ -55,58 +73,104 @@ public class ArticleService {
         return new ArticleListResponseDTO(filteredArticles, getNextPageToken(pageToken), pageInfo);
     }
 
-    // 특정 칼럼 반환 로직
-    public ArticleDetailDTO getArticleById(int id) {
+    /**
+     * 특정 ID에 해당하는 칼럼의 세부 정보 반환
+     *
+     * @param id 가져올 칼럼의 ID
+     * @return 칼럼의 세부 정보가 포함된 DTO
+     */
+    public ArticleDetailDTO getArticleById(Long id) {
         Article article = articleRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Article not found"));
 
-        // Article의 content를 \n로 분리하고 ContentDTO 리스트로 변환
         String[] contentParts = article.getContent().split("\n");
-        List<ContentDTO> contentList = new ArrayList<>();
 
-        for (String part : contentParts) {
-            if (part.contains("h2")) {
-                contentList.add(new ContentDTO("h2", part));
-            } else if (part.contains("h3")) {
-                contentList.add(new ContentDTO("h3", part));
-            } else if (part.contains("img")) {
-                contentList.add(new ContentDTO("img", part));
-            } else {
-                contentList.add(new ContentDTO("p", part)); // 기본적으로 본문 내용은 p로 처리
-            }
+        List<ContentDTO> contentList = new ArrayList<>();
+        contentList.add(new ContentDTO("h2", contentParts[0]));
+
+        if (contentParts.length > 1) {
+            contentList.add(new ContentDTO("h3", contentParts[1]));
         }
 
-        // ArticleDetailDTO로 변환
+        if (contentParts.length > 2) {
+            contentList.add(new ContentDTO("img", contentParts[2]));
+        }
+
+        if (contentParts.length > 3) {
+            StringBuilder fullContent = new StringBuilder();
+            for (int i = 3; i < contentParts.length; i++) {
+                fullContent.append(contentParts[i]).append("\n");
+            }
+            contentList.add(new ContentDTO("p", fullContent.toString().trim()));
+        }
+
         return new ArticleDetailDTO(
             article.getId(),
             article.getTitle(),
-            article.getThumbnailUrl(), // imgurl로 사용
+            article.getThumbnailUrl(),
             article.getDate(),
             article.getAuthor(),
-            List.of(article.getTags().split(",")), // tags를 키워드 배열로 변환
+            List.of(article.getTags().split(",")),
             contentList
         );
     }
 
-    // 정렬 기준에 따른 Comparator 반환
+    /**
+     * 칼럼 업데이트
+     *
+     * @param id 업데이트할 칼럼의 ID
+     * @param articleDTO 업데이트할 내용이 담긴 DTO
+     * @return 업데이트된 칼럼의 DTO
+     */
+    public ArticleDTO updateArticle(Long id, ArticleDTO articleDTO) {
+        Article existingArticle = articleRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Article not found"));
+
+        Article updatedArticle = new Article(
+            existingArticle.getId(),
+            articleDTO.getTitle(),
+            articleDTO.getDate() != null ? articleDTO.getDate() : existingArticle.getDate(),
+            articleDTO.getAuthor(),
+            articleDTO.getTags(),
+            articleDTO.getContent(),
+            articleDTO.getLikes(),
+            articleDTO.getThumbnailUrl()
+        );
+
+        articleRepository.save(updatedArticle);
+
+        return articleDTO;
+    }
+
+    /**
+     * 칼럼 삭제
+     *
+     * @param id 삭제할 칼럼의 ID
+     */
+    public void deleteArticle(Long id) {
+        Article article = articleRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Article not found"));
+
+        articleRepository.delete(article);
+    }
+
+    // 정렬 기준에 따른 Comparator 반환 (default=최신)
     private Comparator<Article> getComparator(String sortby) {
-        if ("price".equals(sortby)) {
-            return Comparator.comparing(Article::getLikes); // price 대신 likes 예시로 사용
-        } else if ("recommend".equals(sortby)) {
-            return Comparator.comparing(Article::getLikes).reversed(); // recommend는 likes의 역순 예시
-        } else if ("sales".equals(sortby)) {
-            return Comparator.comparing(Article::getLikes); // sales도 likes로 정렬 예시
+        if ("popular".equals(sortby)) {
+            // 좋아요 수가 많은 순으로 정렬 (내림차순)
+            return Comparator.comparing(Article::getLikes).reversed();
         } else {
-            return Comparator.comparing(Article::getDate).reversed(); // 기본: 최신순(new)
+            // 기본값: 최신순 (날짜 기준 내림차순)
+            return Comparator.comparing(Article::getDate).reversed();
         }
     }
 
-    // 페이지 오프셋 계산 (pageToken 활용)
+    // 페이지 오프셋 계산
     private int getPageOffset(String pageToken, int maxResults) {
         return pageToken == null ? 0 : Integer.parseInt(pageToken) * maxResults;
     }
 
-    // 다음 페이지 토큰 생성 (pageToken 활용)
+    // 다음 페이지 토큰 생성
     private String getNextPageToken(String pageToken) {
         return pageToken == null ? "1" : String.valueOf(Integer.parseInt(pageToken) + 1);
     }
@@ -116,14 +180,17 @@ public class ArticleService {
         return new SimpleArticleDTO(
             article.getId(),
             article.getTitle(),
-            extractSubtitle(article.getContent()), // 소제목은 content의 두 번째 줄에서 추출
-            article.getThumbnailUrl() // 이미지 URL은 article의 thumbnailUrl에서 가져옴
+            extractSubtitle(article.getContent()),
+            article.getThumbnailUrl()
         );
     }
 
     // 소제목 추출 (content의 두 번째 줄을 추출)
     private String extractSubtitle(String content) {
         String[] lines = content.split("\n");
-        return lines.length > 1 ? lines[1].trim() : ""; // 두 번째 줄을 소제목으로 반환
+        return lines.length > 1 ? lines[1].trim() : "";
     }
+
+
+
 }

@@ -7,8 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SimpleArticleDTO {
-    private int id;
+    private Long id;
     private String title;
-    private String subtitle; // 소제목
-    private String imageurl; // 이미지 주소 (thumbnailUrl에서 매핑)
+    private String subtitle;
+    private String imageurl;
 }

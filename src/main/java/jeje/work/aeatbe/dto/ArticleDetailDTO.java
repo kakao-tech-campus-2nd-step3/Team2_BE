@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticleDetailDTO {
-    private int id;
+    private Long id;
     private String title;
     private String imgurl;
     private Timestamp createdAt;
