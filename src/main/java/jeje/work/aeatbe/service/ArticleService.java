@@ -62,7 +62,6 @@ public class ArticleService {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "date");
 
-        // Directly use the parameters without null checks
         Page<Article> articlePage = articleRepository.findByTagsContainingAndTitleContainingAndContentContaining(
             category, title, subtitle,
             PageRequest.of(Integer.parseInt(pageToken), maxResults, sort)
