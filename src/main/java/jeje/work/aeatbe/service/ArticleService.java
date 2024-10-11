@@ -61,7 +61,7 @@ public class ArticleService {
 
         Sort sort = getSortBy(sortby);
 
-        Page<Article> articlePage = articleRepository.findByFilters(
+        Page<Article> articlePage = articleRepository.findByTagsContainingAndTitleContainingAndContentContaining(
             category != null ? category : "",
             title != null ? title : "",
             subtitle != null ? subtitle : "",

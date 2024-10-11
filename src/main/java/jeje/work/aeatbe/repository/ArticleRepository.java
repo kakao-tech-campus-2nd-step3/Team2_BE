@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
-    Page<Article> findByFilters(
+    Page<Article> findByTagsContainingAndTitleContainingAndContentContaining(
         String tags, String title, String content, Pageable pageable
     );
 }
