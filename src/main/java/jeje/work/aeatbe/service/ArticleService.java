@@ -39,8 +39,8 @@ public class ArticleService {
             articleDTO.getAuthor(),
             articleDTO.getTags(),
             articleDTO.getContent(),
-            articleDTO.getLikes(),
-            articleDTO.getThumbnailUrl()
+            articleDTO.getThumbnailUrl(),
+            articleDTO.getLikes()  // 좋아요 수도 그대로 저장
         );
         articleRepository.save(article);
         return articleDTO;
@@ -131,8 +131,8 @@ public class ArticleService {
             articleDTO.getAuthor(),
             articleDTO.getTags(),
             articleDTO.getContent(),
-            articleDTO.getLikes(),
-            articleDTO.getThumbnailUrl()
+            articleDTO.getThumbnailUrl(),
+            articleDTO.getLikes()
         );
 
         articleRepository.save(updatedArticle);

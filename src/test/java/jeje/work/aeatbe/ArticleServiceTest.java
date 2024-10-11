@@ -41,9 +41,9 @@ public class ArticleServiceTest {
 
     @Test
     public void testGetArticles() {
-        Article article1 = new Article(1L, "Title 1", new Timestamp(System.currentTimeMillis()), "Author 1", "sports,news", "Title 1\nSubtitle 1\nImage URL 1", 10, "http://example.com/image1.jpg");
-        Article article2 = new Article(2L, "Title 2", new Timestamp(System.currentTimeMillis()), "Author 2", "news", "Title 2\nSubtitle 2\nImage URL 2", 20, "http://example.com/image2.jpg");
-        Article article3 = new Article(3L, "Title 3", new Timestamp(System.currentTimeMillis()), "Author 3", "sports", "Title 3\nSubtitle 3\nImage URL 3", 30, "http://example.com/image3.jpg");
+        Article article1 = new Article(1L, "Title 1", new Timestamp(System.currentTimeMillis()), "Author 1", "sports,news", "Title 1\nSubtitle 1\nImage URL 1",  "http://example.com/image1.jpg", 10);
+        Article article2 = new Article(2L, "Title 2", new Timestamp(System.currentTimeMillis()), "Author 2", "news", "Title 2\nSubtitle 2\nImage URL 2", "http://example.com/image2.jpg", 10);
+        Article article3 = new Article(3L, "Title 3", new Timestamp(System.currentTimeMillis()), "Author 3", "sports", "Title 3\nSubtitle 3\nImage URL 3", "http://example.com/image3.jpg", 10);
 
         Page<Article> page1 = new PageImpl<>(List.of(article1, article2));
         Page<Article> page2 = new PageImpl<>(List.of(article3));
@@ -70,7 +70,7 @@ public class ArticleServiceTest {
     @Test
     public void testGetArticleById() {
         Article article = new Article(1L, "Title 1", new Timestamp(System.currentTimeMillis()), "Author 1", "sports,news",
-            "Title 1\nSubtitle 1\nhttp://example.com/image1.jpg\nasbsss. diqdn.\n dadaoidn", 10, "http://example.com/image1.jpg");
+            "Title 1\nSubtitle 1\nhttp://example.com/image1.jpg\nasbsss. diqdn.\n dadaoidn", "http://example.com/image1.jpg", 10);
 
         when(articleRepository.findById(1L)).thenReturn(Optional.of(article));
 
@@ -96,7 +96,7 @@ public class ArticleServiceTest {
     @Test
     public void testUpdateArticle() {
         Article existingArticle = new Article(1L, "Title 1", new Timestamp(System.currentTimeMillis()), "Author 1", "sports,news",
-            "Title 1\nSubtitle 1\nhttp://example.com/image1.jpg", 10, "http://example.com/image1.jpg");
+            "Title 1\nSubtitle 1\nhttp://example.com/image1.jpg", "http://example.com/image1.jpg",10);
 
         ArticleDTO updateDTO = new ArticleDTO(1L, "Updated Title", new Timestamp(System.currentTimeMillis()), "Updated Author", "updated,sports",
             "Updated content", 20, "http://example.com/updatedImage.jpg");
@@ -118,7 +118,7 @@ public class ArticleServiceTest {
     // 칼럼 삭제 테스트
     @Test
     public void testDeleteArticle() {
-        Article article = new Article(1L, "Title 1", new Timestamp(System.currentTimeMillis()), "Author 1", "sports,news", "Title 1\nSubtitle 1\nImage URL 1", 10, "http://example.com/image1.jpg");
+        Article article = new Article(1L, "Title 1", new Timestamp(System.currentTimeMillis()), "Author 1", "sports,news", "Title 1\nSubtitle 1\nImage URL 1", "http://example.com/image1.jpg",10);
 
         when(articleRepository.findById(1L)).thenReturn(Optional.of(article));
 
