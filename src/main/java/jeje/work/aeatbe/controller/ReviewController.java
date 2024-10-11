@@ -16,16 +16,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 리뷰 컨트롤러
+ */
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewController {
 
     private final ReviewService reviewService;
-
+    
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
 
+
+    /**
+     * 칼럼 조회
+     *
+     * @param searchByUser 마이페이지 여부(true = 마이페이지, false = 단순 상품 리뷰)
+     * @param productId    상품 id
+     * @param token        유저 토큰
+     * @return list 형식의 reviewDTO
+     */
     @GetMapping
     public ResponseEntity<List<ReviewDTO>> getReviews(
         @RequestParam(required = false) boolean searchByUser,
@@ -41,6 +53,13 @@ public class ReviewController {
     }
 
 
+    /**
+     * 새 리뷰 생성
+     *
+     * @param reviewDTO 리뷰 DTO
+     * @param token     유저 토큰
+     * @return 201 created 응답 코드
+     */
     @PostMapping
     public ResponseEntity<?> postReviews(@RequestBody ReviewDTO reviewDTO,
         @RequestHeader(required = true, value = "Authorization") String token) {
@@ -51,6 +70,14 @@ public class ReviewController {
 
     }
 
+    /**
+     * 리뷰 수정
+     *
+     * @param id        리뷰 id
+     * @param reviewDTO 리뷰 DTO
+     * @param token     유저 토큰
+     * @return 200 ok 응답 코드
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateReviews(@PathVariable Long id,
         @RequestBody ReviewDTO reviewDTO,
@@ -59,6 +86,13 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 리뷰 삭제
+     *
+     * @param id    리뷰 id
+     * @param token 유저 토큰
+     * @return 204 응답 코드 반환
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteReviews(@PathVariable Long id,
         @RequestHeader(required = true, value = "Authorization") String token) {
