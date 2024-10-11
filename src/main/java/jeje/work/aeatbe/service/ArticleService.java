@@ -96,7 +96,8 @@ public class ArticleService {
      * @return 요청된 칼럼의 세부 정보가 포함된 DTO
      */
     public ArticleResponseDTO getArticleById(Long id) {
-        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Article not found"));
+        Article article = articleRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Article with id " + id + " not found"));
 
         List<String> keywords = Arrays.asList(article.getTags().split(","));
         List<ContentDTO> contentList = extractContentList(article.getContent());
@@ -122,7 +123,7 @@ public class ArticleService {
      */
     public ArticleDTO updateArticle(Long id, ArticleDTO articleDTO) {
         Article existingArticle = articleRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Article not found"));
+            .orElseThrow(() -> new IllegalArgumentException("Article with id " + id + " not found"));
 
         Article updatedArticle = new Article(
             existingArticle.getId(),
@@ -147,7 +148,7 @@ public class ArticleService {
      */
     public void deleteArticle(Long id) {
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Article not found"));
+            .orElseThrow(() -> new IllegalArgumentException("Article with id " + id + " not found"));
 
         articleRepository.delete(article);
     }
