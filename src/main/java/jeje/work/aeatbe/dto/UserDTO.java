@@ -20,11 +20,4 @@ public class UserDTO {
         this.userImgUrl = userImgUrl;
     }
 
-    public UserDTO(Long id, String userId, String allergies, String freeFrom) {
-        this.id = id;
-        this.userId = userId;
-        this.allergies = allergies;
-        this.freeFrom = freeFrom;
-    }
-
 }
