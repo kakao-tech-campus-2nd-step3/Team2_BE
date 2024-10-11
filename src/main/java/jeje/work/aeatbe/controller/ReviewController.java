@@ -52,13 +52,16 @@ public class ReviewController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateReviews(@PathVariable Long id, @RequestBody ReviewDTO reviewDTO) {
+    public ResponseEntity<?> updateReviews(@PathVariable Long id,
+        @RequestBody ReviewDTO reviewDTO,
+        @RequestHeader(required = true, value = "Authorization") String token) {
         reviewService.updateReviews(id, reviewDTO);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteReviews(@PathVariable Long id) {
+    public ResponseEntity<?> deleteReviews(@PathVariable Long id,
+        @RequestHeader(required = true, value = "Authorization") String token) {
         reviewService.deleteReviews(id);
         return ResponseEntity.noContent().build();
     }
