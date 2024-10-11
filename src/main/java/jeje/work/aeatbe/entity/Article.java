@@ -31,8 +31,6 @@ public class Article extends BaseEntity{
     @Column(nullable = false)
     private String content;
 
-
-
     @Column(name = "thumbnail_url", length = 255)
     private String thumbnailUrl;
 
