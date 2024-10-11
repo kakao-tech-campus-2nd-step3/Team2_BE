@@ -1,5 +1,7 @@
 package jeje.work.aeatbe;
 
+import jeje.work.aeatbe.column_dto.ArticleListResponseDTO;
+import jeje.work.aeatbe.column_dto.ArticleResponseDTO;
 import jeje.work.aeatbe.dto.*;
 import jeje.work.aeatbe.entity.Article;
 import jeje.work.aeatbe.repository.ArticleRepository;
@@ -13,8 +15,12 @@ import org.mockito.MockitoAnnotations;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import static org.mockito.Mockito.*;
@@ -33,33 +39,43 @@ public class ArticleServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    // 칼럼 리스트 반환 테스트
     @Test
     public void testGetArticles() {
         Article article1 = new Article(1L, "Title 1", new Timestamp(System.currentTimeMillis()), "Author 1", "sports,news", "Title 1\nSubtitle 1\nImage URL 1", 10, "http://example.com/image1.jpg");
         Article article2 = new Article(2L, "Title 2", new Timestamp(System.currentTimeMillis()), "Author 2", "news", "Title 2\nSubtitle 2\nImage URL 2", 20, "http://example.com/image2.jpg");
+        Article article3 = new Article(3L, "Title 3", new Timestamp(System.currentTimeMillis()), "Author 3", "sports", "Title 3\nSubtitle 3\nImage URL 3", 30, "http://example.com/image3.jpg");
 
-        when(articleRepository.findAll()).thenReturn(List.of(article1, article2));
+        Page<Article> page1 = new PageImpl<>(List.of(article1, article2));
+        Page<Article> page2 = new PageImpl<>(List.of(article3));
 
-        ArticleListResponseDTO result = articleService.getArticles(null, null, null, null, null, 10);
+        when(articleRepository.findByFilters(anyString(), anyString(), anyString(), any(Pageable.class)))
+            .thenReturn(page1)
+            .thenReturn(page2);
 
-        assertEquals(2, result.getColumns().size());
-        assertEquals("Title 1", result.getColumns().get(0).getTitle());
-        assertEquals("Subtitle 1", result.getColumns().get(0).getSubtitle());
-        assertEquals("http://example.com/image1.jpg", result.getColumns().get(0).getImageurl());
+        ArticleListResponseDTO result1 = articleService.getArticles("sports", null, null, "popular", "0", 2);
+        assertEquals(2, result1.getColumns().size());
+        assertEquals("Title 1", result1.getColumns().get(0).getTitle());
+        assertEquals("Subtitle 1", result1.getColumns().get(0).getSubtitle());
+        assertEquals("Title 2", result1.getColumns().get(1).getTitle());
+        assertEquals("Subtitle 2", result1.getColumns().get(1).getSubtitle());
+
+        // 두 번째 페이지 호출 (페이지 1)
+        ArticleListResponseDTO result2 = articleService.getArticles("sports", null, null, "popular", "1", 2);
+        assertEquals(1, result2.getColumns().size());
+        assertEquals("Title 3", result2.getColumns().get(0).getTitle());
+        assertEquals("Subtitle 3", result2.getColumns().get(0).getSubtitle());
     }
 
     // 특정 칼럼 반환 테스트
     @Test
     public void testGetArticleById() {
         Article article = new Article(1L, "Title 1", new Timestamp(System.currentTimeMillis()), "Author 1", "sports,news",
-            "Title 1\nSubtitle 1\nhttp://example.com/image1.jpg\nThis is the first paragraph.\nThis is the second paragraph.", 10, "http://example.com/image1.jpg");
+            "Title 1\nSubtitle 1\nhttp://example.com/image1.jpg\nasbsss. diqdn.\n dadaoidn", 10, "http://example.com/image1.jpg");
 
         when(articleRepository.findById(1L)).thenReturn(Optional.of(article));
 
-        ArticleDetailDTO result = articleService.getArticleById(1L);
+        ArticleResponseDTO result = articleService.getArticleById(1L);
 
-        assertEquals(1L, result.getId());
         assertEquals("Title 1", result.getTitle());
         assertEquals("http://example.com/image1.jpg", result.getImgurl());
 
@@ -73,7 +89,7 @@ public class ArticleServiceTest {
         assertEquals("http://example.com/image1.jpg", result.getContent().get(2).getContent());
 
         assertEquals("p", result.getContent().get(3).getTag());
-        assertEquals("This is the first paragraph.\nThis is the second paragraph.", result.getContent().get(3).getContent());
+        assertEquals("asbsss. diqdn.\n dadaoidn", result.getContent().get(3).getContent());
     }
 
     // 칼럼 업데이트 테스트

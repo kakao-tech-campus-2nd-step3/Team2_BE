@@ -1,15 +1,17 @@
-package jeje.work.aeatbe.dto;
+package jeje.work.aeatbe.column_dto;
 
-import lombok.*;
-
-import java.sql.Timestamp;
 import java.util.List;
+import lombok.*;
+import java.sql.Timestamp;
 
+/**
+ * 특정 칼럼 반환할 때 사용하는 형식입니다.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleDetailDTO {
+public class ArticleResponseDTO {
     private Long id;
     private String title;
     private String imgurl;
@@ -17,4 +19,5 @@ public class ArticleDetailDTO {
     private String auth;
     private List<String> keyword;
     private List<ContentDTO> content;
+    private String subtitle;
 }

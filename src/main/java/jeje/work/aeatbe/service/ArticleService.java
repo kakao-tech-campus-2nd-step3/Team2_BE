@@ -1,18 +1,19 @@
 package jeje.work.aeatbe.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Comparator;
 import jeje.work.aeatbe.dto.ArticleDTO;
-import jeje.work.aeatbe.dto.ArticleDetailDTO;
-import jeje.work.aeatbe.dto.ArticleListResponseDTO;
-import jeje.work.aeatbe.dto.ContentDTO;
-import jeje.work.aeatbe.dto.PageInfoDTO;
-import jeje.work.aeatbe.dto.SimpleArticleDTO;
+import jeje.work.aeatbe.column_dto.ArticleListResponseDTO;
+import jeje.work.aeatbe.column_dto.ArticleResponseDTO;
+import jeje.work.aeatbe.column_dto.ContentDTO;
+import jeje.work.aeatbe.column_dto.PageInfoDTO;
 import jeje.work.aeatbe.entity.Article;
 import jeje.work.aeatbe.repository.ArticleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -57,61 +58,58 @@ public class ArticleService {
      * @return 필터링된 칼럼 목록과 페이지 정보가 포함된 DTO
      */
     public ArticleListResponseDTO getArticles(String category, String title, String subtitle, String sortby, String pageToken, int maxResults) {
-        List<SimpleArticleDTO> filteredArticles = articleRepository.findAll().stream()
-            .filter(article -> category == null || article.getTags().contains(category))
-            .filter(article -> title == null || article.getTitle().contains(title))
-            .filter(article -> subtitle == null || extractSubtitle(article.getContent()).contains(subtitle))
-            .sorted(getComparator(sortby))
-            .skip(getPageOffset(pageToken, maxResults))
-            .limit(maxResults)
-            .map(this::convertToSimpleDTO)
+
+        Sort sort = getSortBy(sortby);
+
+        Page<Article> articlePage = articleRepository.findByFilters(
+            category != null ? category : "",
+            title != null ? title : "",
+            subtitle != null ? subtitle : "",
+            PageRequest.of(Integer.parseInt(pageToken), maxResults, sort)
+        );
+
+        PageInfoDTO pageInfo = new PageInfoDTO(
+            (int) articlePage.getTotalElements(),
+            maxResults
+        );
+
+        List<ArticleResponseDTO> columns = articlePage.getContent().stream()
+            .map(article -> new ArticleResponseDTO(
+                article.getId(),
+                article.getTitle(),
+                article.getThumbnailUrl(),
+                article.getDate(),
+                article.getAuthor(),
+                Arrays.asList(article.getTags().split(",")),
+                null,
+                extractSubtitle(article.getContent())
+            ))
             .collect(Collectors.toList());
 
-        int totalResults = (int) articleRepository.count();
-        PageInfoDTO pageInfo = new PageInfoDTO(totalResults, filteredArticles.size());
-
-        return new ArticleListResponseDTO(filteredArticles, getNextPageToken(pageToken), pageInfo);
+        return new ArticleListResponseDTO(columns, pageToken, pageInfo);
     }
 
     /**
-     * 특정 ID에 해당하는 칼럼의 세부 정보 반환
+     * 특정 칼럼 반환
      *
-     * @param id 가져올 칼럼의 ID
-     * @return 칼럼의 세부 정보가 포함된 DTO
+     * @param id 반환할 칼럼의 ID
+     * @return 요청된 칼럼의 세부 정보가 포함된 DTO
      */
-    public ArticleDetailDTO getArticleById(Long id) {
-        Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Article not found"));
+    public ArticleResponseDTO getArticleById(Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Article not found"));
 
-        String[] contentParts = article.getContent().split("\n");
+        List<String> keywords = Arrays.asList(article.getTags().split(","));
+        List<ContentDTO> contentList = extractContentList(article.getContent());
 
-        List<ContentDTO> contentList = new ArrayList<>();
-        contentList.add(new ContentDTO("h2", contentParts[0]));
-
-        if (contentParts.length > 1) {
-            contentList.add(new ContentDTO("h3", contentParts[1]));
-        }
-
-        if (contentParts.length > 2) {
-            contentList.add(new ContentDTO("img", contentParts[2]));
-        }
-
-        if (contentParts.length > 3) {
-            StringBuilder fullContent = new StringBuilder();
-            for (int i = 3; i < contentParts.length; i++) {
-                fullContent.append(contentParts[i]).append("\n");
-            }
-            contentList.add(new ContentDTO("p", fullContent.toString().trim()));
-        }
-
-        return new ArticleDetailDTO(
+        return new ArticleResponseDTO(
             article.getId(),
             article.getTitle(),
             article.getThumbnailUrl(),
             article.getDate(),
             article.getAuthor(),
-            List.of(article.getTags().split(",")),
-            contentList
+            keywords,
+            contentList,
+            extractSubtitle(article.getContent())
         );
     }
 
@@ -154,43 +152,34 @@ public class ArticleService {
         articleRepository.delete(article);
     }
 
-    // 정렬 기준에 따른 Comparator 반환 (default=최신)
-    private Comparator<Article> getComparator(String sortby) {
-        if ("popular".equals(sortby)) {
-            // 좋아요 수가 많은 순으로 정렬 (내림차순)
-            return Comparator.comparing(Article::getLikes).reversed();
-        } else {
-            // 기본값: 최신순 (날짜 기준 내림차순)
-            return Comparator.comparing(Article::getDate).reversed();
-        }
-    }
-
-    // 페이지 오프셋 계산
-    private int getPageOffset(String pageToken, int maxResults) {
-        return pageToken == null ? 0 : Integer.parseInt(pageToken) * maxResults;
-    }
-
-    // 다음 페이지 토큰 생성
-    private String getNextPageToken(String pageToken) {
-        return pageToken == null ? "1" : String.valueOf(Integer.parseInt(pageToken) + 1);
-    }
-
-    // SimpleArticleDTO로 변환 로직
-    private SimpleArticleDTO convertToSimpleDTO(Article article) {
-        return new SimpleArticleDTO(
-            article.getId(),
-            article.getTitle(),
-            extractSubtitle(article.getContent()),
-            article.getThumbnailUrl()
-        );
-    }
-
-    // 소제목 추출 (content의 두 번째 줄을 추출)
     private String extractSubtitle(String content) {
         String[] lines = content.split("\n");
-        return lines.length > 1 ? lines[1].trim() : "";
+        return lines.length > 1 ? lines[1] : "";
     }
 
+    private List<ContentDTO> extractContentList(String content) {
+        String[] lines = content.split("\n");
+        List<ContentDTO> contentList = new ArrayList<>();
 
+        if (lines.length > 0) contentList.add(new ContentDTO("h2", lines[0])); // 제목
+        if (lines.length > 1) contentList.add(new ContentDTO("h3", lines[1])); // 소제목
+        if (lines.length > 2) contentList.add(new ContentDTO("img", lines[2])); // 이미지 URL
+
+        if (lines.length > 3) {
+            // 본문을 \n 포함한 상태로 그대로 묶어서 처리
+            String body = String.join("\n", Arrays.copyOfRange(lines, 3, lines.length));
+            contentList.add(new ContentDTO("p", body)); // 본문 전체를 한 번에 추가
+        }
+
+        return contentList;
+    }
+
+    private Sort getSortBy(String sortby) {
+        if ("popular".equalsIgnoreCase(sortby)) {
+            return Sort.by(Sort.Direction.DESC, "likes");
+        } else {
+            return Sort.by(Sort.Direction.DESC, "date");
+        }
+    }
 
 }

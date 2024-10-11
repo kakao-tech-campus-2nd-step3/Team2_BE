@@ -1,12 +1,14 @@
 package jeje.work.aeatbe.controller;
 
+import jeje.work.aeatbe.column_dto.ArticleListResponseDTO;
+import jeje.work.aeatbe.column_dto.ArticleResponseDTO;
 import jeje.work.aeatbe.dto.*;
 import jeje.work.aeatbe.service.ArticleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/article")
+@RequestMapping("/api/columns")
 public class ArticleController {
 
     private final ArticleService articleService;
@@ -50,13 +52,13 @@ public class ArticleController {
     }
 
     /**
-     * 특정 ID에 해당하는 칼럼 반환.
+     * 특정 칼럼 반환 API
      *
-     * @param id 가져올 칼럼의 ID
-     * @return 칼럼의 세부 정보가 포함된 DTO
+     * @param id 반환할 칼럼의 ID
+     * @return 요청된 칼럼의 세부 정보가 포함된 DTO
      */
     @GetMapping("/{id}")
-    public ArticleDetailDTO getArticleById(@PathVariable Long id) {
+    public ArticleResponseDTO getArticleById(@PathVariable Long id) {
         return articleService.getArticleById(id);
     }
 
@@ -78,6 +80,7 @@ public class ArticleController {
      * @param id 삭제할 칼럼의 ID
      */
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteArticle(@PathVariable Long id) {
         articleService.deleteArticle(id);
     }
