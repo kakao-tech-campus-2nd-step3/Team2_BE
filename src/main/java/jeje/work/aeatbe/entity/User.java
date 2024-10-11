@@ -1,8 +1,6 @@
 package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.*;
 
 @Entity
@@ -24,7 +22,11 @@ public class User extends BaseEntity{
 
     @Column(name = "free_from", length = 100)
     private String freeFrom;
-    
 
+    @Column(name = "user_name", nullable = false, length = 15)
+    private String userName;
+
+    @Column(name = "user_img_url", length = 255)
+    private String userImgUrl;
 
 }

@@ -65,7 +65,9 @@ public class EntityRepositoryTests {
             userDTO.getId(),
             userDTO.getUserId(),
             userDTO.getAllergies(),
-            userDTO.getFreeFrom()
+            userDTO.getFreeFrom(),
+            "Test User",
+            "https://testImg.com"
         );
 
         User savedUser = userRepository.save(user);
@@ -103,7 +105,9 @@ public class EntityRepositoryTests {
             userDTO.getId(),
             userDTO.getUserId(),
             userDTO.getAllergies(),
-            userDTO.getFreeFrom()
+            userDTO.getFreeFrom(),
+            "Test User",
+            "https://testImg.com"
         );
         userRepository.save(user);
 
