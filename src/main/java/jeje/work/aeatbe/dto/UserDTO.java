@@ -11,5 +11,13 @@ public class UserDTO {
     private String userId;
     private String allergies;
     private String freeFrom;
+    private String userName;
+    private String userImgUrl;
+
+    public UserDTO(Long id, String userName, String userImgUrl) {
+        this.id = id;
+        this.userName = userName;
+        this.userImgUrl = userImgUrl;
+    }
 
 }
