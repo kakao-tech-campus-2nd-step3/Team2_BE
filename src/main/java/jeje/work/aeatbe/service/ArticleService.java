@@ -59,7 +59,7 @@ public class ArticleService {
      */
     public ArticleListResponseDTO getArticles(String category, String title, String subtitle, String sortby, String pageToken, int maxResults) {
 
-        Sort sort = getSortBy(sortby);
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
 
         Page<Article> articlePage = articleRepository.findByTagsContainingAndTitleContainingAndContentContaining(
             category != null ? category : "",
@@ -174,12 +174,12 @@ public class ArticleService {
         return contentList;
     }
 
-    private Sort getSortBy(String sortby) {
-        if ("popular".equalsIgnoreCase(sortby)) {
-            return Sort.by(Sort.Direction.DESC, "likes");
-        } else {
-            return Sort.by(Sort.Direction.DESC, "date");
-        }
-    }
+//    private Sort getSortBy(String sortby) {
+//        if ("popular".equalsIgnoreCase(sortby)) {
+//            return Sort.by(Sort.Direction.DESC, "likes");
+//        } else {
+//            return Sort.by(Sort.Direction.DESC, "date");
+//        }
+//    }
 
 }
