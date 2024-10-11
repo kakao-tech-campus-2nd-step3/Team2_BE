@@ -87,8 +87,8 @@ public class EntityRepositoryTests {
             articleDTO.getAuthor(),
             articleDTO.getTags(),
             articleDTO.getContent(),
-            articleDTO.getLikes(),
-            articleDTO.getThumbnailUrl()
+            articleDTO.getThumbnailUrl(),
+            articleDTO.getLikes()
         );
 
         Article savedArticle = articleRepository.save(article);
