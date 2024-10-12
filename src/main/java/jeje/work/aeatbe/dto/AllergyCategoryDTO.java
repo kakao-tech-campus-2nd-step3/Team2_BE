@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 public class AllergyCategoryDTO {
 
-    private int id;
+    private Long id;
     private String allergyType;
     
 }

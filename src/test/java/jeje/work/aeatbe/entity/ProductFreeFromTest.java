@@ -18,7 +18,7 @@ public class ProductFreeFromTest {
         Product product = new Product();
         FreeFromCategory freeFromCategory = new FreeFromCategory();
 
-        ProductFreeFrom productFreeFrom = new ProductFreeFrom(1, product, freeFromCategory);
+        ProductFreeFrom productFreeFrom = new ProductFreeFrom(1L, product, freeFromCategory);
 
         assertEquals(1, productFreeFrom.getId());
         assertEquals(product, productFreeFrom.getProduct());
@@ -43,9 +43,9 @@ public class ProductFreeFromTest {
         FreeFromCategory freeFromCategory1 = new FreeFromCategory();
         FreeFromCategory freeFromCategory2 = new FreeFromCategory();
 
-        ProductFreeFrom productFreeFrom1 = new ProductFreeFrom(1, product1, freeFromCategory1);
-        ProductFreeFrom productFreeFrom2 = new ProductFreeFrom(1, product1, freeFromCategory1);
-        ProductFreeFrom productFreeFrom3 = new ProductFreeFrom(2, product2, freeFromCategory2);
+        ProductFreeFrom productFreeFrom1 = new ProductFreeFrom(1L, product1, freeFromCategory1);
+        ProductFreeFrom productFreeFrom2 = new ProductFreeFrom(1L, product1, freeFromCategory1);
+        ProductFreeFrom productFreeFrom3 = new ProductFreeFrom(2L, product2, freeFromCategory2);
 
         assertEquals(productFreeFrom1, productFreeFrom2);
         assertNotEquals(productFreeFrom1, productFreeFrom3);

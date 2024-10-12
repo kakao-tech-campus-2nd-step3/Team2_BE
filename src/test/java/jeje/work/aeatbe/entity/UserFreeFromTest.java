@@ -18,7 +18,7 @@ public class UserFreeFromTest {
         User user = new User();
         FreeFromCategory freeFromCategory = new FreeFromCategory();
 
-        UserFreeFrom userFreeFrom = new UserFreeFrom(1, user, freeFromCategory);
+        UserFreeFrom userFreeFrom = new UserFreeFrom(1L, user, freeFromCategory);
 
         assertEquals(1, userFreeFrom.getId());
         assertEquals(user, userFreeFrom.getUser());
@@ -43,9 +43,9 @@ public class UserFreeFromTest {
         FreeFromCategory freeFromCategory1 = new FreeFromCategory();
         FreeFromCategory freeFromCategory2 = new FreeFromCategory();
 
-        UserFreeFrom userFreeFrom1 = new UserFreeFrom(1, user1, freeFromCategory1);
-        UserFreeFrom userFreeFrom2 = new UserFreeFrom(1, user1, freeFromCategory1);
-        UserFreeFrom userFreeFrom3 = new UserFreeFrom(2, user2, freeFromCategory2);
+        UserFreeFrom userFreeFrom1 = new UserFreeFrom(1L, user1, freeFromCategory1);
+        UserFreeFrom userFreeFrom2 = new UserFreeFrom(1L, user1, freeFromCategory1);
+        UserFreeFrom userFreeFrom3 = new UserFreeFrom(2L, user2, freeFromCategory2);
 
         assertEquals(userFreeFrom1, userFreeFrom2);
         assertNotEquals(userFreeFrom1, userFreeFrom3);

@@ -23,25 +23,37 @@ jobs:
         with:
           gradle-version: 8.10
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      # 캐시 생성 비용이 더 큼
+      # - name: Cache Gradle packages
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/.gradle/caches
+      #       ~/.gradle/wrapper
+      #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-gradle-
+
+      - name: Start Docker Compose and wait for database
+        run: |
+          chmod +x ./gradlew
+          cd ./docker
+          docker compose up -d
+          # Wait for database to be ready
+          echo "Waiting for database to be ready..."
+          timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=db") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
 
       - name: Install dependencies
         run: ./gradlew build -x test
 
-#      - name: Run Lint check (Checkstyle)
-#        run: ./gradlew check
-
       - name: Run Tests
         run: ./gradlew test
 
-#      - name: Run Integration Tests
-#        run: ./gradlew integrationTest
-
       - name: Package the application
         run: ./gradlew assemble
+
+      - name: Cleanup
+        if: always()
+        run: |
+          cd ./docker
+          docker compose down
