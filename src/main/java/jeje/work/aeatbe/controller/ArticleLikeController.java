@@ -49,7 +49,7 @@ public class ArticleLikeController {
 
     /**
      * 좋아요 삭제
-     * @param articleId
+     * @param articleLikeId
      * @param userId
      * @return HTTP.status.OK
      */
