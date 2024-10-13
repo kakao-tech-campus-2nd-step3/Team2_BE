@@ -9,9 +9,11 @@ import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.ArticleLikeRepository;
 import jeje.work.aeatbe.repository.ArticleRepository;
 import jeje.work.aeatbe.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ArticleLikeService {
 
     private final ArticleLikeRepository articleLikeRepository;
@@ -20,11 +22,7 @@ public class ArticleLikeService {
 
     private final ArticleRepository articleRepository;
 
-    public ArticleLikeService(ArticleLikeRepository articleLikeRepository, UserRepository userRepository, ArticleRepository articleRepository) {
-        this.articleLikeRepository = articleLikeRepository;
-        this.userRepository = userRepository;
-        this.articleRepository = articleRepository;
-    }
+
 
     /**
      * 좋아요를 누릅니다
@@ -33,7 +31,7 @@ public class ArticleLikeService {
      * @throws userNotFoundException:유저가 없을때
      * @throws columnNOtFoundException(확인할 수 없는 칼럼)
      */
-    public void likeArticle(Long userId, Long articleId) {
+    public ArticleLike likeArticle(Long userId, Long articleId) {
         User user = userRepository.findById(userId)
             .orElseThrow(()->new UserNotFoundException("확인할 수 없는 사용자입니다."));
         Article article = articleRepository.findById(articleId)
@@ -41,6 +39,7 @@ public class ArticleLikeService {
 
         ArticleLike like = new ArticleLike(user, article);
         articleLikeRepository.save(like);
+        return like;
     }
 
     /**
