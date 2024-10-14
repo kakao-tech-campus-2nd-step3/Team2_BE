@@ -10,7 +10,7 @@ import jeje.work.aeatbe.column_dto.ArticleResponseDTO;
 import jeje.work.aeatbe.column_dto.ContentDTO;
 import jeje.work.aeatbe.column_dto.PageInfoDTO;
 import jeje.work.aeatbe.entity.Article;
-import jeje.work.aeatbe.exception.NotFoundColumnException;
+import jeje.work.aeatbe.exception.ColumnNotFoundException;
 import jeje.work.aeatbe.repository.ArticleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -96,7 +96,7 @@ public class ArticleService {
      */
     public ArticleResponseDTO getArticleById(Long id) {
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundColumnException("Article with id " + id + " not found"));
+            .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
 
         List<String> keywords = Arrays.asList(article.getTags().split(","));
         List<ContentDTO> contentList = extractContentList(article.getContent());
@@ -122,7 +122,7 @@ public class ArticleService {
      */
     public ArticleDTO updateArticle(Long id, ArticleDTO articleDTO) {
         Article existingArticle = articleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundColumnException("Article with id " + id + " not found"));
+            .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
 
         Article updatedArticle = new Article(
             existingArticle.getId(),
@@ -147,7 +147,7 @@ public class ArticleService {
      */
     public void deleteArticle(Long id) {
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundColumnException("Article with id " + id + " not found"));
+            .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
 
         articleRepository.delete(article);
     }

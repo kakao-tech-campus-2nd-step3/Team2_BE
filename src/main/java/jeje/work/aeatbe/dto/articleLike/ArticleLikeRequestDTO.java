@@ -1,6 +1,5 @@
-package jeje.work.aeatbe.dto;
+package jeje.work.aeatbe.dto.articleLike;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
