@@ -1,7 +1,7 @@
 package jeje.work.aeatbe.controller;
 
-import jeje.work.aeatbe.dto.ArticleLikeRequestDTO;
-import jeje.work.aeatbe.dto.ArticleLikeResponseDTO;
+import jeje.work.aeatbe.dto.articleLike.ArticleLikeRequestDTO;
+import jeje.work.aeatbe.dto.articleLike.ArticleLikeResponseDTO;
 import jeje.work.aeatbe.entity.ArticleLike;
 import jeje.work.aeatbe.service.ArticleLikeService;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package jeje.work.aeatbe.dto;
+package jeje.work.aeatbe.dto.articleLike;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
