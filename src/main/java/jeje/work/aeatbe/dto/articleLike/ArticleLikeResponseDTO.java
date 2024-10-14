@@ -1,4 +1,4 @@
-package jeje.work.aeatbe.dto;
+package jeje.work.aeatbe.dto.articleLike;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class ArticleLikeResponseDTO {
 
     private Long articleLikeId;
+    private int count; //좋아요 개수
 
 }
