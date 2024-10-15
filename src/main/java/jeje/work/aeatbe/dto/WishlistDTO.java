@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 public class WishlistDTO {
 
-    private int id;
-    private int userId;
-    private int productId;
+    private Long id;
+    private Long userId;
+    private Long productId;
 
 }

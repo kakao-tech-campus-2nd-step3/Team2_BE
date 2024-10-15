@@ -7,6 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FreeFromCategoryDTO {
-    private int id;
+    private Long id;
     private String freeFromType;
 }
