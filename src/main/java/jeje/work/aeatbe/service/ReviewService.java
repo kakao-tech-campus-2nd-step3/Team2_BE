@@ -2,7 +2,7 @@ package jeje.work.aeatbe.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import jeje.work.aeatbe.dto.ReviewDTO;
+import jeje.work.aeatbe.dto.review.ReviewDTO;
 import jeje.work.aeatbe.dto.UserDTO;
 import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.entity.Review;
@@ -34,6 +34,8 @@ public class ReviewService {
      * @param productId    상품 id
      * @param token        유저 토큰
      * @return list 형식의 reviewDTO
+     *
+     * @todo 토큰에서 파싱된 정보를 기반으로 userId에 들어갈 값을 수정 해야 함
      */
     public List<ReviewDTO> getReviews(boolean searchByUser, Long productId, String token) {
         List<Review> reviews = List.of();
@@ -41,7 +43,7 @@ public class ReviewService {
             if (token == null || token.isEmpty()) {
                 throw new IllegalStateException("로그인이 필요합니다.");
             }
-            // 여기서 토큰을 디코딩하여 사용자 ID 추출하는 코드 추가 예정 (token)
+
             Long userId = 1L;
             reviews = reviewRepository.findByUserId(userId);
 
@@ -73,22 +75,22 @@ public class ReviewService {
      *
      * @param reviewDTO 리뷰 DTO
      * @param token     유저 토큰
+     *
+     * @todo 파싱된 정보에서 user에 대한 정보를 기반으로 userId와 하위 로직을 수정해야 함
      */
     public void createReview(ReviewDTO reviewDTO, String token) {
-
-        // 현재는 임시로 이렇게 해 두고 토큰이 생기면 수정하겠습니다
-        Long userId = reviewDTO.getUser().getId();
+        Long userId = reviewDTO.user().getId();
 
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        Product product = productRepository.findById(reviewDTO.getProductId())
+        Product product = productRepository.findById(reviewDTO.productId())
             .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
         Review review = new Review(
-            reviewDTO.getId(),
-            reviewDTO.getRate(),
-            reviewDTO.getContent(),
+            reviewDTO.id(),
+            reviewDTO.rate(),
+            reviewDTO.content(),
             user,
             product
         );
@@ -109,8 +111,8 @@ public class ReviewService {
 
         Review updateReview = new Review(
             existingReview.getId(),
-            reviewDTO.getRate(),
-            reviewDTO.getContent(),
+            reviewDTO.rate(),
+            reviewDTO.content(),
             existingReview.getUser(),
             existingReview.getProduct()
         );
