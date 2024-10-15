@@ -3,19 +3,16 @@ package jeje.work.aeatbe.dto;
 import lombok.*;
 import java.sql.Timestamp;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ArticleDTO {
-
-    private Long id;
-    private String title;
-    private Timestamp date;
-    private String author;
-    private String tags;
-    private String content;
-    private int likes;
-    private String thumbnailUrl;
-
+public record ArticleDTO(
+    Long id,
+    String title,
+    Timestamp date,
+    String author,
+    String tags,
+    String content,
+    int likes,
+    String thumbnailUrl
+) {
+    @Builder
+    public ArticleDTO {}
 }
