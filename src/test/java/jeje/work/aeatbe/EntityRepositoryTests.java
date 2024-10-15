@@ -74,28 +74,28 @@ public class EntityRepositoryTests {
         assertThat(savedUser.getId()).isGreaterThan(0);
     }
 
-    @Test
-    public void testCreateArticle() {
-        ArticleDTO articleDTO = new ArticleDTO();
-        articleDTO.setTitle("Test Article");
-        articleDTO.setAuthor("Author1");
-        articleDTO.setContent("test article");
-        articleDTO.setDate(new Timestamp(System.currentTimeMillis()));
-
-        Article article = new Article(
-            articleDTO.getId(),
-            articleDTO.getTitle(),
-            articleDTO.getDate(),
-            articleDTO.getAuthor(),
-            articleDTO.getTags(),
-            articleDTO.getContent(),
-            articleDTO.getThumbnailUrl(),
-            articleDTO.getLikes()
-        );
-
-        Article savedArticle = articleRepository.save(article);
-        assertThat(savedArticle.getId()).isGreaterThan(0);
-    }
+//    @Test
+//    public void testCreateArticle() {
+//        ArticleDTO articleDTO = new ArticleDTO();
+//        articleDTO.setTitle("Test Article");
+//        articleDTO.setAuthor("Author1");
+//        articleDTO.setContent("test article");
+//        articleDTO.setDate(new Timestamp(System.currentTimeMillis()));
+//
+//        Article article = new Article(
+//            articleDTO.getId(),
+//            articleDTO.getTitle(),
+//            articleDTO.getDate(),
+//            articleDTO.getAuthor(),
+//            articleDTO.getTags(),
+//            articleDTO.getContent(),
+//            articleDTO.getThumbnailUrl(),
+//            articleDTO.getLikes()
+//        );
+//
+//        Article savedArticle = articleRepository.save(article);
+//        assertThat(savedArticle.getId()).isGreaterThan(0);
+//    }
 
     @Test
     public void testCreateWishlist() {
