@@ -1,0 +1,9 @@
+# docker-compose.override.yml
+services:
+  db:
+    volumes:
+      - aeatbe-data:/var/lib/mysql
+
+volumes:
+  aeatbe-data:
+    driver: local
