@@ -1,4 +1,4 @@
-package jeje.work.aeatbe.dto;
+package jeje.work.aeatbe.dto.article;
 
 import lombok.*;
 import java.sql.Timestamp;

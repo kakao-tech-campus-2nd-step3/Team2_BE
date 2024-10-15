@@ -1,14 +1,13 @@
 package jeje.work.aeatbe.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import jeje.work.aeatbe.dto.ArticleDTO;
-import jeje.work.aeatbe.dto.column_dto.ArticleListResponseDTO;
-import jeje.work.aeatbe.dto.column_dto.ArticleResponseDTO;
-import jeje.work.aeatbe.dto.column_dto.ContentDTO;
-import jeje.work.aeatbe.dto.column_dto.PageInfoDTO;
+import jeje.work.aeatbe.dto.article.ArticleDTO;
+import jeje.work.aeatbe.dto.article.ArticleListResponseDTO;
+import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
+import jeje.work.aeatbe.dto.article.ContentDTO;
+import jeje.work.aeatbe.dto.article.PageInfoDTO;
 import jeje.work.aeatbe.entity.Article;
 import jeje.work.aeatbe.exception.ColumnNotFoundException;
 import jeje.work.aeatbe.repository.ArticleRepository;

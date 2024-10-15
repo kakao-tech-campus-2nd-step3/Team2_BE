@@ -1,4 +1,4 @@
-package jeje.work.aeatbe.dto.column_dto;
+package jeje.work.aeatbe.dto.article;
 
 import lombok.*;
 

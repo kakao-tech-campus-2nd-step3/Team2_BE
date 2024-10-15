@@ -3,7 +3,7 @@ package jeje.work.aeatbe.utility;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import jeje.work.aeatbe.dto.column_dto.ContentDTO;
+import jeje.work.aeatbe.dto.article.ContentDTO;
 
 public class ArticleUtil {
     public static String extractSubtitle(String content) {

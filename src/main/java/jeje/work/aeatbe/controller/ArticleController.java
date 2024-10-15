@@ -1,8 +1,8 @@
 package jeje.work.aeatbe.controller;
 
-import jeje.work.aeatbe.dto.column_dto.ArticleListResponseDTO;
-import jeje.work.aeatbe.dto.column_dto.ArticleResponseDTO;
-import jeje.work.aeatbe.dto.*;
+import jeje.work.aeatbe.dto.article.ArticleDTO;
+import jeje.work.aeatbe.dto.article.ArticleListResponseDTO;
+import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
 import jeje.work.aeatbe.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
