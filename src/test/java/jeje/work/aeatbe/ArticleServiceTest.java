@@ -13,6 +13,7 @@ import jeje.work.aeatbe.dto.column_dto.ArticleResponseDTO;
 import jeje.work.aeatbe.entity.Article;
 import jeje.work.aeatbe.repository.ArticleRepository;
 import jeje.work.aeatbe.service.ArticleService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,6 +45,7 @@ public class ArticleServiceTest {
     }
 
     @Test
+    @DisplayName("필터 및 페이지네이션을 사용하여 기사 목록을 가져오는 테스트(칼럼 리스트 반환 기능)")
     public void testGetArticles() {
         Article article1 = new Article(1L, "Title 1", new Timestamp(System.currentTimeMillis()), "Author 1", "sports,news", "Title 1\nSubtitle 1\nImage URL 1", "http://example.com/image1.jpg", 10);
         Article article2 = new Article(2L, "Title 2", new Timestamp(System.currentTimeMillis()), "Author 2", "news", "Title 2\nSubtitle 2\nImage URL 2", "http://example.com/image2.jpg", 20);
@@ -70,6 +72,7 @@ public class ArticleServiceTest {
     }
 
     @Test
+    @DisplayName("ID로 특정 기사를 가져오는 테스트(특정 칼럼 반환 기능)")
     public void testGetArticleById() {
         Article article = new Article(1L, "Title 1", new Timestamp(System.currentTimeMillis()), "Author 1", "sports,news", "Title 1\nSubtitle 1\nImage URL 1", "http://example.com/image1.jpg", 10);
 
