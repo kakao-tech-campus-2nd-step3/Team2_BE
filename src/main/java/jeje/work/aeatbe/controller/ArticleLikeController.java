@@ -42,8 +42,8 @@ public class ArticleLikeController {
      */
     @PostMapping
     public ResponseEntity<ArticleLikeResponseDTO> addArticleLike(@RequestBody ArticleLikeRequestDTO articleLikeRequestDTO) {
-        ArticleLike articleLike = articleLikeService.likeArticle(articleLikeRequestDTO.getArticleId(), articleLikeRequestDTO.getUserId());
-        int like = articleLikeService.getArticleLikeCount(articleLikeRequestDTO.getArticleId());
+        ArticleLike articleLike = articleLikeService.likeArticle(articleLikeRequestDTO.articleId(), articleLikeRequestDTO.userId());
+        int like = articleLikeService.getArticleLikeCount(articleLikeRequestDTO.articleId());
         return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articleLike.getId(),like));
     }
 
