@@ -3,6 +3,7 @@ package jeje.work.aeatbe.resolver;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jeje.work.aeatbe.annotation.LoginUser;
+import jeje.work.aeatbe.exception.TokenException;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -33,6 +34,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
             token = token.substring(7);
             return jwtUtil.getKakaoId(token);
         }
-        throw new JwtException("권한이 없습니다.");
+        throw new TokenException("권한이 없습니다.");
     }
 }
