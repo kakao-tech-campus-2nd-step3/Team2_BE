@@ -5,11 +5,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
 import jeje.work.aeatbe.entity.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
 
+    @Value("${jwt.secret.key}")
     private String secretKey;
 
     private Long tokenExpTime = 36000000L;

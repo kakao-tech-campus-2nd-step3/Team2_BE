@@ -22,3 +22,7 @@ spring:
   docker:
     compose:
       file: ./docker/compose.yml
+
+jwt:
+  secret:
+    key: Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E
