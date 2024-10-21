@@ -1,5 +1,6 @@
 package jeje.work.aeatbe.controller;
 
+import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.dto.articleLike.ArticleLikeRequestDTO;
 import jeje.work.aeatbe.dto.articleLike.ArticleLikeResponseDTO;
 import jeje.work.aeatbe.entity.ArticleLike;
@@ -24,12 +25,12 @@ public class ArticleLikeController {
     /**
      * 좋아요를 가져온다
      * @param articleId
-     * @param userId
+     * @param loginUserId
      * @return ArticleLikeResponseDTO
      */
     @GetMapping
-    public ResponseEntity<ArticleLikeResponseDTO> getArticleLikes(@RequestParam Long articleId, @RequestParam Long userId) {
-        ArticleLike articlelike = articleLikeService.findArticleLikeByUserAndArticle(userId, articleId);
+    public ResponseEntity<ArticleLikeResponseDTO> getArticleLikes(@RequestParam Long articleId, @LoginUser String loginUserId) {
+        ArticleLike articlelike = articleLikeService.findArticleLikeByUserAndArticle(loginUserId, articleId);
         int like = articleLikeService.getArticleLikeCount(articleId);
         return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articlelike.getId(),like));
     }
@@ -41,8 +42,8 @@ public class ArticleLikeController {
      * @return ArticleLikePostResponseDTO
      */
     @PostMapping
-    public ResponseEntity<ArticleLikeResponseDTO> addArticleLike(@RequestBody ArticleLikeRequestDTO articleLikeRequestDTO) {
-        ArticleLike articleLike = articleLikeService.likeArticle(articleLikeRequestDTO.articleId(), articleLikeRequestDTO.userId());
+    public ResponseEntity<ArticleLikeResponseDTO> addArticleLike(@RequestBody ArticleLikeRequestDTO articleLikeRequestDTO, @LoginUser String loginUserId) {
+        ArticleLike articleLike = articleLikeService.likeArticle(loginUserId, articleLikeRequestDTO.articleId());
         int like = articleLikeService.getArticleLikeCount(articleLikeRequestDTO.articleId());
         return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articleLike.getId(),like));
     }
@@ -50,11 +51,11 @@ public class ArticleLikeController {
     /**
      * 좋아요 삭제
      * @param articleLikeId
-     * @param userId
+     * @param loginUserId
      * @return HTTP.status.OK
      */
     @DeleteMapping("/{articleLikeId}")
-    public ResponseEntity<?> deleteArticleLike(@PathVariable Long articleLikeId, @RequestParam Long userId) {
+    public ResponseEntity<?> deleteArticleLike(@PathVariable Long articleLikeId, @LoginUser String loginUserId) {
         articleLikeService.deleteArticleLike(articleLikeId);
         return ResponseEntity.ok().build();
     }

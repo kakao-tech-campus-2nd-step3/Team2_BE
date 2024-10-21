@@ -5,6 +5,6 @@ import lombok.Builder;
 
 
 @Builder
-public record ArticleLikeRequestDTO(Long userId, Long articleId) {
+public record ArticleLikeRequestDTO(Long articleId) {
 
 }
