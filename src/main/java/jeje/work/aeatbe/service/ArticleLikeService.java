@@ -31,8 +31,8 @@ public class ArticleLikeService {
      * @throws userNotFoundException:유저가 없을때
      * @throws columnNOtFoundException(확인할 수 없는 칼럼)
      */
-    public ArticleLike likeArticle(Long userId, Long articleId) {
-        User user = userRepository.findById(userId)
+    public ArticleLike likeArticle(String userId, Long articleId) {
+        User user = userRepository.findByUserId(userId)
             .orElseThrow(()->new UserNotFoundException("확인할 수 없는 사용자입니다."));
         Article article = articleRepository.findById(articleId)
             .orElseThrow(()->new ColumnNotFoundException("확인할 수 없는 컬럼입니다."));
@@ -58,8 +58,8 @@ public class ArticleLikeService {
      * @param articleId
      * @return articleLike(좋아요)
      */
-    public ArticleLike findArticleLikeByUserAndArticle(Long userId, Long articleId) {
-        return articleLikeRepository.findByUserIdAndArticleId(userId,articleId)
+    public ArticleLike findArticleLikeByUserAndArticle(String userId, Long articleId) {
+        return articleLikeRepository.findByUserUserIdAndArticleId(userId,articleId)
             .orElseThrow(()->new ArticleLikeNotFoundException("확인할 수 없는 좋아요입니다."));
     }
 

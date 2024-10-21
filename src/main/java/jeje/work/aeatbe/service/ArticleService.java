@@ -1,30 +1,28 @@
 package jeje.work.aeatbe.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import jeje.work.aeatbe.dto.ArticleDTO;
-import jeje.work.aeatbe.column_dto.ArticleListResponseDTO;
-import jeje.work.aeatbe.column_dto.ArticleResponseDTO;
-import jeje.work.aeatbe.column_dto.ContentDTO;
-import jeje.work.aeatbe.column_dto.PageInfoDTO;
+import jeje.work.aeatbe.dto.article.ArticleDTO;
+import jeje.work.aeatbe.dto.article.ArticleListResponseDTO;
+import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
+import jeje.work.aeatbe.dto.article.ContentDTO;
+import jeje.work.aeatbe.dto.article.PageInfoDTO;
 import jeje.work.aeatbe.entity.Article;
 import jeje.work.aeatbe.exception.ColumnNotFoundException;
 import jeje.work.aeatbe.repository.ArticleRepository;
+import jeje.work.aeatbe.utility.ArticleUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-
-    public ArticleService(ArticleRepository articleRepository){
-        this.articleRepository = articleRepository;
-    }
 
     /**
      * 새로운 칼럼을 데이터베이스에 저장
@@ -34,14 +32,14 @@ public class ArticleService {
      */
     public ArticleDTO createArticle(ArticleDTO articleDTO) {
         Article article = new Article(
-            articleDTO.getId(),
-            articleDTO.getTitle(),
-            articleDTO.getDate(),
-            articleDTO.getAuthor(),
-            articleDTO.getTags(),
-            articleDTO.getContent(),
-            articleDTO.getThumbnailUrl(),
-            articleDTO.getLikes()  // 좋아요 수도 그대로 저장
+            articleDTO.id(),
+            articleDTO.title(),
+            articleDTO.date(),
+            articleDTO.author(),
+            articleDTO.tags(),
+            articleDTO.content(),
+            articleDTO.thumbnailUrl(),
+            articleDTO.likes()
         );
         articleRepository.save(article);
         return articleDTO;
@@ -62,7 +60,6 @@ public class ArticleService {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "date");
 
-        // Directly use the parameters without null checks
         Page<Article> articlePage = articleRepository.findByTagsContainingAndTitleContainingAndContentContaining(
             category, title, subtitle,
             PageRequest.of(Integer.parseInt(pageToken), maxResults, sort)
@@ -82,7 +79,7 @@ public class ArticleService {
                 article.getAuthor(),
                 Arrays.asList(article.getTags().split(",")),
                 null,
-                extractSubtitle(article.getContent())
+                ArticleUtil.extractSubtitle(article.getContent())
             ))
             .collect(Collectors.toList());
 
@@ -100,7 +97,7 @@ public class ArticleService {
             .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
 
         List<String> keywords = Arrays.asList(article.getTags().split(","));
-        List<ContentDTO> contentList = extractContentList(article.getContent());
+        List<ContentDTO> contentList = ArticleUtil.extractContentList(article.getContent());
 
         return new ArticleResponseDTO(
             article.getId(),
@@ -110,7 +107,7 @@ public class ArticleService {
             article.getAuthor(),
             keywords,
             contentList,
-            extractSubtitle(article.getContent())
+            ArticleUtil.extractSubtitle(article.getContent())
         );
     }
 
@@ -127,13 +124,13 @@ public class ArticleService {
 
         Article updatedArticle = new Article(
             existingArticle.getId(),
-            articleDTO.getTitle(),
-            articleDTO.getDate() != null ? articleDTO.getDate() : existingArticle.getDate(),
-            articleDTO.getAuthor(),
-            articleDTO.getTags(),
-            articleDTO.getContent(),
-            articleDTO.getThumbnailUrl(),
-            articleDTO.getLikes()
+            articleDTO.title(),
+            articleDTO.date() != null ? articleDTO.date() : existingArticle.getDate(),
+            articleDTO.author(),
+            articleDTO.tags(),
+            articleDTO.content(),
+            articleDTO.thumbnailUrl(),
+            articleDTO.likes()
         );
 
         articleRepository.save(updatedArticle);
@@ -153,34 +150,5 @@ public class ArticleService {
         articleRepository.delete(article);
     }
 
-    private String extractSubtitle(String content) {
-        String[] lines = content.split("\n");
-        return lines.length > 1 ? lines[1] : "";
-    }
-
-    private List<ContentDTO> extractContentList(String content) {
-        String[] lines = content.split("\n");
-        List<ContentDTO> contentList = new ArrayList<>();
-
-        if (lines.length > 0) contentList.add(new ContentDTO("h2", lines[0])); // 제목
-        if (lines.length > 1) contentList.add(new ContentDTO("h3", lines[1])); // 소제목
-        if (lines.length > 2) contentList.add(new ContentDTO("img", lines[2])); // 이미지 URL
-
-        if (lines.length > 3) {
-            // 본문을 \n 포함한 상태로 그대로 묶어서 처리
-            String body = String.join("\n", Arrays.copyOfRange(lines, 3, lines.length));
-            contentList.add(new ContentDTO("p", body)); // 본문 전체를 한 번에 추가
-        }
-
-        return contentList;
-    }
-
-//    private Sort getSortBy(String sortby) {
-//        if ("popular".equalsIgnoreCase(sortby)) {
-//            return Sort.by(Sort.Direction.DESC, "likes");
-//        } else {
-//            return Sort.by(Sort.Direction.DESC, "date");
-//        }
-//    }
-
 }
+
