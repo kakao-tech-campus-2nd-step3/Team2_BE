@@ -3,7 +3,7 @@ package jeje.work.aeatbe.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import jeje.work.aeatbe.dto.review.ReviewDTO;
-import jeje.work.aeatbe.dto.UserDTO;
+import jeje.work.aeatbe.dto.User.UserDTO;
 import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.entity.Review;
 import jeje.work.aeatbe.entity.User;
@@ -79,7 +79,7 @@ public class ReviewService {
      * @todo 파싱된 정보에서 user에 대한 정보를 기반으로 userId와 하위 로직을 수정해야 함
      */
     public void createReview(ReviewDTO reviewDTO, String token) {
-        Long userId = reviewDTO.user().getId();
+        Long userId = reviewDTO.user().id();
 
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));

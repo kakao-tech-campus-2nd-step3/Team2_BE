@@ -23,7 +23,7 @@ public class JwtUtil {
      */
     public String createToken(User user){
         return Jwts.builder()
-            .subject(user.getKakaoId())
+            .subject(user.getUserId())
             .issuedAt(new Date(System.currentTimeMillis()))
             .expiration(new Date(System.currentTimeMillis()+tokenExpTime))
             .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
@@ -47,7 +47,7 @@ public class JwtUtil {
     }
 
     /**
-     * 토큰으로부터 카카오ID를 추출
+     * 토큰으로부터 UserId(카카오ID)를 추출
      * @param token
      * @return kakaoId
      */
