@@ -1,6 +1,6 @@
 package jeje.work.aeatbe.dto.review;
 
-import jeje.work.aeatbe.dto.UserDTO;
+import jeje.work.aeatbe.dto.User.UserDTO;
 import lombok.Builder;
 
 @Builder
