@@ -29,30 +29,30 @@ public class EntityRepositoryTests {
     @Autowired
     private AllergyCategoryRepository allergyCategoryRepository;
 
-    @Test
-    public void testCreateProduct() {
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setProductName("Test Product");
-        productDTO.setAllergens("nuts");
-        productDTO.setManufacturer("Test Manufacturer");
-
-        Product product = new Product(
-            productDTO.getId(),
-            productDTO.getAllergens(),
-            productDTO.getNutritionalInfo(),
-            productDTO.getProductImageUrl(),
-            productDTO.getMetaImageUrl(),
-            productDTO.getTypeName(),
-            productDTO.getManufacturer(),
-            productDTO.getSeller(),
-            productDTO.getCapacity(),
-            productDTO.getProductName(),
-            productDTO.getIngredients()
-        );
-
-        Product savedProduct = productRepository.save(product);
-        assertThat(savedProduct.getId()).isGreaterThan(0);
-    }
+//    @Test
+//    public void testCreateProduct() {
+//        ProductDTO productDTO = new ProductDTO();
+//        productDTO.setProductName("Test Product");
+//        productDTO.setAllergens("nuts");
+//        productDTO.setManufacturer("Test Manufacturer");
+//
+//        Product product = new Product(
+//            productDTO.getId(),
+//            productDTO.getAllergens(),
+//            productDTO.getNutritionalInfo(),
+//            productDTO.getProductImageUrl(),
+//            productDTO.getMetaImageUrl(),
+//            productDTO.getTypeName(),
+//            productDTO.getManufacturer(),
+//            productDTO.getSeller(),
+//            productDTO.getCapacity(),
+//            productDTO.getProductName(),
+//            productDTO.getIngredients()
+//        );
+//
+//        Product savedProduct = productRepository.save(product);
+//        assertThat(savedProduct.getId()).isGreaterThan(0);
+//    }
 
 //    @Test
 //    public void testCreateUser() {

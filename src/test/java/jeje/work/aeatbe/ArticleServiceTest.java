@@ -54,10 +54,25 @@ public class ArticleServiceTest {
         Page<Article> page1 = new PageImpl<>(List.of(article1, article2));
         Page<Article> page2 = new PageImpl<>(List.of(article3));
 
-        when(articleRepository.findByTagsContainingAndTitleContainingAndContentContaining(anyString(), anyString(), anyString(), any(Pageable.class)))
+        // 모든 조건이 비어 있을 때 findAll() 호출을 가정합니다.
+        when(articleRepository.findAll(any(Pageable.class)))
             .thenReturn(page1)
             .thenReturn(page2);
 
+        // 개별 조건에 대한 repository 호출을 가정합니다.
+        when(articleRepository.findByTagsContaining(anyString(), any(Pageable.class)))
+            .thenReturn(page1)
+            .thenReturn(page2);
+
+        when(articleRepository.findByTitleContaining(anyString(), any(Pageable.class)))
+            .thenReturn(page1)
+            .thenReturn(page2);
+
+        when(articleRepository.findByContentContaining(anyString(), any(Pageable.class)))
+            .thenReturn(page1)
+            .thenReturn(page2);
+
+        // 테스트 케이스 1: 모든 조건이 비어 있을 때 (전체 기사 가져오기)
         ArticleListResponseDTO result1 = articleService.getArticles("", "", "", "new", "0", 2);
         assertEquals(2, result1.columns().size());
         assertEquals("Title 1", result1.columns().get(0).title());
@@ -65,10 +80,23 @@ public class ArticleServiceTest {
         assertEquals("Title 2", result1.columns().get(1).title());
         assertEquals("Subtitle 2", result1.columns().get(1).subtitle());
 
+        // 테스트 케이스 2: 다음 페이지로 이동 (전체 기사 가져오기)
         ArticleListResponseDTO result2 = articleService.getArticles("", "", "", "new", "1", 2);
         assertEquals(1, result2.columns().size());
         assertEquals("Title 3", result2.columns().get(0).title());
         assertEquals("Subtitle 3", result2.columns().get(0).subtitle());
+
+        // 테스트 케이스 3: 특정 카테고리가 존재하는 경우
+        ArticleListResponseDTO result3 = articleService.getArticles("sports", "", "", "new", "0", 2);
+        assertEquals(2, result3.columns().size());
+
+        // 테스트 케이스 4: 특정 제목이 존재하는 경우
+        ArticleListResponseDTO result4 = articleService.getArticles("", "Title", "", "new", "0", 2);
+        assertEquals(2, result4.columns().size());
+
+        // 테스트 케이스 5: 특정 소제목이 존재하는 경우
+        ArticleListResponseDTO result5 = articleService.getArticles("", "", "Subtitle", "new", "0", 2);
+        assertEquals(2, result5.columns().size());
     }
 
     @Test
