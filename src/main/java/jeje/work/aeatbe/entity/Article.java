@@ -7,7 +7,6 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "articles")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Article extends BaseEntity{

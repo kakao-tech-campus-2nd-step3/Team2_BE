@@ -33,10 +33,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
-    @ExceptionHandler(WishlistNotFoundException.class)
-    public ResponseEntity wishlistNotFoundException(WishlistNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-    }
-
 
 }
