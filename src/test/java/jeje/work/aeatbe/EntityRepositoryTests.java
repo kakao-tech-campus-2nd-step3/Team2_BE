@@ -1,6 +1,7 @@
 package jeje.work.aeatbe;
 
 import jeje.work.aeatbe.dto.*;
+import jeje.work.aeatbe.dto.AllergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.dto.User.UserDTO;
 import jeje.work.aeatbe.entity.*;
 import jeje.work.aeatbe.repository.*;
@@ -143,12 +144,11 @@ public class EntityRepositoryTests {
 
     @Test
     public void testCreateAllergyCategory() {
-        AllergyCategoryDTO categoryDTO = new AllergyCategoryDTO();
-        categoryDTO.setAllergyType("Gluten");
+        AllergyCategoryDTO categoryDTO = AllergyCategoryDTO.builder().allergyType("TEST").build();
 
         AllergyCategory category = new AllergyCategory(
-            categoryDTO.getId(),
-            categoryDTO.getAllergyType()
+            categoryDTO.id(),
+            categoryDTO.allergyType()
         );
 
         AllergyCategory savedCategory = allergyCategoryRepository.save(category);
