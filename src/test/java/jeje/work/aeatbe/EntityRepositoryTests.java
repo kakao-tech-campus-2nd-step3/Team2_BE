@@ -1,17 +1,20 @@
 package jeje.work.aeatbe;
 
 import jeje.work.aeatbe.dto.*;
+import jeje.work.aeatbe.dto.AllergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.dto.User.UserDTO;
 import jeje.work.aeatbe.entity.*;
 import jeje.work.aeatbe.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 //dto, 엔티티 테스트
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class EntityRepositoryTests {
 
     @Autowired
@@ -143,12 +146,11 @@ public class EntityRepositoryTests {
 
     @Test
     public void testCreateAllergyCategory() {
-        AllergyCategoryDTO categoryDTO = new AllergyCategoryDTO();
-        categoryDTO.setAllergyType("Gluten");
+        AllergyCategoryDTO categoryDTO = AllergyCategoryDTO.builder().allergyType("TEST").build();
 
         AllergyCategory category = new AllergyCategory(
-            categoryDTO.getId(),
-            categoryDTO.getAllergyType()
+            categoryDTO.id(),
+            categoryDTO.allergyType()
         );
 
         AllergyCategory savedCategory = allergyCategoryRepository.save(category);

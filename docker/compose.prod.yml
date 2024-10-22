@@ -31,7 +31,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: production
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
-      SPRING_DATASOURCE_URL: jdbc:mysql://db_prod:3306/mydb
+      SPRING_DATASOURCE_URL: jdbc:mysql://db_prod:3306/mydb?useUnicode=true&characterEncoding=utf8
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
     ports:

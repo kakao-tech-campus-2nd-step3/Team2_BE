@@ -29,10 +29,11 @@ public class Article extends BaseEntity{
     private String tags;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "thumbnail_url", length = 255)
+    @Lob
+    @Column(name = "thumbnail_url", columnDefinition = "TEXT")
     private String thumbnailUrl;
 
 

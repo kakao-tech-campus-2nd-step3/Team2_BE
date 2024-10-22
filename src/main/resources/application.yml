@@ -18,10 +18,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
 
   docker:
     compose:
       file: ./docker/compose.yml
+
 jwt:
   secret:
     key: Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E
