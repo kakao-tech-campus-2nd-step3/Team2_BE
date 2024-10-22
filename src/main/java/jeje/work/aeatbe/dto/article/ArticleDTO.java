@@ -3,6 +3,7 @@ package jeje.work.aeatbe.dto.article;
 import lombok.*;
 import java.sql.Timestamp;
 
+@Builder
 public record ArticleDTO(
     Long id,
     String title,
@@ -13,6 +14,4 @@ public record ArticleDTO(
     int likes,
     String thumbnailUrl
 ) {
-    @Builder
-    public ArticleDTO {}
 }

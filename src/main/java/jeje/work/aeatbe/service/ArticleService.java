@@ -15,6 +15,7 @@ import jeje.work.aeatbe.utility.ArticleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -31,16 +32,16 @@ public class ArticleService {
      * @return 생성된 칼럼의 DTO
      */
     public ArticleDTO createArticle(ArticleDTO articleDTO) {
-        Article article = new Article(
-            articleDTO.id(),
-            articleDTO.title(),
-            articleDTO.date(),
-            articleDTO.author(),
-            articleDTO.tags(),
-            articleDTO.content(),
-            articleDTO.thumbnailUrl(),
-            articleDTO.likes()
-        );
+        Article article = Article.builder()
+            .id(articleDTO.id())
+            .title(articleDTO.title())
+            .date(articleDTO.date())
+            .author(articleDTO.author())
+            .tags(articleDTO.tags())
+            .content(articleDTO.content())
+            .thumbnailUrl(articleDTO.thumbnailUrl())
+            .likes(articleDTO.likes())
+            .build();
         articleRepository.save(article);
         return articleDTO;
     }
@@ -60,10 +61,26 @@ public class ArticleService {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "date");
 
-        Page<Article> articlePage = articleRepository.findByTagsContainingAndTitleContainingAndContentContaining(
-            category, title, subtitle,
-            PageRequest.of(Integer.parseInt(pageToken), maxResults, sort)
-        );
+        Pageable pageable = PageRequest.of(Integer.parseInt(pageToken), maxResults, sort);
+        Page<Article> articlePage;
+
+        if (category != null && !category.isEmpty() && title != null && !title.isEmpty() && subtitle != null && !subtitle.isEmpty()) {
+            articlePage = articleRepository.findByTagsContainingAndTitleContainingAndContentContaining(
+                category, title, subtitle, pageable
+            );
+        }
+        else if ((category == null || category.isEmpty()) && (title == null || title.isEmpty()) && (subtitle == null || subtitle.isEmpty())) {
+            articlePage = articleRepository.findAll(pageable);
+        }
+        else if (category != null && !category.isEmpty()) {
+            articlePage = articleRepository.findByTagsContaining(category, pageable);
+        } else if (title != null && !title.isEmpty()) {
+            articlePage = articleRepository.findByTitleContaining(title, pageable);
+        } else if (subtitle != null && !subtitle.isEmpty()) {
+            articlePage = articleRepository.findByContentContaining(subtitle, pageable);
+        } else {
+            articlePage = articleRepository.findAll(pageable);
+        }
 
         PageInfoDTO pageInfo = new PageInfoDTO(
             (int) articlePage.getTotalElements(),
@@ -71,17 +88,18 @@ public class ArticleService {
         );
 
         List<ArticleResponseDTO> columns = articlePage.getContent().stream()
-            .map(article -> new ArticleResponseDTO(
-                article.getId(),
-                article.getTitle(),
-                article.getThumbnailUrl(),
-                article.getDate(),
-                article.getAuthor(),
-                Arrays.asList(article.getTags().split(",")),
-                null,
-                ArticleUtil.extractSubtitle(article.getContent())
-            ))
+            .map(article -> ArticleResponseDTO.builder()
+                .id(article.getId())
+                .title(article.getTitle())
+                .imgurl(article.getThumbnailUrl())
+                .createdAt(article.getDate())
+                .auth(article.getAuthor())
+                .keyword(Arrays.asList(article.getTags().split(",")))
+                .content(null)
+                .subtitle(ArticleUtil.extractSubtitle(article.getContent()))
+                .build())
             .collect(Collectors.toList());
+
 
         return new ArticleListResponseDTO(columns, pageToken, pageInfo);
     }
@@ -99,16 +117,16 @@ public class ArticleService {
         List<String> keywords = Arrays.asList(article.getTags().split(","));
         List<ContentDTO> contentList = ArticleUtil.extractContentList(article.getContent());
 
-        return new ArticleResponseDTO(
-            article.getId(),
-            article.getTitle(),
-            article.getThumbnailUrl(),
-            article.getDate(),
-            article.getAuthor(),
-            keywords,
-            contentList,
-            ArticleUtil.extractSubtitle(article.getContent())
-        );
+        return ArticleResponseDTO.builder()
+            .id(article.getId())
+            .title(article.getTitle())
+            .imgurl(article.getThumbnailUrl())
+            .createdAt(article.getDate())
+            .auth(article.getAuthor())
+            .keyword(keywords)
+            .content(contentList)
+            .subtitle(ArticleUtil.extractSubtitle(article.getContent()))
+            .build();
     }
 
     /**
@@ -122,16 +140,16 @@ public class ArticleService {
         Article existingArticle = articleRepository.findById(id)
             .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
 
-        Article updatedArticle = new Article(
-            existingArticle.getId(),
-            articleDTO.title(),
-            articleDTO.date() != null ? articleDTO.date() : existingArticle.getDate(),
-            articleDTO.author(),
-            articleDTO.tags(),
-            articleDTO.content(),
-            articleDTO.thumbnailUrl(),
-            articleDTO.likes()
-        );
+        Article updatedArticle = Article.builder()
+            .id(existingArticle.getId())
+            .title(articleDTO.title())
+            .date(articleDTO.date() != null ? articleDTO.date() : existingArticle.getDate())
+            .author(articleDTO.author())
+            .tags(articleDTO.tags())
+            .content(articleDTO.content())
+            .thumbnailUrl(articleDTO.thumbnailUrl())
+            .likes(articleDTO.likes())
+            .build();
 
         articleRepository.save(updatedArticle);
 
