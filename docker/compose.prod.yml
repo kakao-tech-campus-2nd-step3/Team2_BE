@@ -10,7 +10,11 @@ services:
       - aeatbe-data-prod:/var/lib/mysql  # 볼륨 연결
     container_name: db_prod
     ports: []
-
+    deploy:
+      resources:
+        limits:
+          memory: 1014M
+ 
   app:
     build:
       context: ..
