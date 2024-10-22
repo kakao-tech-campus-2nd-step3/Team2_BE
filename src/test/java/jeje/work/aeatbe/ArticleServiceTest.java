@@ -33,17 +33,6 @@ public class ArticleServiceTest {
     @Autowired
     private ArticleService articleService;
 
-    @DynamicPropertySource
-    static void databaseProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", () -> "jdbc:h2:mem:testdb");
-        registry.add("spring.datasource.driver-class-name", () -> "org.h2.Driver");
-        registry.add("spring.datasource.username", () -> "sa");
-        registry.add("spring.datasource.password", () -> "");
-        registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
-        registry.add("spring.jpa.show-sql", () -> "true");
-        registry.add("spring.jpa.properties.hibernate.dialect", () -> "org.hibernate.dialect.H2Dialect");
-    }
-
     @Test
     @DisplayName("필터 및 페이지네이션을 사용하여 기사 목록을 가져오는 테스트(칼럼 리스트 반환 기능)")
     public void testGetArticles() {
