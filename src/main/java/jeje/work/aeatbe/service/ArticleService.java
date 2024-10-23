@@ -1,30 +1,29 @@
 package jeje.work.aeatbe.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import jeje.work.aeatbe.dto.ArticleDTO;
-import jeje.work.aeatbe.column_dto.ArticleListResponseDTO;
-import jeje.work.aeatbe.column_dto.ArticleResponseDTO;
-import jeje.work.aeatbe.column_dto.ContentDTO;
-import jeje.work.aeatbe.column_dto.PageInfoDTO;
+import jeje.work.aeatbe.dto.article.ArticleDTO;
+import jeje.work.aeatbe.dto.article.ArticleListResponseDTO;
+import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
+import jeje.work.aeatbe.dto.article.ContentDTO;
+import jeje.work.aeatbe.dto.article.PageInfoDTO;
 import jeje.work.aeatbe.entity.Article;
-import jeje.work.aeatbe.exception.NotFoundColumnException;
+import jeje.work.aeatbe.exception.ColumnNotFoundException;
 import jeje.work.aeatbe.repository.ArticleRepository;
+import jeje.work.aeatbe.utility.ArticleUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-
-    public ArticleService(ArticleRepository articleRepository){
-        this.articleRepository = articleRepository;
-    }
 
     /**
      * 새로운 칼럼을 데이터베이스에 저장
@@ -33,16 +32,16 @@ public class ArticleService {
      * @return 생성된 칼럼의 DTO
      */
     public ArticleDTO createArticle(ArticleDTO articleDTO) {
-        Article article = new Article(
-            articleDTO.getId(),
-            articleDTO.getTitle(),
-            articleDTO.getDate(),
-            articleDTO.getAuthor(),
-            articleDTO.getTags(),
-            articleDTO.getContent(),
-            articleDTO.getThumbnailUrl(),
-            articleDTO.getLikes()  // 좋아요 수도 그대로 저장
-        );
+        Article article = Article.builder()
+            .id(articleDTO.id())
+            .title(articleDTO.title())
+            .date(articleDTO.date())
+            .author(articleDTO.author())
+            .tags(articleDTO.tags())
+            .content(articleDTO.content())
+            .thumbnailUrl(articleDTO.thumbnailUrl())
+            .likes(articleDTO.likes())
+            .build();
         articleRepository.save(article);
         return articleDTO;
     }
@@ -62,11 +61,26 @@ public class ArticleService {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "date");
 
-        // Directly use the parameters without null checks
-        Page<Article> articlePage = articleRepository.findByTagsContainingAndTitleContainingAndContentContaining(
-            category, title, subtitle,
-            PageRequest.of(Integer.parseInt(pageToken), maxResults, sort)
-        );
+        Pageable pageable = PageRequest.of(Integer.parseInt(pageToken), maxResults, sort);
+        Page<Article> articlePage;
+
+        if (category != null && !category.isEmpty() && title != null && !title.isEmpty() && subtitle != null && !subtitle.isEmpty()) {
+            articlePage = articleRepository.findByTagsContainingAndTitleContainingAndContentContaining(
+                category, title, subtitle, pageable
+            );
+        }
+        else if ((category == null || category.isEmpty()) && (title == null || title.isEmpty()) && (subtitle == null || subtitle.isEmpty())) {
+            articlePage = articleRepository.findAll(pageable);
+        }
+        else if (category != null && !category.isEmpty()) {
+            articlePage = articleRepository.findByTagsContaining(category, pageable);
+        } else if (title != null && !title.isEmpty()) {
+            articlePage = articleRepository.findByTitleContaining(title, pageable);
+        } else if (subtitle != null && !subtitle.isEmpty()) {
+            articlePage = articleRepository.findByContentContaining(subtitle, pageable);
+        } else {
+            articlePage = articleRepository.findAll(pageable);
+        }
 
         PageInfoDTO pageInfo = new PageInfoDTO(
             (int) articlePage.getTotalElements(),
@@ -74,17 +88,18 @@ public class ArticleService {
         );
 
         List<ArticleResponseDTO> columns = articlePage.getContent().stream()
-            .map(article -> new ArticleResponseDTO(
-                article.getId(),
-                article.getTitle(),
-                article.getThumbnailUrl(),
-                article.getDate(),
-                article.getAuthor(),
-                Arrays.asList(article.getTags().split(",")),
-                null,
-                extractSubtitle(article.getContent())
-            ))
+            .map(article -> ArticleResponseDTO.builder()
+                .id(article.getId())
+                .title(article.getTitle())
+                .imgurl(article.getThumbnailUrl())
+                .createdAt(article.getDate())
+                .auth(article.getAuthor())
+                .keyword(Arrays.asList(article.getTags().split(",")))
+                .content(null)
+                .subtitle(ArticleUtil.extractSubtitle(article.getContent()))
+                .build())
             .collect(Collectors.toList());
+
 
         return new ArticleListResponseDTO(columns, pageToken, pageInfo);
     }
@@ -97,21 +112,21 @@ public class ArticleService {
      */
     public ArticleResponseDTO getArticleById(Long id) {
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundColumnException("Article with id " + id + " not found"));
+            .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
 
         List<String> keywords = Arrays.asList(article.getTags().split(","));
-        List<ContentDTO> contentList = extractContentList(article.getContent());
+        List<ContentDTO> contentList = ArticleUtil.extractContentList(article.getContent());
 
-        return new ArticleResponseDTO(
-            article.getId(),
-            article.getTitle(),
-            article.getThumbnailUrl(),
-            article.getDate(),
-            article.getAuthor(),
-            keywords,
-            contentList,
-            extractSubtitle(article.getContent())
-        );
+        return ArticleResponseDTO.builder()
+            .id(article.getId())
+            .title(article.getTitle())
+            .imgurl(article.getThumbnailUrl())
+            .createdAt(article.getDate())
+            .auth(article.getAuthor())
+            .keyword(keywords)
+            .content(contentList)
+            .subtitle(ArticleUtil.extractSubtitle(article.getContent()))
+            .build();
     }
 
     /**
@@ -123,18 +138,18 @@ public class ArticleService {
      */
     public ArticleDTO updateArticle(Long id, ArticleDTO articleDTO) {
         Article existingArticle = articleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundColumnException("Article with id " + id + " not found"));
+            .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
 
-        Article updatedArticle = new Article(
-            existingArticle.getId(),
-            articleDTO.getTitle(),
-            articleDTO.getDate() != null ? articleDTO.getDate() : existingArticle.getDate(),
-            articleDTO.getAuthor(),
-            articleDTO.getTags(),
-            articleDTO.getContent(),
-            articleDTO.getThumbnailUrl(),
-            articleDTO.getLikes()
-        );
+        Article updatedArticle = Article.builder()
+            .id(existingArticle.getId())
+            .title(articleDTO.title())
+            .date(articleDTO.date() != null ? articleDTO.date() : existingArticle.getDate())
+            .author(articleDTO.author())
+            .tags(articleDTO.tags())
+            .content(articleDTO.content())
+            .thumbnailUrl(articleDTO.thumbnailUrl())
+            .likes(articleDTO.likes())
+            .build();
 
         articleRepository.save(updatedArticle);
 
@@ -148,39 +163,10 @@ public class ArticleService {
      */
     public void deleteArticle(Long id) {
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundColumnException("Article with id " + id + " not found"));
+            .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
 
         articleRepository.delete(article);
     }
 
-    private String extractSubtitle(String content) {
-        String[] lines = content.split("\n");
-        return lines.length > 1 ? lines[1] : "";
-    }
-
-    private List<ContentDTO> extractContentList(String content) {
-        String[] lines = content.split("\n");
-        List<ContentDTO> contentList = new ArrayList<>();
-
-        if (lines.length > 0) contentList.add(new ContentDTO("h2", lines[0])); // 제목
-        if (lines.length > 1) contentList.add(new ContentDTO("h3", lines[1])); // 소제목
-        if (lines.length > 2) contentList.add(new ContentDTO("img", lines[2])); // 이미지 URL
-
-        if (lines.length > 3) {
-            // 본문을 \n 포함한 상태로 그대로 묶어서 처리
-            String body = String.join("\n", Arrays.copyOfRange(lines, 3, lines.length));
-            contentList.add(new ContentDTO("p", body)); // 본문 전체를 한 번에 추가
-        }
-
-        return contentList;
-    }
-
-//    private Sort getSortBy(String sortby) {
-//        if ("popular".equalsIgnoreCase(sortby)) {
-//            return Sort.by(Sort.Direction.DESC, "likes");
-//        } else {
-//            return Sort.by(Sort.Direction.DESC, "date");
-//        }
-//    }
-
 }
+

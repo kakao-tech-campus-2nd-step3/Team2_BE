@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "articles")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Article extends BaseEntity{
@@ -28,27 +29,22 @@ public class Article extends BaseEntity{
     private String tags;
 
     @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "thumbnail_url", length = 255)
+    @Lob
+    @Column(name = "thumbnail_url", columnDefinition = "TEXT")
     private String thumbnailUrl;
 
-    /**
-     * 질문: 이렇게 article에서도 좋아요 수를 관리를 굳이 따로 해주어야하나요?
-     */
+
     private int likes;
 
-    /**
-     * 좋아요 수를 증가시킨다
-     */
+
     public void upLike(){
         this.likes ++;
     }
 
-    /**
-     * 좋아요 수를 감소시킨다
-     */
+
     public void downLike(){
         this.likes --;
     }
