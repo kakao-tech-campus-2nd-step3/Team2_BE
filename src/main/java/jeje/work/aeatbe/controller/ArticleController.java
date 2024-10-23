@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping({"/api/coulmns", "/api/article"})
+@RequestMapping({"/api/columns", "/api/article"})
 @RequiredArgsConstructor
 public class ArticleController {
 
