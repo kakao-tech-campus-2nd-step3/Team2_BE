@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
+@Builder
 @EqualsAndHashCode
 @Table(name = "products_free_from")
 public class ProductFreeFrom extends BaseEntity{

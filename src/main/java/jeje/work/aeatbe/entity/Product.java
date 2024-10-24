@@ -6,6 +6,7 @@ import lombok.*;
 @Entity
 @Table(name = "products")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Product extends BaseEntity{
