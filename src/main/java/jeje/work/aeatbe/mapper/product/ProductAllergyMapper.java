@@ -14,7 +14,7 @@ public class ProductAllergyMapper implements BaseEntityMapper<ProductAllergyDTO,
     private final ProductService productService;
     private final AllergyCategoryService allergyCategoryService;
 
-    public ProductAllergyMapper(ProductService productService, ProductAllergyService productAllergyService, AllergyCategoryService allergyCategoryService) {
+    public ProductAllergyMapper(ProductService productService, AllergyCategoryService allergyCategoryService) {
         this.productService = productService;
         this.allergyCategoryService = allergyCategoryService;
     }
