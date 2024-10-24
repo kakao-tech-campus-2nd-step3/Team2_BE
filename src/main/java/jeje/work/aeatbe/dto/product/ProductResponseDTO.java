@@ -8,7 +8,7 @@ public record ProductResponseDTO(
         String name,
         Long price,
         String imgUrl,
-        Float rating,
+        Double rating,
         String ProductUrl,
         String description,
         String[] freeFrom,

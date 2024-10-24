@@ -18,7 +18,6 @@ public class ProductEntityMapperTest {
     public void setUp() {
         product = Product.builder()
                 .id(1L)
-                .allergens("Peanuts, Soy")
                 .nutritionalInfo("Calories: 200, Fat: 10g")
                 .productImageUrl("http://example.com/product.jpg")
                 .metaImageUrl("http://example.com/meta.jpg")
@@ -41,7 +40,6 @@ public class ProductEntityMapperTest {
         // Assert
         assertNotNull(dto, "DTO는 null이 아님");
         assertEquals(product.getId(), dto.id(), "ID 일치");
-        assertEquals(product.getAllergens(), dto.allergens(), "알레르기 정보 일치");
         assertEquals(product.getNutritionalInfo(), dto.nutritionalInfo(), "영양 정보 일치");
         assertEquals(product.getProductImageUrl(), dto.productImageUrl(), "제품 이미지 URL 일치");
         assertEquals(product.getMetaImageUrl(), dto.metaImageUrl(), "메타 이미지 URL 일치");
@@ -60,7 +58,6 @@ public class ProductEntityMapperTest {
         // Arrange
         ProductDTO dto = ProductDTO.builder()
                 .id(1L)
-                .allergens("Peanuts, Soy")
                 .nutritionalInfo("Calories: 200, Fat: 10g")
                 .productImageUrl("http://example.com/product.jpg")
                 .metaImageUrl("http://example.com/meta.jpg")
@@ -79,7 +76,6 @@ public class ProductEntityMapperTest {
         // Assert
         assertNotNull(entity, "엔티티는 null이 아님");
         assertEquals(dto.id(), entity.getId(), "ID 일치");
-        assertEquals(dto.allergens(), entity.getAllergens(), "알레르기 정보 일치");
         assertEquals(dto.nutritionalInfo(), entity.getNutritionalInfo(), "영양 정보 일치");
         assertEquals(dto.productImageUrl(), entity.getProductImageUrl(), "제품 이미지 URL 일치");
         assertEquals(dto.metaImageUrl(), entity.getMetaImageUrl(), "메타 이미지 URL 일치");
@@ -98,7 +94,6 @@ public class ProductEntityMapperTest {
         // Arrange
         ProductDTO dto = ProductDTO.builder()
                 .id(1L)
-                .allergens("Peanuts, Soy")
                 .nutritionalInfo("Calories: 200, Fat: 10g")
                 .productImageUrl("http://example.com/product.jpg")
                 .metaImageUrl("http://example.com/meta.jpg")
@@ -117,7 +112,6 @@ public class ProductEntityMapperTest {
         // Assert
         assertNotNull(entity, "엔티티는 null이 아님");
         assertNull(entity.getId(), "idRequired가 false인 경우 ID는 null");
-        assertEquals(dto.allergens(), entity.getAllergens(), "알레르기 정보 일치");
         assertEquals(dto.nutritionalInfo(), entity.getNutritionalInfo(), "영양 정보 일치");
         assertEquals(dto.productImageUrl(), entity.getProductImageUrl(), "제품 이미지 URL 일치");
         assertEquals(dto.metaImageUrl(), entity.getMetaImageUrl(), "메타 이미지 URL 일치");

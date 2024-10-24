@@ -11,7 +11,7 @@ public class ProductEntityMapper implements BaseEntityMapper<ProductDTO, Product
     public ProductDTO toDTO(Product product) {
         return ProductDTO.builder()
                 .id(product.getId())
-                .allergens(product.getAllergens())
+//                .allergens(product.getAllergens())
                 .nutritionalInfo(product.getNutritionalInfo())
                 .productImageUrl(product.getProductImageUrl())
                 .metaImageUrl(product.getMetaImageUrl())
@@ -28,7 +28,7 @@ public class ProductEntityMapper implements BaseEntityMapper<ProductDTO, Product
     public Product toEntity(ProductDTO productDTO, boolean idRequired) {
         Product product = Product.builder()
                 .id(idRequired ? productDTO.id() : null)
-                .allergens(productDTO.allergens())
+//                .allergens(productDTO.allergens())
                 .nutritionalInfo(productDTO.nutritionalInfo())
                 .productImageUrl(productDTO.productImageUrl())
                 .metaImageUrl(productDTO.metaImageUrl())

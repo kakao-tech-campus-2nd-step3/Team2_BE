@@ -15,8 +15,8 @@ public class Product extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100)
-    private String allergens;
+//    @Column(length = 100)
+//    private String allergens;
 
     @Lob
     private String nutritionalInfo;
