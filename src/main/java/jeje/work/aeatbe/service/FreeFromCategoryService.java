@@ -3,7 +3,9 @@ package jeje.work.aeatbe.service;
 import jeje.work.aeatbe.entity.FreeFromCategory;
 import jeje.work.aeatbe.exception.FreeFromCategoryNotFoundException;
 import jeje.work.aeatbe.repository.FreeFromCategoryRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FreeFromCategoryService {
     final private FreeFromCategoryRepository freeFromCategoryRepository;
 
