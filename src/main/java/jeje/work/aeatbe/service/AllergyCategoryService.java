@@ -2,24 +2,38 @@ package jeje.work.aeatbe.service;
 
 import jeje.work.aeatbe.dto.AllergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.entity.AllergyCategory;
+import jeje.work.aeatbe.exception.AllergyCategoryNotFoundException;
 import jeje.work.aeatbe.repository.AllergyCategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * db 시딩을 테스트 하기 위해서 구축된 서비스 입니다.
- * 조회 이외의 목적을 가지고 개발되지 않았으니, 이를 사용하고지 한다면 문의 바랍니다.
+ * 알러지 카테고리 서비스 레이어
  *
  * @author jjh4450git@gmail.com
  */
 @Service
 public class AllergyCategoryService {
 
-    @Autowired
-    private AllergyCategoryRepository allergyCategoryRepository;
+    private final AllergyCategoryRepository allergyCategoryRepository;
+
+    public AllergyCategoryService(AllergyCategoryRepository allergyCategoryRepository) {
+        this.allergyCategoryRepository = allergyCategoryRepository;
+    }
+
+    /**
+     * id에 해당하는 알러지 카테고리를 반환합니다.
+     *
+     * @param id 알러지 카테고리 id
+     * @return id에 해당하는 알러지 카테고리
+     */
+    public AllergyCategory findById(Long id) {
+        return allergyCategoryRepository.findById(id).orElseThrow(
+                () -> new AllergyCategoryNotFoundException("해당 id의 알러지 카테고리가 존재하지 않습니다.")
+        );
+    }
 
     /**
      * 알러지 카테고리를 전부 반환합니다.
