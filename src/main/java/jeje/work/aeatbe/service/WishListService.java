@@ -1,0 +1,124 @@
+package jeje.work.aeatbe.service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import jeje.work.aeatbe.dto.wishlist.WishDTO;
+import jeje.work.aeatbe.dto.wishlist.WishProductDTO;
+import jeje.work.aeatbe.entity.Product;
+import jeje.work.aeatbe.entity.User;
+import jeje.work.aeatbe.entity.Wishlist;
+import jeje.work.aeatbe.exception.WishlistNotFoundException;
+import jeje.work.aeatbe.repository.ProductRepository;
+import jeje.work.aeatbe.repository.UserRepository;
+import jeje.work.aeatbe.repository.WishlistRepository;
+import jeje.work.aeatbe.utility.JwtUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class WishListService {
+
+    private final WishlistRepository wishlistRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
+
+    /**
+     * 위시리스트 항목을 생성하는 메서드.
+     *
+     * @param token 사용자의 인증 토큰
+     * @param productId 위시리스트에 추가할 상품의 ID
+     * @return 생성된 WishDTO 객체
+     * @throws WishlistNotFoundException 사용자를 찾지 못하거나, 상품을 찾지 못할 경우 예외 발생
+     */
+    public WishDTO createWish(String token, Long productId) {
+        String kakaoId = jwtUtil.getKakaoId(token);
+        User user = userRepository.findByUserId(kakaoId)
+            .orElseThrow(() -> new WishlistNotFoundException("User not found"));
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new WishlistNotFoundException("Product not found"));
+
+        Wishlist wishlist = new Wishlist(null, user, product);
+        wishlistRepository.save(wishlist);
+
+        return WishDTO.builder()
+            .id(wishlist.getId())
+            .product(WishProductDTO.builder()
+                .id(product.getId())
+                .name(product.getProductName())
+                .price(product.getPrice())
+                .imgurl(product.getProductImageUrl())
+                .tag(product.getTypeName())
+                .build())
+            .build();
+    }
+
+    /**
+     * 사용자의 위시리스트를 조회하는 메서드.
+     *
+     * @param token 사용자의 인증 토큰
+     * @return 사용자의 모든 위시리스트 항목을 포함한 List<WishDTO>
+     * @throws WishlistNotFoundException 사용자 ID를 추출할 수 없거나, 위시리스트 항목을 찾지 못할 경우 예외 발생
+     */
+    public List<WishDTO> getWishlist(String token) {
+        String kakaoId = jwtUtil.getKakaoId(token);
+        User user = userRepository.findByUserId(kakaoId)
+            .orElseThrow(() -> new WishlistNotFoundException("User not found"));
+        List<Wishlist> wishlistItems = wishlistRepository.findByUserId(user.getId());
+
+        return wishlistItems.stream()
+            .map(wishlist -> WishDTO.builder()
+                .id(wishlist.getId())
+                .product(WishProductDTO.builder()
+                    .id(wishlist.getProduct().getId())
+                    .name(wishlist.getProduct().getProductName())
+                    .price(wishlist.getProduct().getPrice())
+                    .imgurl(wishlist.getProduct().getProductImageUrl())
+                    .tag(wishlist.getProduct().getTypeName())
+                    .build())
+                .build())
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * 위시리스트 항목을 업데이트하는 메서드.
+     *
+     * @param token 사용자의 인증 토큰
+     * @param wishId 업데이트할 위시리스트 항목의 ID
+     * @param newProductId 새로 추가할 상품의 ID
+     * @throws WishlistNotFoundException 위시리스트 항목 또는 새 상품을 찾지 못할 경우 예외 발생
+     */
+    @Transactional
+    public void updateWish(String token, Long wishId, Long newProductId) {
+        String kakaoId = jwtUtil.getKakaoId(token);
+        User user = userRepository.findByUserId(kakaoId)
+            .orElseThrow(() -> new WishlistNotFoundException("User not found"));
+        Wishlist existingWishlist = wishlistRepository.findByIdAndUserId(wishId, user.getId())
+            .orElseThrow(() -> new WishlistNotFoundException("Wish not found or not authorized"));
+
+        Product newProduct = productRepository.findById(newProductId)
+            .orElseThrow(() -> new WishlistNotFoundException("New product not found"));
+
+        Wishlist updatedWishlist = new Wishlist(existingWishlist.getId(), existingWishlist.getUser(), newProduct);
+        wishlistRepository.save(updatedWishlist);
+    }
+
+    /**
+     * 위시리스트 항목을 삭제하는 메서드.
+     *
+     * @param token 사용자의 인증 토큰
+     * @param wishId 삭제할 위시리스트 항목의 ID
+     * @throws WishlistNotFoundException 위시리스트 항목을 찾지 못하거나 권한이 없을 경우 예외 발생
+     */
+    public void deleteWish(String token, Long wishId) {
+        String kakaoId = jwtUtil.getKakaoId(token);
+        User user = userRepository.findByUserId(kakaoId)
+            .orElseThrow(() -> new WishlistNotFoundException("User not found"));
+        Wishlist wishlist = wishlistRepository.findByIdAndUserId(wishId, user.getId())
+            .orElseThrow(() -> new WishlistNotFoundException("Wish not found or not authorized"));
+
+        wishlistRepository.delete(wishlist);
+    }
+}

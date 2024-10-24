@@ -1,23 +1,20 @@
 package jeje.work.aeatbe.controller;
 
-import jeje.work.aeatbe.column_dto.ArticleListResponseDTO;
-import jeje.work.aeatbe.column_dto.ArticleResponseDTO;
-import jeje.work.aeatbe.dto.*;
+import jeje.work.aeatbe.dto.article.ArticleDTO;
+import jeje.work.aeatbe.dto.article.ArticleListResponseDTO;
+import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
 import jeje.work.aeatbe.service.ArticleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/columns")
+@RequestMapping({"/api/columns", "/api/article"})
+@RequiredArgsConstructor
 public class ArticleController {
 
     private final ArticleService articleService;
-
-    public ArticleController(ArticleService articleService) {
-        this.articleService = articleService;
-    }
-
     /**
      * 새로운 칼럼 생성
      *

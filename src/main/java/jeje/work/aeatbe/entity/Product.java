@@ -44,4 +44,6 @@ public class Product extends BaseEntity{
     @Lob
     private String ingredients;
 
+    @Column(nullable = false)
+    private Long price;
 }

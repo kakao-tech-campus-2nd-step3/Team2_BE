@@ -1,15 +1,10 @@
 package jeje.work.aeatbe.dto.articleLike;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ArticleLikeResponseDTO {
+import lombok.Builder;
 
-    private Long articleLikeId;
-    private int count; //좋아요 개수
+
+@Builder
+public record ArticleLikeResponseDTO(Long articleLikeId, int count) {
 
 }

@@ -1,7 +1,7 @@
 package jeje.work.aeatbe.controller;
 
 import java.util.List;
-import jeje.work.aeatbe.dto.ReviewDTO;
+import jeje.work.aeatbe.dto.review.ReviewDTO;
 import jeje.work.aeatbe.service.ReviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +37,8 @@ public class ReviewController {
      * @param productId    상품 id
      * @param token        유저 토큰
      * @return list 형식의 reviewDTO
+     *
+     * @todo 토큰에서 필요한 정보를 추출하는 코드를 구현해야 함
      */
     @GetMapping
     public ResponseEntity<List<ReviewDTO>> getReviews(
@@ -47,7 +49,6 @@ public class ReviewController {
         if (searchByUser && (token == null || token.isEmpty()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        /* token 부분은 추후 토큰에서 필요한 정보를 뽑아서 대체 할 예정입니다.*/
         List<ReviewDTO> reviews = reviewService.getReviews(searchByUser, productId, token);
         return ResponseEntity.ok(reviews);
     }
@@ -59,12 +60,14 @@ public class ReviewController {
      * @param reviewDTO 리뷰 DTO
      * @param token     유저 토큰
      * @return 201 created 응답 코드
+     *
+     * @todo 토큰에서 필요한 정보를 추출하는 코드를 구현해야 함
+     * @todo 토큰 인증하는 로직 필요
      */
     @PostMapping
     public ResponseEntity<?> postReviews(@RequestBody ReviewDTO reviewDTO,
         @RequestHeader(required = true, value = "Authorization") String token) {
 
-        // 이 부분은 추후 수정 될 예정
         reviewService.createReview(reviewDTO, token);
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
@@ -77,6 +80,9 @@ public class ReviewController {
      * @param reviewDTO 리뷰 DTO
      * @param token     유저 토큰
      * @return 200 ok 응답 코드
+     *
+     * @todo 토큰에서 필요한 정보를 추출하는 코드를 구현해야 함
+     * @todo 토큰 인증하는 로직 필요
      */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateReviews(@PathVariable Long id,
@@ -92,6 +98,9 @@ public class ReviewController {
      * @param id    리뷰 id
      * @param token 유저 토큰
      * @return 204 응답 코드 반환
+     *
+     * @todo 토큰에서 필요한 정보를 추출하는 코드를 구현해야 함
+     * @todo 토큰 인증하는 로직 필요
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteReviews(@PathVariable Long id,

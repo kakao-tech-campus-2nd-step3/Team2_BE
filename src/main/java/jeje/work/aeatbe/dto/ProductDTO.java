@@ -18,5 +18,5 @@ public class ProductDTO {
     private String capacity;
     private String productName;
     private String ingredients;
-
+    private int price;
 }
