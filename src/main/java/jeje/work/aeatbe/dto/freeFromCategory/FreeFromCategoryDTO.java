@@ -5,6 +5,6 @@ import lombok.Builder;
 @Builder
 public record FreeFromCategoryDTO(
         Long id,
-        String freeFromType,
+        String freeFromType
 ) {
 }
