@@ -1,8 +1,5 @@
 package jeje.work.aeatbe;
-
-import jeje.work.aeatbe.dto.*;
 import jeje.work.aeatbe.dto.AllergyCategory.AllergyCategoryDTO;
-import jeje.work.aeatbe.dto.User.UserDTO;
 import jeje.work.aeatbe.entity.*;
 import jeje.work.aeatbe.repository.*;
 import org.junit.jupiter.api.Test;
