@@ -172,4 +172,13 @@ public class ReviewService {
         reviewRepository.delete(existingReview);
     }
 
+    /**
+     * 상품 ID로 리뷰 삭제
+     * @param productId 상품 id
+     */
+    public void deleteReviewsByProductId(Long productId) {
+        List<Review> reviews = reviewRepository.findByProductId(productId);
+        reviewRepository.deleteAll(reviews);
+    }
+
 }
