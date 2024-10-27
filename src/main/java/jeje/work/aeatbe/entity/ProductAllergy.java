@@ -9,7 +9,8 @@ import lombok.*;
 @Getter
 @Builder
 @EqualsAndHashCode
-@Table(name = "products_allergies")
+@Table(name = "products_allergies",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "allergy_id"}))
 public class ProductAllergy extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
