@@ -3,6 +3,8 @@ package jeje.work.aeatbe.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "products")
 @Getter
@@ -47,4 +49,10 @@ public class Product extends BaseEntity{
 
     @Column(nullable = false)
     private Long price;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductAllergy> productAllergies;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductFreeFrom> productFreeFroms;
 }

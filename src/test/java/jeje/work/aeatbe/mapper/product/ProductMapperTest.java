@@ -2,15 +2,14 @@ package jeje.work.aeatbe.mapper.product;
 
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.entity.Product;
-import jeje.work.aeatbe.mapper.product.ProductEntityMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ProductEntityMapperTest {
+public class ProductMapperTest {
 
-    private final ProductEntityMapper mapper = new ProductEntityMapper();
+    private final ProductMapper mapper = new ProductMapper();
 
     private Product product;
 
