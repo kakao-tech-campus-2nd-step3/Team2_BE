@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FreeFromCategoryMapperTest {
 
-    private final FreeFromCategoryMapper mapper = new FreeFromCategoryMapper(null);
+    private final FreeFromCategoryMapper mapper = new FreeFromCategoryMapper();
 
     @Test
     @DisplayName("엔티티를 DTO로 변환 테스트")
