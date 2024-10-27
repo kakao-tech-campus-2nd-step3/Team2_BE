@@ -4,21 +4,16 @@ import jeje.work.aeatbe.dto.product.ProductFreeFromDTO;
 import jeje.work.aeatbe.entity.FreeFromCategory;
 import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.entity.ProductFreeFrom;
-import jeje.work.aeatbe.service.FreeFromCategoryService;
-import jeje.work.aeatbe.service.ProductService;
+import jeje.work.aeatbe.mapper.product.ProductFreeFromMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class ProductFreeFromMapperTest {
 
-    private final ProductService productService = Mockito.mock(ProductService.class);
-    private final FreeFromCategoryService freeFromCategoryService = Mockito.mock(FreeFromCategoryService.class);
-    private final ProductFreeFromMapper mapper = new ProductFreeFromMapper(productService, freeFromCategoryService);
+    private final ProductFreeFromMapper mapper = new ProductFreeFromMapper();
 
     private Product product;
     private FreeFromCategory freeFromCategory;
@@ -34,30 +29,26 @@ public class ProductFreeFromMapperTest {
                 .id(1L)
                 .freeFromType("Gluten-Free")
                 .build();
-
-        // Mock behavior
-        when(productService.findById(1L)).thenReturn(product);
-        when(freeFromCategoryService.findById(1L)).thenReturn(freeFromCategory);
     }
 
     @Test
     @DisplayName("엔티티를 DTO로 변환 테스트")
     public void testToDTO() {
         // Arrange
-        ProductFreeFrom entity = ProductFreeFrom.builder()
+        ProductFreeFrom productFreeFrom = ProductFreeFrom.builder()
                 .id(1L)
                 .product(product)
                 .freeFromCategory(freeFromCategory)
                 .build();
 
         // Act
-        ProductFreeFromDTO dto = mapper.toDTO(entity);
+        ProductFreeFromDTO dto = mapper.toDTO(productFreeFrom);
 
         // Assert
         assertNotNull(dto, "DTO는 null이 아님");
-        assertEquals(entity.getId(), dto.id(), "ID 일치");
-        assertEquals(entity.getProduct().getId(), dto.productId(), "productId 일치");
-        assertEquals(entity.getFreeFromCategory().getId(), dto.freeFromId(), "freeFromId 일치");
+        assertEquals(productFreeFrom.getId(), dto.id(), "ID 일치");
+        assertEquals(productFreeFrom.getProduct().getId(), dto.productId(), "productId 일치");
+        assertEquals(productFreeFrom.getFreeFromCategory().getId(), dto.freeFromId(), "freeFromId 일치");
     }
 
     @Test
@@ -71,13 +62,13 @@ public class ProductFreeFromMapperTest {
                 .build();
 
         // Act
-        ProductFreeFrom entity = mapper.toEntity(dto, true);
+        ProductFreeFrom entity = mapper.toEntity(dto, product, freeFromCategory, true);
 
         // Assert
         assertNotNull(entity, "엔티티는 null이 아님");
         assertEquals(dto.id(), entity.getId(), "ID 일치");
-        assertNotNull(entity.getProduct(), "Product는 null이 아님");
-        assertNotNull(entity.getFreeFromCategory(), "FreeFromCategory는 null이 아님");
+        assertEquals(product, entity.getProduct(), "Product 일치");
+        assertEquals(freeFromCategory, entity.getFreeFromCategory(), "FreeFromCategory 일치");
     }
 
     @Test
@@ -91,12 +82,12 @@ public class ProductFreeFromMapperTest {
                 .build();
 
         // Act
-        ProductFreeFrom entity = mapper.toEntity(dto, false);
+        ProductFreeFrom entity = mapper.toEntity(dto, product, freeFromCategory, false);
 
         // Assert
         assertNotNull(entity, "엔티티는 null이 아님");
         assertNull(entity.getId(), "idRequired가 false인 경우 ID는 null");
-        assertNotNull(entity.getProduct(), "Product는 null이 아님");
-        assertNotNull(entity.getFreeFromCategory(), "FreeFromCategory는 null이 아님");
+        assertEquals(product, entity.getProduct(), "Product 일치");
+        assertEquals(freeFromCategory, entity.getFreeFromCategory(), "FreeFromCategory 일치");
     }
 }

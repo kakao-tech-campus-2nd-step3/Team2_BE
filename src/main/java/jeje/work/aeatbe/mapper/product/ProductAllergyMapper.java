@@ -1,24 +1,22 @@
 package jeje.work.aeatbe.mapper.product;
 
 import jeje.work.aeatbe.dto.product.ProductAllergyDTO;
+import jeje.work.aeatbe.entity.AllergyCategory;
+import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.entity.ProductAllergy;
-import jeje.work.aeatbe.mapper.BaseEntityMapper;
-import jeje.work.aeatbe.service.AllergyCategoryService;
-import jeje.work.aeatbe.service.ProductAllergyService;
-import jeje.work.aeatbe.service.ProductService;
 import org.springframework.stereotype.Component;
 
+/**
+ * 상품 알레르기 매퍼
+ */
 @Component
-public class ProductAllergyMapper implements BaseEntityMapper<ProductAllergyDTO, ProductAllergy> {
+public class ProductAllergyMapper{
 
-    private final ProductService productService;
-    private final AllergyCategoryService allergyCategoryService;
-
-    public ProductAllergyMapper(ProductService productService, AllergyCategoryService allergyCategoryService) {
-        this.productService = productService;
-        this.allergyCategoryService = allergyCategoryService;
-    }
-
+    /**
+     * Entity -> DTO
+     * @param productAllergy
+     * @return DTO
+     */
     public ProductAllergyDTO toDTO(ProductAllergy productAllergy) {
         return ProductAllergyDTO.builder()
                 .id(productAllergy.getId())
@@ -27,17 +25,36 @@ public class ProductAllergyMapper implements BaseEntityMapper<ProductAllergyDTO,
                 .build();
     }
 
-    public ProductAllergy toEntity(ProductAllergyDTO productAllergyDTO, boolean idRequired) {
+    /**
+     * DTO -> Entity
+     * @param productAllergyDTO
+     * @return Entity
+     */
+    public ProductAllergy toEntity(ProductAllergyDTO productAllergyDTO, Product product, AllergyCategory allergyCategory, boolean idRequired) {
         ProductAllergy productAllergy = ProductAllergy.builder()
                 .id(idRequired ? productAllergyDTO.id() : null)
-                .product(productService.findById(productAllergyDTO.productId()))
-                .allergy(allergyCategoryService.findById(productAllergyDTO.allergyId()))
+                .product(product)
+                .allergy(allergyCategory)
                 .build();
 
         return productAllergy;
     }
 
-    public ProductAllergy toEntity(ProductAllergyDTO productAllergyDTO) {
-        return toEntity(productAllergyDTO, false);
+    /**
+     * DTO -> Entity
+     * @param productAllergyDTO
+     * @return Entity
+     */
+    public ProductAllergy toEntity(ProductAllergyDTO productAllergyDTO, Product product, AllergyCategory allergyCategory) {
+        return toEntity(productAllergyDTO, product, allergyCategory, false);
+    }
+
+    /**
+     * DTO -> Entity
+     * @param product
+     * @return Entity
+     */
+    public ProductAllergy toEntity(Product product, AllergyCategory allergyCategory) {
+        return toEntity(null , product, allergyCategory, false);
     }
 }

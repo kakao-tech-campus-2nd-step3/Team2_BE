@@ -2,12 +2,19 @@ package jeje.work.aeatbe.mapper.product;
 
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.entity.Product;
-import jeje.work.aeatbe.mapper.BaseEntityMapper;
 import org.springframework.stereotype.Component;
 
+/**
+ * 상품 매퍼
+ */
 @Component
-public class ProductEntityMapper implements BaseEntityMapper<ProductDTO, Product> {
+public class ProductMapper {
 
+    /**
+     * Entity -> DTO
+     * @param product
+     * @return DTO
+     */
     public ProductDTO toDTO(Product product) {
         return ProductDTO.builder()
                 .id(product.getId())
@@ -25,6 +32,11 @@ public class ProductEntityMapper implements BaseEntityMapper<ProductDTO, Product
                 .build();
     }
 
+    /**
+     * DTO -> Entity
+     * @param productDTO
+     * @return Entity
+     */
     public Product toEntity(ProductDTO productDTO, boolean idRequired) {
         Product product = Product.builder()
                 .id(idRequired ? productDTO.id() : null)
@@ -44,6 +56,11 @@ public class ProductEntityMapper implements BaseEntityMapper<ProductDTO, Product
         return product;
     }
 
+    /**
+     * DTO -> Entity
+     * @param productDTO
+     * @return Entity
+     */
     public Product toEntity(ProductDTO productDTO) {
         return toEntity(productDTO, false);
     }

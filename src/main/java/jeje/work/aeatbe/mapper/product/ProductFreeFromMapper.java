@@ -1,23 +1,22 @@
 package jeje.work.aeatbe.mapper.product;
 
 import jeje.work.aeatbe.dto.product.ProductFreeFromDTO;
+import jeje.work.aeatbe.entity.FreeFromCategory;
+import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.entity.ProductFreeFrom;
-import jeje.work.aeatbe.mapper.BaseEntityMapper;
-import jeje.work.aeatbe.service.FreeFromCategoryService;
-import jeje.work.aeatbe.service.ProductService;
 import org.springframework.stereotype.Component;
 
+/**
+ * 상품 알레르기 매퍼
+ */
 @Component
-public class ProductFreeFromMapper implements BaseEntityMapper<ProductFreeFromDTO, ProductFreeFrom>{
+public class ProductFreeFromMapper{
 
-    private final ProductService productService;
-    private final FreeFromCategoryService freeFromCategoryService;
-
-    public ProductFreeFromMapper(ProductService productService, FreeFromCategoryService freeFromCategoryService) {
-        this.productService = productService;
-        this.freeFromCategoryService = freeFromCategoryService;
-    }
-
+    /**
+     * Entity -> DTO
+     * @param entity
+     * @return DTO
+     */
     public ProductFreeFromDTO toDTO(ProductFreeFrom entity) {
         return ProductFreeFromDTO.builder()
                 .id(entity.getId())
@@ -26,15 +25,34 @@ public class ProductFreeFromMapper implements BaseEntityMapper<ProductFreeFromDT
                 .build();
     }
 
-    public ProductFreeFrom toEntity(ProductFreeFromDTO dto, boolean idRequired) {
+    /**
+     * DTO -> Entity
+     * @param dto
+     * @return Entity
+     */
+    public ProductFreeFrom toEntity(ProductFreeFromDTO dto, Product product, FreeFromCategory freeFromCategory, boolean idRequired) {
         return ProductFreeFrom.builder()
                 .id(idRequired ? dto.id() : null)
-                .product(productService.findById(dto.productId()))
-                .freeFromCategory(freeFromCategoryService.findById(dto.freeFromId()))
+                .product(product)
+                .freeFromCategory(freeFromCategory)
                 .build();
     }
 
-    public ProductFreeFrom toEntity(ProductFreeFromDTO dto) {
-        return toEntity(dto, false);
+    /**
+     * DTO -> Entity
+     * @param dto
+     * @return Entity
+     */
+    public ProductFreeFrom toEntity(ProductFreeFromDTO dto, Product product, FreeFromCategory freeFromCategory) {
+        return toEntity(dto, product, freeFromCategory, false);
+    }
+
+    /**
+     * DTO -> Entity
+     * @param product
+     * @return Entity
+     */
+    public ProductFreeFrom toEntity(Product product, FreeFromCategory freeFromCategory) {
+        return toEntity(null, product, freeFromCategory, false);
     }
 }

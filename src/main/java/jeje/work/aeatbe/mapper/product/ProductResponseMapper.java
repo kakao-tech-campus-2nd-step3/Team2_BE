@@ -2,33 +2,33 @@ package jeje.work.aeatbe.mapper.product;
 
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
-import jeje.work.aeatbe.mapper.BaseResponseDTOMapper;
-import jeje.work.aeatbe.service.ProductAllergyService;
-import jeje.work.aeatbe.service.ProductFreeFromService;
-import jeje.work.aeatbe.service.ReviewService;
+import org.springframework.stereotype.Component;
 
-public class ProductResponseMapper implements BaseResponseDTOMapper<ProductDTO, ProductResponseDTO> {
-    private final ProductAllergyService productAllergyService;
-    private final ProductFreeFromService productFreeFromService;
-    private final ReviewService reviewService;
+import java.util.List;
 
-    public ProductResponseMapper(ProductAllergyService productAllergyService, ProductFreeFromService productFreeFromService, ReviewService reviewService) {
-        this.productAllergyService = productAllergyService;
-        this.productFreeFromService = productFreeFromService;
-        this.reviewService = reviewService;
-    }
+@Component
+public class ProductResponseMapper{
 
-    public ProductResponseDTO toEntity(ProductDTO dto, boolean idRequired) {
+    /**
+     * ProductDTO를 ProductResponseDTO로 변환
+     * @param dto ProductDTO
+     * @param avergeRating 평균 평점
+     * @param freeFromList 프리프롬 리스트
+     * @param allergyList 알러지 리스트
+     * @param idRequired id 필요 여부
+     * @return ProductResponseDTO
+     */
+    public ProductResponseDTO toEntity(ProductDTO dto, Double avergeRating, List<String> freeFromList, List<String> allergyList, boolean idRequired) {
         return ProductResponseDTO.builder()
                 .id(idRequired ? dto.id() : null)
                 .name(dto.productName())
                 .price(dto.price())
                 .imgUrl(dto.productImageUrl())
-                .rating(reviewService.getAverageRating(dto.id()))
+                .rating(avergeRating)
                 .ProductUrl(dto.seller())
                 .description(dto.metaImageUrl())
-                .freeFrom(productFreeFromService.getFreeFromTags(dto.id()).toArray(new String[0]))
-                .allergy(productAllergyService.getAllergyTags(dto.id()).toArray(new String[0]))
+                .freeFrom(freeFromList.toArray(new String[0]))
+                .allergy(allergyList.toArray(new String[0]))
                 .build();
     }
 }
