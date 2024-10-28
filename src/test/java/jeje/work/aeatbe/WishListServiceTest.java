@@ -80,6 +80,7 @@ public class WishListServiceTest {
                 "ingredients",
                 1000L,
                 null,
+                null,
                 null
         );
 
@@ -96,7 +97,8 @@ public class WishListServiceTest {
                 "ingredients",
                 1000L,
                 null,
-                null
+                null,
+            null
         );
 
         wishlist = new Wishlist(1L, user, oldProduct);
