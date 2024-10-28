@@ -7,8 +7,10 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
+@Builder
 @EqualsAndHashCode
-@Table(name = "products_free_from")
+@Table(name = "products_free_from",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "free_from_id"}))
 public class ProductFreeFrom extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

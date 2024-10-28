@@ -45,3 +45,27 @@ VALUES ('프리프롬 제품 트렌드 및 이해', CURRENT_TIMESTAMP, '정재�
        ('균형 잡힌 식단을 위한 대체식품', CURRENT_TIMESTAMP, '이정우', '대체식품, 식물성, 영양',
         '# 서론\n\n최근 몇 년 동안 건강과 환경에 대한 관심이 커지면서 대체식품에 대한 수요가 폭발적으로 증가하고 있습니다. 특히, 식물성 대체식품은 이러한 트렌드를 선도하고 있으며, 비건이나 채식주의자뿐만 아니라 일반 소비자들 사이에서도 널리 사용되고 있습니다.\n\n# 본론\n\n식물성 대체식품 중에서도 고기 대체품은 매우 인기가 높습니다. 콩, 두부, 곡물을 기반으로 한 대체 고기 제품은 동물성 고기와 유사한 질감과 맛을 제공하며, 단백질 함량이 높아 건강을 고려하는 소비자들에게 큰 호응을 얻고 있습니다. 또한, 식물성 대체 유제품도 아몬드 밀크, 코코넛 요거트 등의 형태로 시장에 많이 등장하고 있습니다. 이러한 제품들은 환경에 미치는 영향이 적고, 유제품 알레르기나 유당불내증을 가진 사람들에게 좋은 대안이 됩니다.\n\n특히, 대체식품은 건강을 중시하는 소비자들에게 단순한 대체재가 아닌, 필수적인 식품군으로 자리잡고 있습니다. 대체식품은 동물성 식품을 섭취하지 않아도 충분한 영양소를 제공할 수 있으며, 비타민 B12와 같은 필수 영양소를 첨가하는 등 제품의 품질과 영양소가 지속적으로 개선되고 있습니다.\n\n# 결론\n\n대체식품은 건강과 환경을 고려한 지속 가능한 선택으로 자리잡고 있으며, 앞으로도 더욱 많은 소비자들이 이를 선택할 것으로 예상됩니다. 새로운 기술과 재료를 바탕으로 한 혁신적인 대체식품이 계속 등장할 것이며, 이는 식품 산업의 중요한 흐름이 될 것입니다.',
         'https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbafebf27-4e21-4ed6-99e1-983eb90ad9c0%2F061227b5-3df1-4cf1-a0e7-0dda0569bdff%2FKakaoTalk_20240409_093703410_14.jpg?table=block&id=18d1230c-d3bb-4cb0-a7b1-eea1b3a38d6b&cache=v2', 0);
+
+-- products 테이블 초기 데이터 삽입
+INSERT IGNORE INTO products (id, nutritional_info, product_image_url, meta_image_url, type_name, manufacturer, seller, capacity, product_name, ingredients, price, created_at, updated_at)
+VALUES
+    (1, '칼로리 200kcal, 탄수화물 30g, 단백질 5g', 'https://example.com/product1.jpg', 'https://example.com/meta1.jpg', '식품', '건강한 식품제조사', '헬시몰', '500ml', '헬시 글루텐 프리 주스', '물, 설탕, 향료', 12000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2, '칼로리 150kcal, 지방 10g, 단백질 3g', 'https://example.com/product2.jpg', 'https://example.com/meta2.jpg', '식품', '자연우유', '푸드파이터', '250g', '락토 프리 요구르트', '락토 프리 우유, 천연 과일 농축액', 8000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (3, '칼로리 100kcal, 탄수화물 20g, 단백질 2g', 'https://example.com/product3.jpg', 'https://example.com/meta3.jpg', '식품', '에코넛츠', '그린샵', '100g', '피넛 프리 땅콩버터 대체품', '아몬드, 소금', 9500, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (4, '칼로리 50kcal, 탄수화물 10g', 'https://example.com/product4.jpg', 'https://example.com/meta4.jpg', '식품', '베지테리언키친', '비건마켓', '300ml', '비건 콩 단백 음료', '콩 추출물, 감미료', 5000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- allergy_categories 테이블 초기화 데이터와 매핑된 products_allergies 테이블 초기 데이터 삽입
+INSERT IGNORE INTO products_allergies (product_id, allergy_id, created_at, updated_at)
+VALUES
+    (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 헬시 글루텐 프리 주스는 '알류' 알레르기를 가짐
+    (2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 락토 프리 요구르트는 '우유' 알레르기를 가짐
+    (3, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 피넛 프리 땅콩버터 대체품은 '땅콩' 알레르기를 가짐
+    (4, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP); -- 비건 콩 단백 음료는 '대두' 알레르기를 가짐
+
+-- free_from_categories 테이블 초기화 데이터와 매핑된 products_free_from 테이블 초기 데이터 삽입
+INSERT IGNORE INTO products_free_from (product_id, free_from_id, created_at, updated_at)
+VALUES
+    (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 헬시 글루텐 프리 주스는 '글루텐 프리'
+    (2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 락토 프리 요구르트는 '락토 프리'
+    (3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 피넛 프리 땅콩버터 대체품은 '피넛 프리'
+    (4, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP); -- 비건 콩 단백 음료는 '비건'
