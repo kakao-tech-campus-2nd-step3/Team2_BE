@@ -30,8 +30,8 @@ public class User extends BaseEntity{
     @Column(name = "user_img_url", length = 255)
     private String userImgUrl;
 
-//    @Column
-//    private String kakaoId;
+    @Column
+    private String kakaoId;
 
     @Column
     private String accessToken;
