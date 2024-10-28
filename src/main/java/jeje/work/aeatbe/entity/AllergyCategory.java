@@ -6,6 +6,7 @@ import lombok.*;
 @Entity
 @Table(name = "allergy_categories")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class AllergyCategory extends BaseEntity{

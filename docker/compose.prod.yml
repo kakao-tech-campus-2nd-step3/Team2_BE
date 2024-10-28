@@ -10,7 +10,11 @@ services:
       - aeatbe-data-prod:/var/lib/mysql  # 볼륨 연결
     container_name: db_prod
     ports: []
-
+    deploy:
+      resources:
+        limits:
+          memory: 1014M
+ 
   app:
     build:
       context: ..
@@ -27,11 +31,11 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: production
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
-      SPRING_DATASOURCE_URL: jdbc:mysql://db_prod:3306/mydb
+      SPRING_DATASOURCE_URL: jdbc:mysql://db_prod:3306/mydb?useUnicode=true&characterEncoding=utf8
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
     ports:
-      - "8080:8081"
+      - "8081:8080"
 
 volumes:
   aeatbe-data-prod:
