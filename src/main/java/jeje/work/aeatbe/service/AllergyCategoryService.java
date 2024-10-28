@@ -2,24 +2,50 @@ package jeje.work.aeatbe.service;
 
 import jeje.work.aeatbe.dto.AllergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.entity.AllergyCategory;
+import jeje.work.aeatbe.exception.AllergyCategoryNotFoundException;
+import jeje.work.aeatbe.mapper.allergyCategory.AllergyCategoryMapper;
 import jeje.work.aeatbe.repository.AllergyCategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * db 시딩을 테스트 하기 위해서 구축된 서비스 입니다.
- * 조회 이외의 목적을 가지고 개발되지 않았으니, 이를 사용하고지 한다면 문의 바랍니다.
+ * 알러지 카테고리 서비스 레이어
  *
- * @author jjh4450git@gmail.com
  */
 @Service
+@RequiredArgsConstructor
 public class AllergyCategoryService {
 
-    @Autowired
-    private AllergyCategoryRepository allergyCategoryRepository;
+    private final AllergyCategoryRepository allergyCategoryRepository;
+    private final AllergyCategoryMapper allergyCategoryMapper;
+
+    /**
+     * id에 해당하는 알러지 카테고리를 반환합니다.
+     *
+     * @param id 알러지 카테고리 id
+     * @return id에 해당하는 알러지 카테고리
+     */
+    protected AllergyCategory findById(Long id) {
+        return allergyCategoryRepository.findById(id).orElseThrow(
+                () -> new AllergyCategoryNotFoundException("해당 id의 알러지 카테고리가 존재하지 않습니다.")
+        );
+    }
+
+    /**
+     * 테이블에서 태그를 기반으로 알러지 카테고리를 조회하는 메서드
+     *
+     * @param allergyType 조회할 알러지 카테고리의 이름
+     * @return 조회된 알러지 카테고리
+     * @throws AllergyCategoryNotFoundException 조회된 알러지 카테고리가 없을 경우 예외 발생
+     */
+    public AllergyCategoryDTO getProductAllergyByType(String allergyType) {
+        AllergyCategory allergyCategory = allergyCategoryRepository.findByAllergyType(allergyType)
+                .orElseThrow(() -> new AllergyCategoryNotFoundException("해당 알러지 카테고리가 존재하지 않습니다."));
+        return allergyCategoryMapper.toDTO(allergyCategory);
+    }
 
     /**
      * 알러지 카테고리를 전부 반환합니다.

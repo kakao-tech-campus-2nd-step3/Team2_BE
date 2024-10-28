@@ -8,7 +8,7 @@ import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.entity.User;
 import jeje.work.aeatbe.entity.Wishlist;
 import jeje.work.aeatbe.exception.WishlistNotFoundException;
-import jeje.work.aeatbe.repository.ProductRepository;
+import jeje.work.aeatbe.mapper.product.ProductMapper;
 import jeje.work.aeatbe.repository.UserRepository;
 import jeje.work.aeatbe.repository.WishlistRepository;
 import jeje.work.aeatbe.utility.JwtUtil;
@@ -21,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class WishListService {
 
     private final WishlistRepository wishlistRepository;
-    private final ProductRepository productRepository;
+    private final ProductService productService;
+    private final ProductMapper productMapper;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
@@ -37,8 +38,8 @@ public class WishListService {
         String kakaoId = jwtUtil.getKakaoId(token);
         User user = userRepository.findByUserId(kakaoId)
             .orElseThrow(() -> new WishlistNotFoundException("User not found"));
-        Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new WishlistNotFoundException("Product not found"));
+
+        Product product = productMapper.toEntity(productService.getProductDTO(productId), true);
 
         Wishlist wishlist = new Wishlist(null, user, product);
         wishlistRepository.save(wishlist);
@@ -98,8 +99,7 @@ public class WishListService {
         Wishlist existingWishlist = wishlistRepository.findByIdAndUserId(wishId, user.getId())
             .orElseThrow(() -> new WishlistNotFoundException("Wish not found or not authorized"));
 
-        Product newProduct = productRepository.findById(newProductId)
-            .orElseThrow(() -> new WishlistNotFoundException("New product not found"));
+        Product newProduct = productMapper.toEntity(productService.getProductDTO(newProductId), true);
 
         Wishlist updatedWishlist = new Wishlist(existingWishlist.getId(), existingWishlist.getUser(), newProduct);
         wishlistRepository.save(updatedWishlist);

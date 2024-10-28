@@ -71,6 +71,46 @@ public class ReviewService {
     }
 
     /**
+     * 상품을 기반으로 리뷰 조회
+     * @param productId 상품 id
+     * @return list 형식의 reviewDTO
+     */
+    public List<ReviewDTO> getReviewsByProduct(Long productId) {
+        List<Review> reviews = reviewRepository.findByProductId(productId);
+
+        if (reviews.isEmpty()) {
+            throw new IllegalArgumentException("해당 product_id로 조회된 리뷰가 없습니다.");
+        }
+
+        return reviews.stream()
+            .map(review -> new ReviewDTO(
+                review.getId(),
+                review.getRate(),
+                review.getContent(),
+                new UserDTO(
+                    review.getUser().getId(),
+                    review.getUser().getUserName(),
+                    review.getUser().getUserImgUrl()
+                ),
+                review.getProduct().getId()
+            ))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * 해당 상품의 리뷰 평균 평점 조회
+     * @param productId 상품 id
+     * @return 리뷰 평균 평점
+     */
+    public Double getAverageRating(Long productId) {
+        List<ReviewDTO> reviews = getReviewsByProduct(productId);
+        return reviews.stream()
+            .mapToDouble(ReviewDTO::rate)
+            .average()
+            .orElse(0);
+    }
+
+    /**
      * 새 리뷰 생성
      *
      * @param reviewDTO 리뷰 DTO
@@ -130,6 +170,15 @@ public class ReviewService {
             .orElseThrow(() -> new IllegalArgumentException("ID: " + id + "에 대한 리뷰를 찾을 수 없습니다."));
 
         reviewRepository.delete(existingReview);
+    }
+
+    /**
+     * 상품 ID로 리뷰 삭제
+     * @param productId 상품 id
+     */
+    public void deleteReviewsByProductId(Long productId) {
+        List<Review> reviews = reviewRepository.findByProductId(productId);
+        reviewRepository.deleteAll(reviews);
     }
 
 }
