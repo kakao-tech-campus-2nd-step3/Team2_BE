@@ -3,9 +3,12 @@ package jeje.work.aeatbe.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "products")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Product extends BaseEntity{
@@ -14,8 +17,8 @@ public class Product extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100)
-    private String allergens;
+//    @Column(length = 100)
+//    private String allergens;
 
     @Lob
     private String nutritionalInfo;
@@ -44,4 +47,12 @@ public class Product extends BaseEntity{
     @Lob
     private String ingredients;
 
+    @Column(nullable = false)
+    private Long price;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductAllergy> productAllergies;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductFreeFrom> productFreeFroms;
 }

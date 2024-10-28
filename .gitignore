@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+## prod optrions
+compose.yml.network.yml

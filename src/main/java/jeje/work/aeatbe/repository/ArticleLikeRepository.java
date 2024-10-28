@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleLikeRepository extends JpaRepository<ArticleLike, Long> {
     int countByArticleId(Long articleId);
-    Optional<ArticleLike> findByUserIdAndArticleId(Long userId, Long articleId);
+    Optional<ArticleLike> findByUserUserIdAndArticleId(String userId, Long articleId);
 }
