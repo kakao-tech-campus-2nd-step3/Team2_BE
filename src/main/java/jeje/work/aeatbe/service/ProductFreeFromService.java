@@ -8,6 +8,7 @@ import jeje.work.aeatbe.exception.ProductFreeFromNotFoundException;
 import jeje.work.aeatbe.mapper.freeFromCategory.FreeFromCategoryMapper;
 import jeje.work.aeatbe.mapper.product.ProductFreeFromMapper;
 import jeje.work.aeatbe.repository.ProductFreeFromRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +19,11 @@ import java.util.List;
  * @see ProductAllergyService
  */
 @Service
+@RequiredArgsConstructor
 public class ProductFreeFromService {
     private final ProductFreeFromRepository productFreeFromRepository;
     private final ProductFreeFromMapper productFreeFromMapper;
     private final FreeFromCategoryMapper freeFromCategoryMapper;
-
-    public ProductFreeFromService(ProductFreeFromRepository productFreeFromRepository, ProductFreeFromMapper productFreeFromMapper, FreeFromCategoryMapper freeFromCategoryMapper) {
-        this.productFreeFromRepository = productFreeFromRepository;
-        this.productFreeFromMapper = productFreeFromMapper;
-        this.freeFromCategoryMapper = freeFromCategoryMapper;
-    }
 
     /**
      * 상품 알레르기 정보를 조회하는 메서드

@@ -7,12 +7,14 @@ import jeje.work.aeatbe.exception.ProductNotFoundException;
 import jeje.work.aeatbe.mapper.product.ProductMapper;
 import jeje.work.aeatbe.mapper.product.ProductResponseMapper;
 import jeje.work.aeatbe.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -24,26 +26,6 @@ public class ProductService {
     private final ReviewService reviewService;
     private final AllergyCategoryService allergyCategoryService;
     private final FreeFromCategoryService freeFromCategoryService;
-
-    public ProductService(
-            ProductRepository productRepository,
-            ProductMapper productMapper,
-            ProductResponseMapper productResponseMapper,
-            ProductAllergyService productAllergyService,
-            ProductFreeFromService productFreeFromService,
-            ReviewService reviewService,
-            AllergyCategoryService allergyCategoryService,
-            FreeFromCategoryService freeFromCategoryService
-    ) {
-        this.productRepository = productRepository;
-        this.productMapper = productMapper;
-        this.productResponseMapper = productResponseMapper;
-        this.productAllergyService = productAllergyService;
-        this.productFreeFromService = productFreeFromService;
-        this.reviewService = reviewService;
-        this.allergyCategoryService = allergyCategoryService;
-        this.freeFromCategoryService = freeFromCategoryService;
-    }
 
     public ProductResponseDTO getProductResponseDTO(ProductDTO productDTO) {
         return productResponseMapper.toEntity(

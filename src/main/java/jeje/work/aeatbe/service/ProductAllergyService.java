@@ -9,6 +9,7 @@ import jeje.work.aeatbe.exception.ProductAllergyNotFoundException;
 import jeje.work.aeatbe.mapper.allergyCategory.AllergyCategoryMapper;
 import jeje.work.aeatbe.mapper.product.ProductAllergyMapper;
 import jeje.work.aeatbe.repository.ProductAllergyRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,18 +20,11 @@ import java.util.List;
  * @see ProductAllergyService
  */
 @Service
+@RequiredArgsConstructor
 public class ProductAllergyService {
     private final ProductAllergyRepository productAllergyRepository;
     private final ProductAllergyMapper productAllergyMapper;
     private final AllergyCategoryMapper allergyCategoryMapper;
-
-    public ProductAllergyService(ProductAllergyRepository productAllergyRepository,
-                                 ProductAllergyMapper productAllergyMapper,
-                                 AllergyCategoryMapper allergyCategoryMapper) {
-        this.productAllergyRepository = productAllergyRepository;
-        this.productAllergyMapper = productAllergyMapper;
-        this.allergyCategoryMapper = allergyCategoryMapper;
-    }
 
     /**
      * 상품 알레르기 정보를 조회하는 메서드

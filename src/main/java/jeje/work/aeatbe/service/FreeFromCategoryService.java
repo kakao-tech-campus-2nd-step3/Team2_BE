@@ -5,6 +5,7 @@ import jeje.work.aeatbe.entity.FreeFromCategory;
 import jeje.work.aeatbe.exception.FreeFromCategoryNotFoundException;
 import jeje.work.aeatbe.mapper.freeFromCategory.FreeFromCategoryMapper;
 import jeje.work.aeatbe.repository.FreeFromCategoryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,14 +13,10 @@ import org.springframework.stereotype.Service;
  * @see ProductAllergyService
  */
 @Service
+@RequiredArgsConstructor
 public class FreeFromCategoryService {
     final private FreeFromCategoryRepository freeFromCategoryRepository;
     final private FreeFromCategoryMapper freeFromCategoryMapper;
-
-    public FreeFromCategoryService(FreeFromCategoryRepository freeFromCategoryRepository, FreeFromCategoryMapper freeFromCategoryMapper) {
-        this.freeFromCategoryRepository = freeFromCategoryRepository;
-        this.freeFromCategoryMapper = freeFromCategoryMapper;
-    }
 
     /**
      * id에 해당하는 상품 알레르기 엔티티를 DB에서 조회합니다.

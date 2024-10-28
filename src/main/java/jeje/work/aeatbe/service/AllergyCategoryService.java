@@ -5,6 +5,7 @@ import jeje.work.aeatbe.entity.AllergyCategory;
 import jeje.work.aeatbe.exception.AllergyCategoryNotFoundException;
 import jeje.work.aeatbe.mapper.allergyCategory.AllergyCategoryMapper;
 import jeje.work.aeatbe.repository.AllergyCategoryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +16,11 @@ import java.util.stream.Collectors;
  *
  */
 @Service
+@RequiredArgsConstructor
 public class AllergyCategoryService {
 
     private final AllergyCategoryRepository allergyCategoryRepository;
     private final AllergyCategoryMapper allergyCategoryMapper;
-
-    public AllergyCategoryService(AllergyCategoryRepository allergyCategoryRepository, AllergyCategoryMapper allergyCategoryMapper) {
-        this.allergyCategoryRepository = allergyCategoryRepository;
-        this.allergyCategoryMapper = allergyCategoryMapper;
-    }
 
     /**
      * id에 해당하는 알러지 카테고리를 반환합니다.
