@@ -40,6 +40,7 @@ public class WishListServiceTest {
     private WishListService wishListService;
 
     private Long userId;
+    private String kakaoId;
     private User user;
 
     private Product oldProduct;
@@ -53,7 +54,7 @@ public class WishListServiceTest {
     @BeforeEach
     public void setUp() {
         userId = 1L;
-        String kakaoId = "kakao123";
+        kakaoId = "kakao123";
         user = User.builder()
             .id(userId)
             .userId(kakaoId)
@@ -101,7 +102,7 @@ public class WishListServiceTest {
     public void testGetWishlist() {
         when(wishlistRepository.findByUserId(userId)).thenReturn(List.of(wishlist));
 
-        List<WishDTO> result = wishListService.getWishlist(userId.toString());
+        List<WishDTO> result = wishListService.getWishlist(kakaoId);
 
         assertEquals(1, result.size());
         assertEquals("productName", result.get(0).product().name());
@@ -117,7 +118,7 @@ public class WishListServiceTest {
         when(wishlistRepository.findByIdAndUserId(wishId, userId)).thenReturn(Optional.of(wishlist));
         when(productRepository.findById(newProductId)).thenReturn(Optional.of(newProduct));
 
-        wishListService.updateWish(userId.toString(), wishId, newProductId);
+        wishListService.updateWish(kakaoId, wishId, newProductId);
 
         verify(wishlistRepository, times(1)).save(any(Wishlist.class));
     }
@@ -129,7 +130,7 @@ public class WishListServiceTest {
 
         when(wishlistRepository.findByIdAndUserId(wishId, userId)).thenReturn(Optional.of(wishlist));
 
-        wishListService.deleteWish(userId.toString(), wishId);
+        wishListService.deleteWish(kakaoId, wishId);
 
         verify(wishlistRepository, times(1)).delete(wishlist);
     }
@@ -141,7 +142,7 @@ public class WishListServiceTest {
 
         when(productRepository.findById(productId)).thenReturn(Optional.of(newProduct));
 
-        WishDTO result = wishListService.createWish(userId.toString(), productId);
+        WishDTO result = wishListService.createWish(kakaoId, productId);
 
         assertNotNull(result);
         assertEquals(productId, result.product().id());
