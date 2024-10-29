@@ -15,8 +15,8 @@ public class User extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false, unique = true)
-    private String userId;
+    @Column(name = "kakao_id", nullable = false, unique = true)
+    private String kakaoId;
 
     @Column(length = 100)
     private String allergies;
@@ -29,9 +29,6 @@ public class User extends BaseEntity{
 
     @Column(name = "user_img_url", length = 255)
     private String userImgUrl;
-
-    @Column
-    private String kakaoId;
 
     @Column
     private String accessToken;

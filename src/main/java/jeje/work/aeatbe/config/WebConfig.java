@@ -3,8 +3,10 @@ package jeje.work.aeatbe.config;
 import java.util.List;
 import jeje.work.aeatbe.interceptor.JwtInterceptor;
 import jeje.work.aeatbe.resolver.LoginUserArgumentResolver;
+import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,12 +14,12 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private JwtInterceptor jwtInterceptor;
-
-    private JwtUtil jwtUtil;
+    private final UserService userService;
+    private final JwtInterceptor jwtInterceptor;
+    private final JwtUtil jwtUtil;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -27,7 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new LoginUserArgumentResolver(jwtUtil));
+        argumentResolvers.add(new LoginUserArgumentResolver(jwtUtil, userService));
     }
 
     @Override

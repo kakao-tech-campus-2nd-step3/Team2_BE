@@ -62,13 +62,13 @@ public class ReviewService {
     /**
      * 특정 유저의 리뷰 조회
      *
-     * @param kakaoId 카카오 id
+     * @param userId 카카오 id
      * @return 특정 유저에 대한 list 형식의 reviewDTO
      *
      * todo: kakaoId가 아닌 userId를 받아와서 작업
      */
-    public List<ReviewDTO> getReviewsByUser(String kakaoId) {
-        Long userId = userRepository.findByKakaoId(kakaoId)
+    public List<ReviewDTO> getReviewsByUser(Long userId) {
+        User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         List<Review> reviews = reviewRepository.findByUserId(userId);
@@ -101,13 +101,11 @@ public class ReviewService {
      * 새 리뷰 생성
      *
      * @param reviewDTO 리뷰 DTO
-     * @param kakaoId   카카오 id
+     * @param userId   카카오 id
      *
      * @todo: kakaoId가 아닌 userId를 받아와서 작업
      */
-    public void createReview(ReviewDTO reviewDTO, String kakaoId) {
-        Long userId = userRepository.findByKakaoId(kakaoId)
-            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    public void createReview(ReviewDTO reviewDTO, Long userId) {
 
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -135,8 +133,8 @@ public class ReviewService {
      *
      * @todo: kakaoId가 아닌 userId를 받아와서 작업
      */
-    public void updateReviews(Long id, ReviewDTO reviewDTO, String kakaoId) {
-        Long userId = userRepository.findByKakaoId(kakaoId)
+    public void updateReviews(Long id, ReviewDTO reviewDTO, Long userId) {
+        User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         Review existingReview = reviewRepository.findById(id)
@@ -161,12 +159,12 @@ public class ReviewService {
      * 리뷰 삭제
      *
      * @param id      리뷰 id
-     * @param kakaoId 카카오 id
+     * @param userId 유저 id
      *
      * @todo kakaoId가 아닌 userId를 받아와서 작업
      */
-    public void deleteReviews(Long id, String kakaoId) {
-        Long userId = userRepository.findByKakaoId(kakaoId)
+    public void deleteReviews(Long id, Long userId) {
+        User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         Review existingReview = reviewRepository.findById(id)

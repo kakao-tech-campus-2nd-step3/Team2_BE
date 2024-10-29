@@ -1,6 +1,7 @@
 package jeje.work.aeatbe.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import java.net.URI;
 import java.util.Optional;
 import jeje.work.aeatbe.domian.KakaoProperties;
@@ -34,8 +35,8 @@ public class UserService {
     }
 
 
-    public Long getUserId(String userId){
-        Optional<User> user = userRepository.findByUserId(userId);
+    public Long getUserId(String kakaoId){
+        Optional<User> user = userRepository.findByKakaoId(kakaoId);
         if(user.isPresent()){
             return user.get().getId();
         }
@@ -47,8 +48,8 @@ public class UserService {
     }
 
     public boolean validateToken(String token) {
-        String userId = jwtUtil.getKakaoId(token);
-        return userRepository.findByUserId(userId).isPresent();
+        String kakaoId = jwtUtil.getKakaoId(token);
+        return userRepository.findByKakaoId(kakaoId).isPresent();
     }
 
     public KakaoTokenResponsed getKakaoTokenResponse(String code){
@@ -72,6 +73,7 @@ public class UserService {
         return body;
     }
 
+    @Transactional
     public String Login(String accessToken, String refreshToken){
         var uri = "https://kapi.kakao.com/v2/user/me";
         var response = restClient.get()
@@ -80,9 +82,9 @@ public class UserService {
             .retrieve()
             .body(KakaoUserInfo.class);
         String kakaoId = response.id()+"";
-        Optional<User> user = userRepository.findByUserId(kakaoId);
+        Optional<User> user = userRepository.findByKakaoId(kakaoId);
         if(user.isEmpty()){
-            User newUser = User.builder().userId(kakaoId).
+            User newUser = User.builder().kakaoId(kakaoId).
                 accessToken(accessToken).
                 refreshToken(refreshToken).
                 build();

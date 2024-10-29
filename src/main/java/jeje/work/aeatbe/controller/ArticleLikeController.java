@@ -29,7 +29,7 @@ public class ArticleLikeController {
      * @return ArticleLikeResponseDTO
      */
     @GetMapping
-    public ResponseEntity<ArticleLikeResponseDTO> getArticleLikes(@RequestParam Long articleId, @LoginUser String loginUserId) {
+    public ResponseEntity<ArticleLikeResponseDTO> getArticleLikes(@RequestParam Long articleId, @LoginUser Long loginUserId) {
         ArticleLike articlelike = articleLikeService.findArticleLikeByUserAndArticle(loginUserId, articleId);
         int like = articleLikeService.getArticleLikeCount(articleId);
         return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articlelike.getId(),like));
@@ -42,7 +42,7 @@ public class ArticleLikeController {
      * @return ArticleLikePostResponseDTO
      */
     @PostMapping
-    public ResponseEntity<ArticleLikeResponseDTO> addArticleLike(@RequestBody ArticleLikeRequestDTO articleLikeRequestDTO, @LoginUser String loginUserId) {
+    public ResponseEntity<ArticleLikeResponseDTO> addArticleLike(@RequestBody ArticleLikeRequestDTO articleLikeRequestDTO, @LoginUser Long loginUserId) {
         ArticleLike articleLike = articleLikeService.likeArticle(loginUserId, articleLikeRequestDTO.articleId());
         int like = articleLikeService.getArticleLikeCount(articleLikeRequestDTO.articleId());
         return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articleLike.getId(),like));
@@ -55,7 +55,7 @@ public class ArticleLikeController {
      * @return HTTP.status.OK
      */
     @DeleteMapping("/{articleLikeId}")
-    public ResponseEntity<?> deleteArticleLike(@PathVariable Long articleLikeId, @LoginUser String loginUserId) {
+    public ResponseEntity<?> deleteArticleLike(@PathVariable Long articleLikeId, @LoginUser Long loginUserId) {
         articleLikeService.deleteArticleLike(articleLikeId);
         return ResponseEntity.ok().build();
     }

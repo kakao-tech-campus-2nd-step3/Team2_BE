@@ -57,10 +57,10 @@ public class WishListServiceTest {
         kakaoId = "kakao123";
         user = User.builder()
             .id(userId)
-            .userId(kakaoId)
+            .kakaoId(kakaoId)
             .build();
 
-        when(userRepository.findByUserId(kakaoId)).thenReturn(Optional.of(user));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
 
         oldProduct = new Product(
