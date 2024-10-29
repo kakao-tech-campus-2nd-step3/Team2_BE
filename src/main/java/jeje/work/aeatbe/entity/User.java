@@ -51,4 +51,8 @@ public class User extends BaseEntity{
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
