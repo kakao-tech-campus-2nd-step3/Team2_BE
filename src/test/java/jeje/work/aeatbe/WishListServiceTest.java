@@ -62,6 +62,7 @@ public class WishListServiceTest {
 
         when(userRepository.findByUserId(kakaoId)).thenReturn(Optional.of(user));
 
+
         oldProduct = new Product(
             1L,
             "nutrionalInfo",
@@ -75,23 +76,25 @@ public class WishListServiceTest {
             "ingredients",
             1000L,
             null,
+            null,
             null
         );
 
-        newProduct = new Product(
-            2L,
-            "nutrionalInfo",
-            "productImageUrl",
-            "metaImageUrl",
-            "typeName",
-            "manufacturer",
-            "seller",
-            "capacity",
-            "productNameChanged",
-            "ingredients",
-            1000L,
-            null,
-            null
+        newProduct =new Product(
+                2L,
+                "nutrionalInfo",
+                "productImageUrl",
+                "metaImageUrl",
+                "typeName",
+                "manufacturer",
+                "seller",
+                "capacity",
+                "productNameChanged",
+                "ingredients",
+                1000L,
+                null,
+                null,
+                null
         );
 
         wishlist = new Wishlist(1L, user, oldProduct);

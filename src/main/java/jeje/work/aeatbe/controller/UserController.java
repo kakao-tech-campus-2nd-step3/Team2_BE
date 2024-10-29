@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
-import jeje.work.aeatbe.dto.User.TokenResponseDto;
+import jeje.work.aeatbe.dto.user.TokenResponseDto;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;

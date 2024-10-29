@@ -1,4 +1,4 @@
-package jeje.work.aeatbe.dto.AllergyCategory;
+package jeje.work.aeatbe.dto.allergyCategory;
 
 import lombok.Builder;
 

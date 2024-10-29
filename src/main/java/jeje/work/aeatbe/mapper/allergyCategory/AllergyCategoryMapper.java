@@ -1,6 +1,6 @@
 package jeje.work.aeatbe.mapper.allergyCategory;
 
-import jeje.work.aeatbe.dto.AllergyCategory.AllergyCategoryDTO;
+import jeje.work.aeatbe.dto.allergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.entity.AllergyCategory;
 import org.springframework.stereotype.Component;
 

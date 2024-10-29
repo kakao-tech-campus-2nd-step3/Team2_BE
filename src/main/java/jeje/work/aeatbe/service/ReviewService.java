@@ -1,9 +1,10 @@
 package jeje.work.aeatbe.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import jeje.work.aeatbe.dto.review.ReviewDTO;
-import jeje.work.aeatbe.dto.User.UserDTO;
+import jeje.work.aeatbe.dto.user.UserDTO;
 import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.entity.Review;
 import jeje.work.aeatbe.entity.User;
@@ -30,52 +31,12 @@ public class ReviewService {
     /**
      * 리뷰 조회
      *
-     * @param searchByUser 마이페이지 여부(true = 마이페이지, false = 단순 상품 리뷰)
      * @param productId    상품 id
-     * @param token        유저 토큰
      * @return list 형식의 reviewDTO
      *
      * @todo 토큰에서 파싱된 정보를 기반으로 userId에 들어갈 값을 수정 해야 함
      */
-    public List<ReviewDTO> getReviews(boolean searchByUser, Long productId, String token) {
-        List<Review> reviews = List.of();
-        if (searchByUser) {
-            if (token == null || token.isEmpty()) {
-                throw new IllegalStateException("로그인이 필요합니다.");
-            }
-
-            Long userId = 1L;
-            reviews = reviewRepository.findByUserId(userId);
-
-        } else{
-            reviews = reviewRepository.findByProductId(productId);
-        }
-
-        if (reviews.isEmpty()) {
-            throw new IllegalArgumentException("해당 product_id로 조회된 리뷰가 없습니다.");
-        }
-
-        return reviews.stream()
-            .map(review -> new ReviewDTO(
-                review.getId(),
-                review.getRate(),
-                review.getContent(),
-                new UserDTO(
-                    review.getUser().getId(),
-                    review.getUser().getUserName(),
-                    review.getUser().getUserImgUrl()
-                ),
-                review.getProduct().getId()
-            ))
-            .collect(Collectors.toList());
-    }
-
-    /**
-     * 상품을 기반으로 리뷰 조회
-     * @param productId 상품 id
-     * @return list 형식의 reviewDTO
-     */
-    public List<ReviewDTO> getReviewsByProduct(Long productId) {
+    public List<ReviewDTO> getReviews(Long productId) {
         List<Review> reviews = reviewRepository.findByProductId(productId);
 
         if (reviews.isEmpty()) {
@@ -83,17 +44,43 @@ public class ReviewService {
         }
 
         return reviews.stream()
-            .map(review -> new ReviewDTO(
-                review.getId(),
-                review.getRate(),
-                review.getContent(),
-                new UserDTO(
+            .map(review -> ReviewDTO.builder()
+                .id(review.getId())
+                .rate(review.getRate())
+                .content(review.getContent())
+                .user(new UserDTO(
                     review.getUser().getId(),
                     review.getUser().getUserName(),
                     review.getUser().getUserImgUrl()
-                ),
-                review.getProduct().getId()
-            ))
+                ))
+                .productId(review.getProduct().getId())
+                .build()
+            )
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * 특정 유저의 리뷰 조회
+     *
+     * @param kakaoId 카카오 id
+     * @return 특정 유저에 대한 list 형식의 reviewDTO
+     *
+     * todo: kakaoId가 아닌 userId를 받아와서 작업
+     */
+    public List<ReviewDTO> getReviewsByUser(String kakaoId) {
+        Long userId = userRepository.findByKakaoId(kakaoId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        List<Review> reviews = reviewRepository.findByUserId(userId);
+
+        return reviews.stream()
+            .map(review -> ReviewDTO.builder()
+                .id(review.getId())
+                .rate(review.getRate())
+                .content(review.getContent())
+                .productImgUrl(Optional.ofNullable(review.getProduct().getProductImageUrl()))
+                .build()
+            )
             .collect(Collectors.toList());
     }
 
@@ -103,7 +90,7 @@ public class ReviewService {
      * @return 리뷰 평균 평점
      */
     public Double getAverageRating(Long productId) {
-        List<ReviewDTO> reviews = getReviewsByProduct(productId);
+        List<ReviewDTO> reviews = getReviews(productId);
         return reviews.stream()
             .mapToDouble(ReviewDTO::rate)
             .average()
@@ -114,12 +101,13 @@ public class ReviewService {
      * 새 리뷰 생성
      *
      * @param reviewDTO 리뷰 DTO
-     * @param token     유저 토큰
+     * @param kakaoId   카카오 id
      *
-     * @todo 파싱된 정보에서 user에 대한 정보를 기반으로 userId와 하위 로직을 수정해야 함
+     * @todo: kakaoId가 아닌 userId를 받아와서 작업
      */
-    public void createReview(ReviewDTO reviewDTO, String token) {
-        Long userId = reviewDTO.user().id();
+    public void createReview(ReviewDTO reviewDTO, String kakaoId) {
+        Long userId = userRepository.findByKakaoId(kakaoId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -144,10 +132,19 @@ public class ReviewService {
      *
      * @param id        리뷰 id
      * @param reviewDTO 리뷰 DTO
+     *
+     * @todo: kakaoId가 아닌 userId를 받아와서 작업
      */
-    public void updateReviews(Long id, ReviewDTO reviewDTO) {
+    public void updateReviews(Long id, ReviewDTO reviewDTO, String kakaoId) {
+        Long userId = userRepository.findByKakaoId(kakaoId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
         Review existingReview = reviewRepository.findById(id)
             .orElseThrow(()-> new IllegalArgumentException("해당 상품의 리뷰가 존재하지 않습니다."));
+
+        if (!existingReview.getUser().getId().equals(userId)) {
+            throw new IllegalStateException("해당 리뷰를 수정할 권한이 없습니다.");
+        }
 
         Review updateReview = new Review(
             existingReview.getId(),
@@ -163,22 +160,23 @@ public class ReviewService {
     /**
      * 리뷰 삭제
      *
-     * @param id 리뷰 id
+     * @param id      리뷰 id
+     * @param kakaoId 카카오 id
+     *
+     * @todo kakaoId가 아닌 userId를 받아와서 작업
      */
-    public void deleteReviews(Long id) {
+    public void deleteReviews(Long id, String kakaoId) {
+        Long userId = userRepository.findByKakaoId(kakaoId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
         Review existingReview = reviewRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("ID: " + id + "에 대한 리뷰를 찾을 수 없습니다."));
+            .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다."));
+
+        if (!existingReview.getUser().getId().equals(userId)) {
+            throw new IllegalStateException("해당 리뷰를 삭제할 권한이 없습니다.");
+        }
 
         reviewRepository.delete(existingReview);
-    }
-
-    /**
-     * 상품 ID로 리뷰 삭제
-     * @param productId 상품 id
-     */
-    public void deleteReviewsByProductId(Long productId) {
-        List<Review> reviews = reviewRepository.findByProductId(productId);
-        reviewRepository.deleteAll(reviews);
     }
 
 }

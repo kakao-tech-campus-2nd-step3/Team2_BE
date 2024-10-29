@@ -1,6 +1,6 @@
 package jeje.work.aeatbe.service;
 
-import jeje.work.aeatbe.dto.AllergyCategory.AllergyCategoryDTO;
+import jeje.work.aeatbe.dto.allergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.dto.freeFromCategory.FreeFromCategoryDTO;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
@@ -154,7 +154,6 @@ class ProductServiceTest {
     void deleteProduct_Success() {
         // given
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
-        doNothing().when(reviewService).deleteReviewsByProductId(product.getId());
         doNothing().when(productRepository).delete(product);
 
         // when
