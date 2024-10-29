@@ -105,10 +105,26 @@ public class WishListServiceTest {
     @DisplayName("사용자의 위시리스트 조회")
     @Test
     public void testGetWishlist() {
+<<<<<<< Updated upstream
 
+=======
+        Long userIdFromToken = 1L;
+        String kakaoId = "kakao123";
+        String token = "Bearer token";
+
+        User user = User.builder()
+            .id(userIdFromToken)
+            .userId(kakaoId)
+            .build();
+        Product product = new Product(1L, "allergens", "nutritionalInfo", "http://image.com", "http://metaimage.com", "Type Name", "Manufacturer", "Seller", "Capacity", "productName", "Ingredients", 1000L);
+        Wishlist wishlist = new Wishlist(1L, user, product);
+
+        when(jwtUtil.getKakaoId(token)).thenReturn(kakaoId);
+        when(userRepository.findByUserId(kakaoId)).thenReturn(Optional.of(user));
+>>>>>>> Stashed changes
         when(wishlistRepository.findByUserId(userIdFromToken)).thenReturn(List.of(wishlist));
 
-        List<WishDTO> result = wishListService.getWishlist("token");
+        List<WishDTO> result = wishListService.getWishlist(kakaoId);
 
         assertEquals(1, result.size());
         assertEquals("productName", result.get(0).product().name());
@@ -120,12 +136,28 @@ public class WishListServiceTest {
     public void testUpdateWish() {
         Long wishId = 1L;
         Long newProductId = 2L;
+<<<<<<< Updated upstream
         Wishlist wishlist = new Wishlist(wishId, user, oldProduct);
 
+=======
+        String kakaoId = "kakao123";
+        String token = "Bearer token";
+
+        User user = User.builder()
+            .id(userIdFromToken)
+            .userId(kakaoId)
+            .build();
+        Product oldProduct = new Product(1L, "allergens", "nutritionalInfo", "http://image.com", "http://metaimage.com", "Type Name", "Manufacturer", "Seller", "Capacity", "oldProduct", "Ingredients", 500L);
+        Product newProduct = new Product(2L, "allergens", "nutritionalInfo", "http://image.com", "http://metaimage.com", "Type Name", "Manufacturer", "Seller", "Capacity", "newProduct", "Ingredients", 1500L);
+        Wishlist wishlist = new Wishlist(1L, user, oldProduct);
+
+        when(jwtUtil.getKakaoId(token)).thenReturn(kakaoId);
+        when(userRepository.findByUserId(kakaoId)).thenReturn(Optional.of(user));
+>>>>>>> Stashed changes
         when(wishlistRepository.findByIdAndUserId(wishId, userIdFromToken)).thenReturn(Optional.of(wishlist));
         when(productRepository.findById(newProductId)).thenReturn(Optional.of(newProduct));
 
-        wishListService.updateWish("token", wishId, newProductId);
+        wishListService.updateWish(kakaoId, wishId, newProductId);
 
         verify(wishlistRepository, times(1)).save(any(Wishlist.class));
     }
@@ -134,11 +166,27 @@ public class WishListServiceTest {
     @Test
     public void testDeleteWish() {
         Long wishId = 1L;
+<<<<<<< Updated upstream
         Wishlist wishlist = new Wishlist(wishId, user, oldProduct);
 
+=======
+        Long userIdFromToken = 1L;
+        String kakaoId = "kakao123";
+        String token = "Bearer token";
+
+        User user = User.builder()
+            .id(userIdFromToken)
+            .userId(kakaoId)
+            .build();
+        Product product = new Product(1L, "allergens", "nutritionalInfo", "http://image.com", "http://metaimage.com", "Type Name", "Manufacturer", "Seller", "Capacity", "productName", "Ingredients", 1000L);
+        Wishlist wishlist = new Wishlist(1L, user, product);
+
+        when(jwtUtil.getKakaoId(token)).thenReturn(kakaoId);
+        when(userRepository.findByUserId(kakaoId)).thenReturn(Optional.of(user));
+>>>>>>> Stashed changes
         when(wishlistRepository.findByIdAndUserId(wishId, userIdFromToken)).thenReturn(Optional.of(wishlist));
 
-        wishListService.deleteWish("token", wishId);
+        wishListService.deleteWish(kakaoId, wishId);
 
         verify(wishlistRepository, times(1)).delete(wishlist);
     }
@@ -146,9 +194,29 @@ public class WishListServiceTest {
     @DisplayName("위시리스트에 새로운 항목 추가")
     @Test
     public void testCreateWish() {
+<<<<<<< Updated upstream
         when(productRepository.findById(2L)).thenReturn(Optional.of(newProduct));
 
         WishDTO result = wishListService.createWish("token", 2L);
+=======
+        Long userIdFromToken = 1L;
+        String kakaoId = "kakao123";
+        String token = "Bearer token";
+
+        Product product = new Product(1L, "allergens", "nutritionalInfo", "http://image.com", "http://metaimage.com", "Type Name", "Manufacturer", "Seller", "Capacity", "Product Name", "Ingredients", 1000L);
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
+        User user = User.builder()
+            .id(userIdFromToken)
+            .userId(kakaoId)
+            .build();
+        when(userRepository.findByUserId(kakaoId)).thenReturn(Optional.of(user));
+
+        when(jwtUtil.getKakaoId(token)).thenReturn(kakaoId);
+
+        WishDTO result = wishListService.createWish(kakaoId, 1L);
+>>>>>>> Stashed changes
 
         assertNotNull(result);
         assertEquals(2L, result.product().id());
