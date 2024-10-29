@@ -7,6 +7,7 @@ import jeje.work.aeatbe.dto.wishlist.WishProductDTO;
 import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.entity.User;
 import jeje.work.aeatbe.entity.Wishlist;
+import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.exception.WishlistNotFoundException;
 import jeje.work.aeatbe.mapper.product.ProductMapper;
 import jeje.work.aeatbe.repository.UserRepository;
@@ -36,7 +37,7 @@ public class WishListService {
      */
     public WishDTO createWish(String loginUserId, Long productId) {
         User user = userRepository.findByUserId(loginUserId)
-            .orElseThrow(() -> new WishlistNotFoundException("User not found"));
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Product product = productMapper.toEntity(productService.getProductDTO(productId), true);
 
@@ -64,7 +65,7 @@ public class WishListService {
      */
     public List<WishDTO> getWishlist(String loginUserId) {
         User user = userRepository.findByUserId(loginUserId)
-            .orElseThrow(() -> new WishlistNotFoundException("User not found"));
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
         List<Wishlist> wishlistItems = wishlistRepository.findByUserId(user.getId());
 
         return wishlistItems.stream()
@@ -92,7 +93,7 @@ public class WishListService {
     @Transactional
     public void updateWish(String loginUserId, Long wishId, Long newProductId) {
         User user = userRepository.findByUserId(loginUserId)
-            .orElseThrow(() -> new WishlistNotFoundException("User not found"));
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
         Wishlist existingWishlist = wishlistRepository.findByIdAndUserId(wishId, user.getId())
             .orElseThrow(() -> new WishlistNotFoundException("Wish not found or not authorized"));
 
@@ -111,7 +112,7 @@ public class WishListService {
      */
     public void deleteWish(String loginUserId, Long wishId) {
         User user = userRepository.findByUserId(loginUserId)
-            .orElseThrow(() -> new WishlistNotFoundException("User not found"));
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
         Wishlist wishlist = wishlistRepository.findByIdAndUserId(wishId, user.getId())
             .orElseThrow(() -> new WishlistNotFoundException("Wish not found or not authorized"));
 
