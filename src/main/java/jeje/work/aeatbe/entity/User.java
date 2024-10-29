@@ -36,9 +36,9 @@ public class User extends BaseEntity{
     private String refreshToken;
 
     @Builder
-    public User(String KakaoId, String allergies, String freeFrom,
+    public User(String kakaoId, String allergies, String freeFrom,
         String userName, String userImgUrl, String accessToken, String refreshToken) {
-        this.kakaoId = KakaoId;
+        this.kakaoId = kakaoId;
         this.allergies = allergies;
         this.freeFrom = freeFrom;
         this.userName = userName;
