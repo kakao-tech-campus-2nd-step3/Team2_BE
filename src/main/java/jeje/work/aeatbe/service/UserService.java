@@ -40,7 +40,7 @@ public class UserService {
         if(user.isPresent()){
             return user.get().getId();
         }
-        return -1L;
+        return null;
     }
 
     public String createToken(User user) {

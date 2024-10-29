@@ -8,7 +8,6 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 public class User extends BaseEntity{
 
     @Id
@@ -35,6 +34,18 @@ public class User extends BaseEntity{
 
     @Column
     private String refreshToken;
+
+    @Builder
+    public User(String KakaoId, String allergies, String freeFrom,
+        String userName, String userImgUrl, String accessToken, String refreshToken) {
+        this.kakaoId = KakaoId;
+        this.allergies = allergies;
+        this.freeFrom = freeFrom;
+        this.userName = userName;
+        this.userImgUrl = userImgUrl;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
 
     public void kakaoTokenUpdate(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
