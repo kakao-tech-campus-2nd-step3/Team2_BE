@@ -31,7 +31,7 @@ public class WishListController {
      * @return 추가된 위시리스트 항목을 담은 WishDTO와 HTTP 상태 코드 201 CREATED
      */
     @PostMapping
-    public ResponseEntity<WishDTO> createWish(@LoginUser String loginUserId, @RequestParam Long productId) {
+    public ResponseEntity<WishDTO> createWish(@LoginUser Long loginUserId, @RequestParam Long productId) {
         WishDTO wishDTO = wishListService.createWish(loginUserId, productId);
         return ResponseEntity.status(HttpStatus.CREATED).body(wishDTO);
     }
@@ -43,7 +43,7 @@ public class WishListController {
      * @return 사용자의 위시리스트 항목들을 담은 리스트와 HTTP 상태 코드 200 OK
      */
     @GetMapping
-    public ResponseEntity<List<WishDTO>> getWishlist(@LoginUser String loginUserId) {
+    public ResponseEntity<List<WishDTO>> getWishlist(@LoginUser Long loginUserId) {
         List<WishDTO> wishlist = wishListService.getWishlist(loginUserId);
         return ResponseEntity.ok(wishlist);
     }
@@ -57,7 +57,7 @@ public class WishListController {
      * @return HTTP 상태 코드 204 No Content.
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateWish(@LoginUser String loginUserId, @PathVariable Long id, @RequestParam Long newProductId) {
+    public ResponseEntity<Void> updateWish(@LoginUser Long loginUserId, @PathVariable Long id, @RequestParam Long newProductId) {
         wishListService.updateWish(loginUserId, id, newProductId);
         return ResponseEntity.noContent().build();
     }
@@ -70,7 +70,7 @@ public class WishListController {
      * @return HTTP 상태 코드 204 No Content
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWish(@LoginUser String loginUserId, @PathVariable Long id) {
+    public ResponseEntity<Void> deleteWish(@LoginUser Long loginUserId, @PathVariable Long id) {
         wishListService.deleteWish(loginUserId, id);
         return ResponseEntity.noContent().build();
     }

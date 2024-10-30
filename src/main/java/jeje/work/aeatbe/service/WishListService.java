@@ -35,8 +35,8 @@ public class WishListService {
      * @return 생성된 WishDTO 객체
      * @throws WishlistNotFoundException 사용자를 찾지 못하거나, 상품을 찾지 못할 경우 예외 발생
      */
-    public WishDTO createWish(String loginUserId, Long productId) {
-        User user = userRepository.findByUserId(loginUserId)
+    public WishDTO createWish(Long loginUserId, Long productId) {
+        User user = userRepository.findById(loginUserId)
             .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Product product = productMapper.toEntity(productService.getProductDTO(productId), true);
@@ -63,8 +63,8 @@ public class WishListService {
      * @return 사용자의 모든 위시리스트 항목을 포함한 List<WishDTO>
      * @throws WishlistNotFoundException 사용자 ID를 추출할 수 없거나, 위시리스트 항목을 찾지 못할 경우 예외 발생
      */
-    public List<WishDTO> getWishlist(String loginUserId) {
-        User user = userRepository.findByUserId(loginUserId)
+    public List<WishDTO> getWishlist(Long loginUserId) {
+        User user = userRepository.findById(loginUserId)
             .orElseThrow(() -> new UserNotFoundException("User not found"));
         List<Wishlist> wishlistItems = wishlistRepository.findByUserId(user.getId());
 
@@ -91,8 +91,8 @@ public class WishListService {
      * @throws WishlistNotFoundException 위시리스트 항목 또는 새 상품을 찾지 못할 경우 예외 발생
      */
     @Transactional
-    public void updateWish(String loginUserId, Long wishId, Long newProductId) {
-        User user = userRepository.findByUserId(loginUserId)
+    public void updateWish(Long loginUserId, Long wishId, Long newProductId) {
+        User user = userRepository.findById(loginUserId)
             .orElseThrow(() -> new UserNotFoundException("User not found"));
         Wishlist existingWishlist = wishlistRepository.findByIdAndUserId(wishId, user.getId())
             .orElseThrow(() -> new WishlistNotFoundException("Wish not found or not authorized"));
@@ -110,8 +110,8 @@ public class WishListService {
      * @param wishId 삭제할 위시리스트 항목의 ID
      * @throws WishlistNotFoundException 위시리스트 항목을 찾지 못하거나 권한이 없을 경우 예외 발생
      */
-    public void deleteWish(String loginUserId, Long wishId) {
-        User user = userRepository.findByUserId(loginUserId)
+    public void deleteWish(Long loginUserId, Long wishId) {
+        User user = userRepository.findById(loginUserId)
             .orElseThrow(() -> new UserNotFoundException("User not found"));
         Wishlist wishlist = wishlistRepository.findByIdAndUserId(wishId, user.getId())
             .orElseThrow(() -> new WishlistNotFoundException("Wish not found or not authorized"));
