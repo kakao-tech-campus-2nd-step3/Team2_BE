@@ -6,7 +6,9 @@ import java.util.Optional;
 import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
 import jeje.work.aeatbe.domian.KakaoUserInfo;
+import jeje.work.aeatbe.dto.Kakao.LogoutResponseDto;
 import jeje.work.aeatbe.entity.User;
+import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.UserRepository;
 import jeje.work.aeatbe.utility.JwtUtil;
 import org.springframework.http.MediaType;
@@ -51,7 +53,7 @@ public class KakaoService {
     }
 
     @Transactional
-    public String Login(String accessToken, String refreshToken){
+    public String login(String accessToken, String refreshToken){
         var uri = "https://kapi.kakao.com/v2/user/me";
         var response = restClient.get()
             .uri(URI.create(uri))
@@ -72,6 +74,23 @@ public class KakaoService {
         }
         user.get().kakaoTokenUpdate(accessToken, refreshToken);
         return jwtUtil.createToken(user.get());
+    }
+
+    @Transactional
+    public LogoutResponseDto logout(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new UserNotFoundException("확인되지 않은 유저 입니다."));
+
+        var uri = "https://kapi.kakao.com/v1/user/logout";
+        var response = restClient.post()
+                .uri(URI.create(uri))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .header("Authorization", "Bearer " + user.getAccessToken())
+                .retrieve()
+                .body(LogoutResponseDto.class);
+
+        return response;
+
     }
 
 
