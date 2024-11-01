@@ -62,7 +62,7 @@ public class ArticleService {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "date");
 
-        int page = decodePageToken(pageToken)[0];
+        int page = pageToken == null ? 0 : Integer.parseInt(pageToken);
         Pageable pageable = PageRequest.of(page, maxResults, sort);
         Page<Article> articlePage;
 
@@ -84,7 +84,7 @@ public class ArticleService {
             articlePage = articleRepository.findAll(pageable);
         }
 
-        String nextPageToken = articlePage.hasNext() ? generateNextPageToken(articlePage.getNumber() + 1, maxResults) : null;
+        String nextPageToken = articlePage.hasNext() ? String.valueOf(page + 1) : null;
 
         PageInfoDTO pageInfo = new PageInfoDTO(
             (int) articlePage.getTotalElements(),
@@ -170,37 +170,6 @@ public class ArticleService {
 
         articleRepository.delete(article);
     }
-
-    /**
-     * 다음 페이지 토큰 생성 (베이스64 인코딩 사용)
-     *
-     * @param page 현재 페이지 번호
-     * @param pageSize 한 페이지당 결과 수
-     * @return 인코딩된 페이지 토큰
-     */
-    public String generateNextPageToken(int page, int pageSize) {
-        String tokenData = page + ":" + pageSize;
-        return Base64.getEncoder().encodeToString(tokenData.getBytes());
-    }
-
-    /**
-     * 페이지 토큰을 디코딩하여 페이지 번호와 페이지 크기 추출
-     *
-     * @param pageToken 인코딩된 페이지 토큰
-     * @return 페이지 번호와 페이지 크기를 포함하는 배열
-     */
-    private int[] decodePageToken(String pageToken) {
-        if (pageToken == null || pageToken.equals("0")) {
-            return new int[]{0, 10};
-        }
-
-        String decoded = new String(Base64.getDecoder().decode(pageToken));
-        String[] parts = decoded.split(":");
-        int page = Integer.parseInt(parts[0]);
-        int pageSize = Integer.parseInt(parts[1]);
-        return new int[]{page, pageSize};
-    }
-
 
 }
 

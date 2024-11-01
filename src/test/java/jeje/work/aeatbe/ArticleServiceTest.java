@@ -69,11 +69,8 @@ public class ArticleServiceTest {
         assertEquals(2, result1.pageInfo().resultsPerPage());
         assertEquals(2, result1.pageInfo().totalResults());
 
-        // 다음 페이지 토큰을 인코딩된 형태로 생성
-        String nextPageToken = articleService.generateNextPageToken(1, 2);
-
         // 테스트 케이스 2: 다음 페이지로 이동 (전체 기사 가져오기)
-        ArticleListResponseDTO result2 = articleService.getArticles("", "", "", "new", nextPageToken, 2);
+        ArticleListResponseDTO result2 = articleService.getArticles("", "", "", "new", "1", 2);
         assertEquals(1, result2.columns().size()); // 다음 페이지에는 한 개의 기사만 남음
         assertEquals("Title 3", result2.columns().get(0).title());
         assertEquals("Subtitle 3", result2.columns().get(0).subtitle());
