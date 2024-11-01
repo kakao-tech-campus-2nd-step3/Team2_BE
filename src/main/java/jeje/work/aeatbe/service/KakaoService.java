@@ -108,12 +108,5 @@ public class KakaoService {
 
     }
 
-//    private LinkedMultiValueMap<String, String> createLogOutBody(String code) {
-//        var body = new LinkedMultiValueMap<String, String>();
-//        body.add("client_id", kakaoProperties.clientId());
-//        body.add("redirect_uri", kakaoProperties.redirectLogoutUrl());
-//        body.add("code", code);
-//        return body;
-//    }
 
 }

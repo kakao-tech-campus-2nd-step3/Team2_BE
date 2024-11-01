@@ -51,13 +51,7 @@ public class KakaoAuthController {
         LogoutResponseDto logoutResponseDto = kakaoService.logout(userid);
         response.sendRedirect(url);
     }
-//    @PostMapping("/logout")
-//    public ResponseEntity<LogoutResponseDto> logout(@LoginUser Long userid){
-//        String url = kakaoProperties.logoutRedirectUrl() +
-//                "client_id=" + kakaoProperties.clientId() + "&logout_redirect_uri=" + kakaoProperties.logoutRedirectUrl();
-//        LogoutResponseDto logoutResponseDto = kakaoService.logout(userid);
-//        return ResponseEntity.ok(logoutResponseDto);
-//    }
+
 
     @GetMapping("/logoutWithKakao/callback")
     public ResponseEntity<?> logoutWithKakao(){
