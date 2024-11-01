@@ -1,6 +1,8 @@
 package jeje.work.aeatbe.service;
 
+
 import java.util.stream.Collectors;
+import jeje.work.aeatbe.dto.product.PageInfoDTO;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
 import jeje.work.aeatbe.entity.Product;
@@ -43,6 +45,7 @@ public class ProductService {
                 reviewService.getAverageRating(productDTO.id()),
                 productFreeFromService.getFreeFromTags(productDTO.id()),
                 productAllergyService.getAllergyTags(productDTO.id()),
+                PageInfoDTO.builder().build(),
                 true
         );
     }
@@ -61,11 +64,17 @@ public class ProductService {
      * @return the all products
      */
     @Transactional(readOnly = true)
-    public Page<ProductResponseDTO> getAllProducts(String q, List<String> allergies, List<String> freeFroms, int priceMin, int priceMax, String sortBy, Pageable pageable) {
+    public Page<ProductResponseDTO> getAllProducts(String q, List<String> allergies,
+        List<String> freeFroms, int priceMin, int priceMax, String sortBy, Pageable pageable) {
         Pageable sortedPageable = createSortedPageable(pageable, sortBy);
 
         Page<Product> productsPage = findProductsByCriteria(q, allergies, freeFroms, priceMin, priceMax, sortedPageable);
-        List<ProductResponseDTO> productDTOs = mapToResponseDTO(productsPage.getContent());
+
+        PageInfoDTO pageInfo = new PageInfoDTO(
+            (int) productsPage.getTotalElements(),
+            pageable.getPageSize()
+        );
+        List<ProductResponseDTO> productDTOs = mapToResponseDTO(productsPage.getContent(), pageInfo);
 
         return new PageImpl<>(productDTOs, sortedPageable, productsPage.getTotalElements());
     }
@@ -158,7 +167,8 @@ public class ProductService {
      * @return ProductResponseDTO 상품 상세 정보
      */
     @Transactional
-    public ProductResponseDTO updateProduct(Long id, ProductDTO productDTO, List<String> allergies, List<String> freeFroms) {
+    public ProductResponseDTO updateProduct(Long id, ProductDTO productDTO,
+        List<String> allergies, List<String> freeFroms) {
         var product = getProductEntity(id);
 
         var nowAllergiesEntity = product.getProductAllergies();
@@ -232,7 +242,8 @@ public class ProductService {
         return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
     }
 
-    private Page<Product> findProductsByCriteria(String q, List<String> allergies, List<String> freeFroms, int priceMin, int priceMax, Pageable pageable) {
+    private Page<Product> findProductsByCriteria(String q, List<String> allergies,
+        List<String> freeFroms, int priceMin, int priceMax, Pageable pageable) {
         if (q != null) {
             return productRepository.findByProductNameContaining(q, pageable);
         } else if (allergies != null && !allergies.isEmpty()) {
@@ -244,13 +255,14 @@ public class ProductService {
         }
     }
 
-    protected List<ProductResponseDTO> mapToResponseDTO(List<Product> products) {
+    private List<ProductResponseDTO> mapToResponseDTO(List<Product> products, PageInfoDTO pageInfoDTO) {
         return products.stream()
             .map(product -> productResponseMapper.toEntity(
                 productMapper.toDTO(product),
                 reviewService.getAverageRating(product.getId()),
                 productFreeFromService.getFreeFromTags(product.getId()),
                 productAllergyService.getAllergyTags(product.getId()),
+                pageInfoDTO,
                 true
             ))
             .collect(Collectors.toList());
