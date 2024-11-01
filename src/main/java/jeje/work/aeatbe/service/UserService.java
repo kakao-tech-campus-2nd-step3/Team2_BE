@@ -7,7 +7,9 @@ import java.util.Optional;
 import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
 import jeje.work.aeatbe.domian.KakaoUserInfo;
+import jeje.work.aeatbe.dto.user.UserInfoResponseDto;
 import jeje.work.aeatbe.entity.User;
+import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.UserRepository;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +37,20 @@ public class UserService {
         return null;
     }
 
-    public String createToken(User user) {
-        return jwtUtil.createToken(user);
-    }
-
     public boolean validateToken(String token) {
         String kakaoId = jwtUtil.getKakaoId(token);
         return userRepository.findByKakaoId(kakaoId).isPresent();
+    }
+
+    public UserInfoResponseDto getUserInfo(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new UserNotFoundException("잘못된 유저입니다."));
+        return UserInfoResponseDto.builder()
+                .id(user.getId())
+                .userName(user.getUserName())
+                .userImageUrl(user.getUserImgUrl())
+                .build();
+
     }
 
 

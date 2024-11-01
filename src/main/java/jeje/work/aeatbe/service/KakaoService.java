@@ -74,11 +74,12 @@ public class KakaoService {
         String kakaoId = response.id()+"";
         Optional<User> user = userRepository.findByKakaoId(kakaoId);
         if(user.isEmpty()){
-            User newUser = User.builder().kakaoId(kakaoId).
-                    userName(userName).
-                    accessToken(accessToken).
-                    refreshToken(refreshToken).
-                    build();
+            User newUser = User.builder().kakaoId(kakaoId)
+                    .userName(userName)
+                    .userImgUrl("")
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .build();
             userRepository.save(newUser);
             return jwtUtil.createToken(newUser);
         }
