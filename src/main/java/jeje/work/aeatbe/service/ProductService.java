@@ -1,5 +1,6 @@
 package jeje.work.aeatbe.service;
 
+import java.util.stream.Collectors;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
 import jeje.work.aeatbe.entity.Product;
@@ -8,6 +9,9 @@ import jeje.work.aeatbe.mapper.product.ProductMapper;
 import jeje.work.aeatbe.mapper.product.ProductResponseMapper;
 import jeje.work.aeatbe.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +40,56 @@ public class ProductService {
                 true
         );
     }
+
+    // @todo : 상품 전체 조회
+    public Page<ProductResponseDTO> getAllProducts(String q, String allergies, String freeFroms, int priceMin, int priceMax, Pageable pageable) {
+        List<Product> products = getAllProductEntities();
+
+        if (q != null && !q.isEmpty()) {
+            products = products.stream()
+                .filter(product -> product.getProductName().contains(q))
+                .collect(Collectors.toList());
+        }
+
+        if (allergies != null && !allergies.isEmpty()) {
+            products = products.stream()
+                .filter(product -> product.getProductAllergies().stream()
+                    .anyMatch(allergyEntity -> allergies.contains(
+                        (CharSequence) allergyEntity.getAllergy())))
+                .collect(Collectors.toList());
+        }
+
+        if (freeFroms != null && !freeFroms.isEmpty()) {
+            products = products.stream()
+                .filter(product -> product.getProductFreeFroms().stream()
+                    .anyMatch(freeFromEntity -> freeFroms.contains(
+                        (CharSequence) freeFromEntity.getFreeFromCategory())))
+                .collect(Collectors.toList());
+        }
+
+        products = products.stream()
+            .filter(product -> product.getPrice() >= priceMin && product.getPrice() <= priceMax)
+            .collect(Collectors.toList());
+
+        List<ProductResponseDTO> productDTOs = products.stream()
+            .map(product -> productResponseMapper.toEntity(
+                productMapper.toDTO(product),
+                reviewService.getAverageRating(product.getId()),
+                productFreeFromService.getFreeFromTags(product.getId()),
+                productAllergyService.getAllergyTags(product.getId()),
+                true
+            ))
+            .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), productDTOs.size());
+        return new PageImpl<>(productDTOs.subList(start, end), pageable, productDTOs.size());
+    }
+
+    protected List<Product> getAllProductEntities(){
+        return productRepository.findAll();
+    }
+
 
     /**
      * id에 해당하는 상품 엔티티를 DB에서 조회합니다.
