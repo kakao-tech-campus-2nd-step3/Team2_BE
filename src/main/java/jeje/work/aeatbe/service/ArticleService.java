@@ -178,7 +178,7 @@ public class ArticleService {
      * @param pageSize 한 페이지당 결과 수
      * @return 인코딩된 페이지 토큰
      */
-    private String generateNextPageToken(int page, int pageSize) {
+    public String generateNextPageToken(int page, int pageSize) {
         String tokenData = page + ":" + pageSize;
         return Base64.getEncoder().encodeToString(tokenData.getBytes());
     }
