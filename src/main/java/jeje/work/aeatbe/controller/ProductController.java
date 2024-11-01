@@ -1,6 +1,7 @@
 package jeje.work.aeatbe.controller;
 
 
+import java.util.List;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
 import jeje.work.aeatbe.service.ProductService;
@@ -47,8 +48,8 @@ public class ProductController {
      */
     @GetMapping
     public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(@RequestParam String q,
-        @RequestParam(required = false) String allergy,
-        @RequestParam(required = false) String freeFroms,
+        @RequestParam(required = false) List<String> allergy,
+        @RequestParam(required = false) List<String> freeFroms,
         @RequestParam(required = false, defaultValue = "0") int priceMin,
         @RequestParam(required = false, defaultValue = "1000000") int priceMax,
         @RequestParam(required = false, defaultValue = "new") String sortBy,
@@ -59,7 +60,6 @@ public class ProductController {
         Page<ProductResponseDTO> products = productService.getAllProducts(q, allergy, freeFroms, priceMin, priceMax, sortBy, pageable);
         return ResponseEntity.ok(products);
     }
-
 
     /**
      * 상품 상세 조회
@@ -84,12 +84,11 @@ public class ProductController {
      *
      * @ todo:  토큰 사용 로직
      */
-// todo: 토큰 사용 로직
     @PostMapping
     public ResponseEntity<?> postProducts(
         @RequestParam ProductDTO productDTO,
-        @RequestParam String allegies,
-        @RequestParam String freeFroms
+        @RequestParam List<String> allegies,
+        @RequestParam List<String> freeFroms
 //        ,@LoginUser Long userId
     ){
         ProductResponseDTO product = productService.createProduct(productDTO, allegies, freeFroms);
@@ -107,12 +106,11 @@ public class ProductController {
      *
      * @ todo:  토큰 사용 로직
      */
-// todo: 토큰 사용 로직
     @PatchMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProducts(@PathVariable Long id,
         @RequestParam ProductDTO productDTO,
-        @RequestParam String allegies,
-        @RequestParam String freeFroms
+        @RequestParam List<String> allegies,
+        @RequestParam List<String> freeFroms
         //        ,@LoginUser Long userId
     ) {
 
