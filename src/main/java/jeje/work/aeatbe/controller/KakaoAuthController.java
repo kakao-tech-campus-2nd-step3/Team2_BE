@@ -45,9 +45,23 @@ public class KakaoAuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<LogoutResponseDto> logout(@LoginUser Long userid){
+    public void logout(HttpServletResponse response, @LoginUser Long userid) throws IOException{
+        String url = kakaoProperties.logoutUrl() +
+                "?client_id=" + kakaoProperties.clientId() + "&logout_redirect_uri=" + kakaoProperties.logoutRedirectUrl();
         LogoutResponseDto logoutResponseDto = kakaoService.logout(userid);
-        return ResponseEntity.ok(logoutResponseDto);
+        response.sendRedirect(url);
+    }
+//    @PostMapping("/logout")
+//    public ResponseEntity<LogoutResponseDto> logout(@LoginUser Long userid){
+//        String url = kakaoProperties.logoutRedirectUrl() +
+//                "client_id=" + kakaoProperties.clientId() + "&logout_redirect_uri=" + kakaoProperties.logoutRedirectUrl();
+//        LogoutResponseDto logoutResponseDto = kakaoService.logout(userid);
+//        return ResponseEntity.ok(logoutResponseDto);
+//    }
+
+    @GetMapping("/logoutWithKakao/callback")
+    public ResponseEntity<?> logoutWithKakao(){
+        return ResponseEntity.ok().build();
     }
 
 }
