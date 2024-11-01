@@ -45,6 +45,12 @@ class ProductServiceTest {
     @Mock
     private FreeFromCategoryService freeFromCategoryService;
 
+    @Mock
+    private ProductAllergyService productAllergyService;
+
+    @Mock
+    private ProductFreeFromService productFreeFromService;
+
     @InjectMocks
     private ProductService productService;
 
@@ -106,6 +112,11 @@ class ProductServiceTest {
                 .metaImageUrl("http://example.com/meta.jpg")
                 .seller("Test Seller")
                 .build();
+
+        freeFromCategories.add(new FreeFromCategoryDTO(1L, "Gluten"));
+        freeFromCategories.add(new FreeFromCategoryDTO(1L, "Dairy"));
+
+        allergyCategories.add(new AllergyCategoryDTO(1L, "Peanuts"));
     }
 
     @Test
@@ -140,13 +151,13 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품 생성 - 성공")
     void createProduct_Success() {
-        //TODO: Implement this test
     }
+
 
     @Test
     @DisplayName("상품 업데이트 - 성공")
     void updateProduct_Success() {
-        //TODO: Implement this test
+
     }
 
     @Test
