@@ -29,6 +29,11 @@ public class KakaoAuthController {
     private final KakaoProperties kakaoProperties;
     private final KakaoService kakaoService;
 
+    /**
+     * 카카오 로그인페이지로 리다이렉션
+     * @param response
+     * @throws IOException
+     */
     @GetMapping("/login")
     public void redirectKakaoLogin(HttpServletResponse response) throws IOException {
         String url = kakaoProperties.authUrl() +
@@ -37,6 +42,11 @@ public class KakaoAuthController {
         response.sendRedirect(url);
     }
 
+    /**
+     * 카카오 로그인후 jwt토큰 발급
+     * @param code
+     * @return
+     */
     @GetMapping("/callback")
     public ResponseEntity<TokenResponseDto> getAccessToken(@RequestParam String code){
         KakaoTokenResponsed token = kakaoService.getKakaoTokenResponse(code);
@@ -44,6 +54,12 @@ public class KakaoAuthController {
         return ResponseEntity.ok(new TokenResponseDto(jwt));
     }
 
+    /**
+     * 카카오 로그아웃후 카카오계정과 함께 로그아웃으로 리다이렉션
+     * @param response
+     * @param userid
+     * @throws IOException
+     */
     @PostMapping("/logout")
     public void logout(HttpServletResponse response, @LoginUser Long userid) throws IOException{
         String url = kakaoProperties.logoutUrl() +
@@ -52,7 +68,10 @@ public class KakaoAuthController {
         response.sendRedirect(url);
     }
 
-
+    /**
+     * 카카오계정과 함께 로그아웃
+     * @return 카카오계정과 함꼐 로그아웃 페이지
+     */
     @GetMapping("/logoutWithKakao/callback")
     public ResponseEntity<?> logoutWithKakao(){
         return ResponseEntity.ok().build();
