@@ -7,7 +7,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record KakaoProperties(
     String clientId,
     String redirectUrl,
-    String authUrl
+    String authUrl,
+    String logoutUrl,
+    String logoutRedirectUrl
 ) {
 
 }
