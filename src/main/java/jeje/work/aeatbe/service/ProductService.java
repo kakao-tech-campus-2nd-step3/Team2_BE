@@ -1,6 +1,11 @@
 package jeje.work.aeatbe.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import jeje.work.aeatbe.dto.allergyCategory.AllergyCategoryDTO;
+import jeje.work.aeatbe.dto.freeFromCategory.FreeFromCategoryDTO;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
 import jeje.work.aeatbe.entity.Product;
@@ -11,12 +16,17 @@ import jeje.work.aeatbe.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 상품 서비스 레이어
+ */
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -41,37 +51,37 @@ public class ProductService {
         );
     }
 
-    // @todo : 상품 전체 조회
-    public Page<ProductResponseDTO> getAllProducts(String q, String allergies, String freeFroms, int priceMin, int priceMax, Pageable pageable) {
-        List<Product> products = getAllProductEntities();
 
-        if (q != null && !q.isEmpty()) {
-            products = products.stream()
-                .filter(product -> product.getProductName().contains(q))
-                .collect(Collectors.toList());
-        }
+    /**
+     * 모든 상품 조회
+     *
+     * @param q         검색어
+     * @param allergies 알러지 카테고리
+     * @param freeFroms 프리프롬 카테고리
+     * @param priceMin  상품 최소 가격
+     * @param priceMax  상품 최대 가격
+     * @param pageable  the pageable
+     * @return the all products
+     */
+    @Transactional(readOnly = true)
+    public Page<ProductResponseDTO> getAllProducts(String q, String allergies, String freeFroms, int priceMin, int priceMax, String sortBy, Pageable pageable) {
+        Sort sort = determineSortOrder(sortBy);
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
-        if (allergies != null && !allergies.isEmpty()) {
-            products = products.stream()
-                .filter(product -> product.getProductAllergies().stream()
+        Page<Product> productPage = getAllProductEntities(sortedPageable);
+
+        List<Product> filteredProducts = productPage.getContent().stream()
+            .filter(product -> (q == null || product.getProductName().contains(q)) &&
+                (allergies == null || product.getProductAllergies().stream()
                     .anyMatch(allergyEntity -> allergies.contains(
-                        (CharSequence) allergyEntity.getAllergy())))
-                .collect(Collectors.toList());
-        }
-
-        if (freeFroms != null && !freeFroms.isEmpty()) {
-            products = products.stream()
-                .filter(product -> product.getProductFreeFroms().stream()
+                        (CharSequence) allergyEntity.getAllergy()))) &&
+                (freeFroms == null || product.getProductFreeFroms().stream()
                     .anyMatch(freeFromEntity -> freeFroms.contains(
-                        (CharSequence) freeFromEntity.getFreeFromCategory())))
-                .collect(Collectors.toList());
-        }
-
-        products = products.stream()
-            .filter(product -> product.getPrice() >= priceMin && product.getPrice() <= priceMax)
+                        (CharSequence) freeFromEntity.getFreeFromCategory()))) &&
+                (product.getPrice() >= priceMin && product.getPrice() <= priceMax))
             .collect(Collectors.toList());
 
-        List<ProductResponseDTO> productDTOs = products.stream()
+        List<ProductResponseDTO> productDTOs = filteredProducts.stream()
             .map(product -> productResponseMapper.toEntity(
                 productMapper.toDTO(product),
                 reviewService.getAverageRating(product.getId()),
@@ -81,13 +91,18 @@ public class ProductService {
             ))
             .collect(Collectors.toList());
 
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), productDTOs.size());
-        return new PageImpl<>(productDTOs.subList(start, end), pageable, productDTOs.size());
+        return new PageImpl<>(productDTOs, sortedPageable, productPage.getTotalElements());
     }
 
-    protected List<Product> getAllProductEntities(){
-        return productRepository.findAll();
+    /**
+     * 모든 상품에 대한 엔티티 조회
+     *
+     * @param pageable the pageable
+     * @return the list
+     */
+    @Transactional(readOnly = true)
+    protected Page<Product> getAllProductEntities(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
 
@@ -135,28 +150,26 @@ public class ProductService {
 
     /**
      * 상품을 생성합니다.
+     *
      * @param productDTO 상품 정보
-     * @param allegies 알레르기 정보
-     * @param freeFroms 프리프롬 정보
+     * @param allergies  알러지 카테고리
+     * @param freeFroms  프리프롬 카테고리
      * @return ProductResponseDTO 상품 상세 정보
      */
     @Transactional
-    public ProductResponseDTO createProduct(ProductDTO productDTO, List<String> allegies, List<String> freeFroms) {
+    public ProductResponseDTO createProduct(ProductDTO productDTO, String allergies, String freeFroms) {
         var product = productRepository.save(productMapper.toEntity(productDTO));
 
-        var wantAllergiesEntity = allegies.stream()
-                .map(allergyCategoryService::getProductAllergyByType)
-                .toList();
+        List<String> allergyList = Arrays.asList(allergies.split(","));
+        List<String> freeFromList = Arrays.asList(freeFroms.split(","));
 
-        var wantFreeFromsEntity = freeFroms.stream()
-                .map(freeFromCategoryService::getProductFreeFromByType)
-                .toList();
-
-        for (var wantAllergy : wantAllergiesEntity) {
+        for (String allergy : allergyList) {
+            var wantAllergy = allergyCategoryService.getProductAllergyByType(allergy.trim());
             productAllergyService.createProductAllergy(product, wantAllergy);
         }
 
-        for (var wantFreeFrom : wantFreeFromsEntity) {
+        for (String freeFrom : freeFromList) {
+            var wantFreeFrom = freeFromCategoryService.getProductFreeFromByType(freeFrom.trim());
             productFreeFromService.createProductFreeFrom(product, wantFreeFrom);
         }
 
@@ -165,26 +178,30 @@ public class ProductService {
 
     /**
      * 상품을 업데이트합니다.
-     * @param id 상품 id
+     *
+     * @param id         상품 id
      * @param productDTO 상품 정보
-     * @param allegies 알레르기 정보
-     * @param freeFroms 프리프롬 정보
+     * @param allergies  알러지 카테고리
+     * @param freeFroms  프리프롬 카테고리
      * @return ProductResponseDTO 상품 상세 정보
      */
     @Transactional
-    public ProductResponseDTO updateProduct(Long id, ProductDTO productDTO, List<String> allegies, List<String> freeFroms) {
+    public ProductResponseDTO updateProduct(Long id, ProductDTO productDTO, String allergies, String freeFroms) {
         var product = getProductEntity(id);
 
-        var nowAllergiesEntity = product.getProductAllergies();
-        var nowFreeFromsEntity = product.getProductFreeFroms();
+        // 현재 알러지 및 프리프롬 항목을 가져와서 null일 경우 빈 리스트로 초기화
+        var nowAllergiesEntity = Optional.ofNullable(product.getProductAllergies()).orElse(new ArrayList<>());
+        var nowFreeFromsEntity = Optional.ofNullable(product.getProductFreeFroms()).orElse(new ArrayList<>());
 
-        var wantAllergiesEntity = allegies.stream()
-                .map(allergyCategoryService::getProductAllergyByType)
-                .toList();
+        List<AllergyCategoryDTO> wantAllergiesEntity = Arrays.stream(allergies.split(","))
+            .map(String::trim)
+            .map(allergyCategoryService::getProductAllergyByType)
+            .toList();
 
-        var wantFreeFromsEntity = freeFroms.stream()
-                .map(freeFromCategoryService::getProductFreeFromByType)
-                .toList();
+        List<FreeFromCategoryDTO> wantFreeFromsEntity = Arrays.stream(freeFroms.split(","))
+            .map(String::trim)
+            .map(freeFromCategoryService::getProductFreeFromByType)
+            .toList();
 
         for (var nowAllergy : nowAllergiesEntity) {
             if (!wantAllergiesEntity.contains(nowAllergy.getAllergy())) {
@@ -206,7 +223,7 @@ public class ProductService {
 
         for (var wantFreeFrom : wantFreeFromsEntity) {
             if (!nowFreeFromsEntity.stream().anyMatch(entity -> entity.getFreeFromCategory().equals(wantFreeFrom))) {
-                productFreeFromService.createProductFreeFrom(product,wantFreeFrom);
+                productFreeFromService.createProductFreeFrom(product, wantFreeFrom);
             }
         }
 
@@ -225,5 +242,18 @@ public class ProductService {
     public void deleteProduct(Long id) {
         var product = getProductEntity(id);
         productRepository.delete(product);
+    }
+
+    private Sort determineSortOrder(String sortBy) {
+        switch (sortBy.toLowerCase()) {
+            case "new":
+                return Sort.by(Sort.Direction.DESC, "createdAt");
+            case "price":
+                return Sort.by(Sort.Direction.ASC, "price");
+            case "sales":
+                return Sort.by(Sort.Direction.DESC, "salesVolume");
+            default:
+                return Sort.by(Sort.Direction.DESC, "rating");
+        }
     }
 }

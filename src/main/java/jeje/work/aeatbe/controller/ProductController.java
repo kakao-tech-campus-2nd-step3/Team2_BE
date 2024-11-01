@@ -1,14 +1,12 @@
 package jeje.work.aeatbe.controller;
 
 
-import java.util.List;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
 import jeje.work.aeatbe.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 상품 컨트롤러
+ */
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -31,6 +32,19 @@ public class ProductController {
     }
 
 
+    /**
+     * 전체 상품 조회
+     *
+     * @param q          검색어
+     * @param allergy    알러지 카테고리
+     * @param freeFroms  프리프롬 카테고리
+     * @param priceMin   상품 최소 가격
+     * @param priceMax   상품 최대 가격
+     * @param sortBy     정렬 기준
+     * @param pageToken  페이지 번호
+     * @param maxResults 페이지 내 상품 개수
+     * @return 전체 상품 목록
+     */
     @GetMapping
     public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(@RequestParam String q,
         @RequestParam(required = false) String allergy,
@@ -41,31 +55,18 @@ public class ProductController {
         @RequestParam(required = true, defaultValue = "1") String pageToken,
         @RequestParam(required = true) int maxResults) {
 
-//        List<ProductResponseDTO> product = productService.getAllProducts(q, allergy, freeFroms, priceMin, priceMax, sortBy, pageToken, maxResults); // step2는 categoryId가 들어가던데...
-//        return ResponseEntity.ok(product);
-
-        Sort sort;
-        switch (sortBy.toLowerCase()) {
-            case "new":
-                sort = Sort.by(Sort.Direction.DESC, "createdAt");
-                break;
-            case "price":
-                sort = Sort.by(Sort.Direction.ASC, "price");
-                break;
-            case "sales":
-                sort = Sort.by(Sort.Direction.DESC, "salesVolume");
-                break;
-            default:
-                sort = Sort.by(Sort.Direction.DESC, "rating");
-                break;
-        }
-
-        Pageable pageable = PageRequest.of(Integer.parseInt(pageToken), maxResults, sort);
-        Page<ProductResponseDTO> products = productService.getAllProducts(q, allergy, freeFroms, priceMin, priceMax, pageable);
+        Pageable pageable = PageRequest.of(Integer.parseInt(pageToken), maxResults);
+        Page<ProductResponseDTO> products = productService.getAllProducts(q, allergy, freeFroms, priceMin, priceMax, sortBy, pageable);
         return ResponseEntity.ok(products);
     }
 
 
+    /**
+     * 상품 상세 조회
+     *
+     * @param id 상품 id
+     * @return 상세 상품 정보
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> getProductsById(@PathVariable Long id) {
        ProductResponseDTO product = productService.getProductResponseDTO(id);
@@ -73,24 +74,45 @@ public class ProductController {
     }
 
 
-    // todo: 토큰 사용 로직
+    /**
+     * 새 상품 추가
+     *
+     * @param productDTO 상품 DTO
+     * @param allegies   알러지 카테고리
+     * @param freeFroms  프리프롬 카테고리
+     * @return 201 응답 코드 반환
+     *
+     * @ todo:  토큰 사용 로직
+     */
+// todo: 토큰 사용 로직
     @PostMapping
     public ResponseEntity<?> postProducts(
         @RequestParam ProductDTO productDTO,
-        @RequestParam List<String> allegies,
-        @RequestParam List<String> freeFroms
+        @RequestParam String allegies,
+        @RequestParam String freeFroms
 //        ,@LoginUser Long userId
     ){
         ProductResponseDTO product = productService.createProduct(productDTO, allegies, freeFroms);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
-    // todo: 토큰 사용 로직
+    /**
+     * 상품 정보 수정
+     *
+     * @param id         상품 id
+     * @param productDTO 상품 DTO
+     * @param allegies   알러지 카테고리
+     * @param freeFroms  프리프롬 카테고리
+     * @return 200 응답 코드
+     *
+     * @ todo:  토큰 사용 로직
+     */
+// todo: 토큰 사용 로직
     @PatchMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProducts(@PathVariable Long id,
         @RequestParam ProductDTO productDTO,
-        @RequestParam List<String> allegies,
-        @RequestParam List<String> freeFroms
+        @RequestParam String allegies,
+        @RequestParam String freeFroms
         //        ,@LoginUser Long userId
     ) {
 
@@ -99,7 +121,14 @@ public class ProductController {
     }
 
 
-    // todo : 토큰 사용 로직
+    /**
+     * 상품 삭제
+     *
+     * @param id 상품 id
+     * @return 204 응답 코드
+     *
+     * @ todo:  토큰 사용 로직
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProducts(@PathVariable Long id
         //        ,@LoginUser Long userId
