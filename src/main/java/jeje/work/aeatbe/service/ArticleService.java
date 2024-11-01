@@ -1,6 +1,7 @@
 package jeje.work.aeatbe.service;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import jeje.work.aeatbe.dto.article.ArticleDTO;
@@ -61,7 +62,8 @@ public class ArticleService {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "date");
 
-        Pageable pageable = PageRequest.of(Integer.parseInt(pageToken), maxResults, sort);
+        int page = decodePageToken(pageToken)[0];
+        Pageable pageable = PageRequest.of(page, maxResults, sort);
         Page<Article> articlePage;
 
         if (category != null && !category.isEmpty() && title != null && !title.isEmpty() && subtitle != null && !subtitle.isEmpty()) {
@@ -82,6 +84,8 @@ public class ArticleService {
             articlePage = articleRepository.findAll(pageable);
         }
 
+        String nextPageToken = articlePage.hasNext() ? generateNextPageToken(articlePage.getNumber() + 1, maxResults) : null;
+
         PageInfoDTO pageInfo = new PageInfoDTO(
             (int) articlePage.getTotalElements(),
             maxResults
@@ -100,8 +104,7 @@ public class ArticleService {
                 .build())
             .collect(Collectors.toList());
 
-
-        return new ArticleListResponseDTO(columns, pageToken, pageInfo);
+        return new ArticleListResponseDTO(columns, nextPageToken, pageInfo);
     }
 
     /**
@@ -167,6 +170,37 @@ public class ArticleService {
 
         articleRepository.delete(article);
     }
+
+    /**
+     * 다음 페이지 토큰 생성 (베이스64 인코딩 사용)
+     *
+     * @param page 현재 페이지 번호
+     * @param pageSize 한 페이지당 결과 수
+     * @return 인코딩된 페이지 토큰
+     */
+    private String generateNextPageToken(int page, int pageSize) {
+        String tokenData = page + ":" + pageSize;
+        return Base64.getEncoder().encodeToString(tokenData.getBytes());
+    }
+
+    /**
+     * 페이지 토큰을 디코딩하여 페이지 번호와 페이지 크기 추출
+     *
+     * @param pageToken 인코딩된 페이지 토큰
+     * @return 페이지 번호와 페이지 크기를 포함하는 배열
+     */
+    private int[] decodePageToken(String pageToken) {
+        if (pageToken == null || pageToken.equals("0")) {
+            return new int[]{0, 10};
+        }
+
+        String decoded = new String(Base64.getDecoder().decode(pageToken));
+        String[] parts = decoded.split(":");
+        int page = Integer.parseInt(parts[0]);
+        int pageSize = Integer.parseInt(parts[1]);
+        return new int[]{page, pageSize};
+    }
+
 
 }
 
