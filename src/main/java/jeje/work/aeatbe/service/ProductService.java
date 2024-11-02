@@ -1,5 +1,6 @@
 package jeje.work.aeatbe.service;
 
+
 import java.util.stream.Collectors;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
@@ -61,10 +62,12 @@ public class ProductService {
      * @return the all products
      */
     @Transactional(readOnly = true)
-    public Page<ProductResponseDTO> getAllProducts(String q, List<String> allergies, List<String> freeFroms, int priceMin, int priceMax, String sortBy, Pageable pageable) {
+    public Page<ProductResponseDTO> getAllProducts(String q, List<String> allergies,
+        List<String> freeFroms, int priceMin, int priceMax, String sortBy, Pageable pageable) {
         Pageable sortedPageable = createSortedPageable(pageable, sortBy);
 
         Page<Product> productsPage = findProductsByCriteria(q, allergies, freeFroms, priceMin, priceMax, sortedPageable);
+
         List<ProductResponseDTO> productDTOs = mapToResponseDTO(productsPage.getContent());
 
         return new PageImpl<>(productDTOs, sortedPageable, productsPage.getTotalElements());
@@ -232,7 +235,8 @@ public class ProductService {
         return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
     }
 
-    private Page<Product> findProductsByCriteria(String q, List<String> allergies, List<String> freeFroms, int priceMin, int priceMax, Pageable pageable) {
+    private Page<Product> findProductsByCriteria(String q, List<String> allergies,
+        List<String> freeFroms, int priceMin, int priceMax, Pageable pageable) {
         if (q != null) {
             return productRepository.findByProductNameContaining(q, pageable);
         } else if (allergies != null && !allergies.isEmpty()) {
@@ -244,7 +248,7 @@ public class ProductService {
         }
     }
 
-    protected List<ProductResponseDTO> mapToResponseDTO(List<Product> products) {
+    private List<ProductResponseDTO> mapToResponseDTO(List<Product> products) {
         return products.stream()
             .map(product -> productResponseMapper.toEntity(
                 productMapper.toDTO(product),

@@ -1,10 +1,16 @@
 package jeje.work.aeatbe.service;
 
+import java.util.Arrays;
+import java.util.Collections;
 import jeje.work.aeatbe.dto.allergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.dto.freeFromCategory.FreeFromCategoryDTO;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
+import jeje.work.aeatbe.entity.AllergyCategory;
+import jeje.work.aeatbe.entity.FreeFromCategory;
 import jeje.work.aeatbe.entity.Product;
+import jeje.work.aeatbe.entity.ProductAllergy;
+import jeje.work.aeatbe.entity.ProductFreeFrom;
 import jeje.work.aeatbe.exception.ProductNotFoundException;
 import jeje.work.aeatbe.mapper.product.ProductMapper;
 import jeje.work.aeatbe.mapper.product.ProductResponseMapper;
@@ -15,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -62,9 +69,38 @@ class ProductServiceTest {
     private List<FreeFromCategoryDTO> freeFromCategories = new ArrayList<>(), oldFreeFromCategories = new ArrayList<>() , updatedFreeFromCategories = new ArrayList<>();
     private List<AllergyCategoryDTO> allergyCategories = new ArrayList<>(), oldAllergyCategories = new ArrayList<>(), updatedAllergyCategories = new ArrayList<>();
 
+    private AllergyCategoryDTO allergyDairy;
+    private AllergyCategoryDTO allergyNuts;
+    private FreeFromCategoryDTO freeFromGluten;
+    private FreeFromCategoryDTO freeFromDairy;
+
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        // 알러지 카테고리 DTO 인스턴스 생성
+        AllergyCategoryDTO allergyGluten = new AllergyCategoryDTO(1L, "Gluten-Free");
+        AllergyCategoryDTO allergyDairy = new AllergyCategoryDTO(2L, "Dairy-Free");
+        AllergyCategoryDTO allergyPeanuts = new AllergyCategoryDTO(3L, "Peanuts");
+        AllergyCategoryDTO allergyNuts = new AllergyCategoryDTO(4L, "Nuts");
+
+        // 알러지 엔티티 객체를 생성
+        List<ProductAllergy> productAllergies = new ArrayList<>();
+        productAllergies.add(new ProductAllergy(1L, product, new AllergyCategory(1L, "Gluten")));
+        productAllergies.add(new ProductAllergy(2L, product, new AllergyCategory(2L, "Dairy")));
+        productAllergies.add(new ProductAllergy(3L, product, new AllergyCategory(3L, "Peanuts")));
+        productAllergies.add(new ProductAllergy(4L, product, new AllergyCategory(4L, "Nuts")));
+
+        // 프리프롬 카테고리 DTO 인스턴스 생성
+        FreeFromCategoryDTO freeFromGluten = new FreeFromCategoryDTO(1L, "Gluten-Free");
+        FreeFromCategoryDTO freeFromDairy = new FreeFromCategoryDTO(2L, "Dairy-Free");
+
+        // 프리프롬 엔티티 객체를 생성
+        List<ProductFreeFrom> productFreeFroms = new ArrayList<>();
+        productFreeFroms.add(new ProductFreeFrom(1L, product, new FreeFromCategory(1L, "Gluten-Free")));
+        productFreeFroms.add(new ProductFreeFrom(2L, product, new FreeFromCategory(2L, "Dairy-Free")));
+
         productDTO = ProductDTO.builder()
                 .id(1L)
                 .productName("Test Product")
@@ -80,6 +116,8 @@ class ProductServiceTest {
                 .price(100L)
                 .productImageUrl("http://example.com/product.jpg")
                 .metaImageUrl("http://example.com/meta.jpg")
+                .productAllergies(productAllergies)
+                .productFreeFroms(productFreeFroms)
                 .seller("Test Seller")
                 .build();
 
@@ -151,13 +189,54 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품 생성 - 성공")
     void createProduct_Success() {
+        // given
+        ProductDTO productDTO1 = productDTO;
+        List<String> allergies = Arrays.asList("Nuts", "Dairy");
+        List<String> freeFroms = Arrays.asList("Gluten", "Soy");
+        Product mockProduct = product;
+
+        when(productMapper.toEntity(any(ProductDTO.class))).thenReturn(mockProduct);
+        when(productRepository.save(any(Product.class))).thenReturn(mockProduct);
+        when(productMapper.toDTO(any(Product.class))).thenReturn(productDTO1);
+        when(productResponseMapper.toEntity(any(), any(), any(), any(), anyBoolean()))
+            .thenReturn(productResponseDTO);
+
+        // when
+        ProductResponseDTO result = productService.createProduct(productDTO1, allergies, freeFroms);
+
+        // then
+        assertEquals(productDTO1.id(), result.id());
+        verify(productAllergyService, times(2)).createProductAllergy(any(), any());
+        verify(productFreeFromService, times(2)).createProductFreeFrom(any(), any());
     }
 
 
     @Test
     @DisplayName("상품 업데이트 - 성공")
     void updateProduct_Success() {
-
+//        Long productId = 1L;
+//        ProductDTO productDTO1 = updatedProductDTO;
+//        List<String> allergies = Collections.singletonList("Nuts");
+//        List<String> freeFroms = Collections.singletonList("Gluten-Free");
+//
+//        Product mockProduct = product;
+//        ProductResponseDTO productResponseDTO1 = productResponseDTO;
+//
+//        // 상품이 존재한다고 가정
+//        when(productRepository.findById(productId)).thenReturn(Optional.of(mockProduct));
+//        when(productMapper.toDTO(any(Product.class))).thenReturn(productDTO1);
+//        when(productMapper.toEntity(any(ProductDTO.class), anyBoolean())).thenReturn(mockProduct);
+//        when(productResponseMapper.toEntity(any(ProductDTO.class), anyDouble(), anyList(), anyList(), any(), anyBoolean()))
+//            .thenReturn(productResponseDTO1);
+//
+//        ProductResponseDTO result = productService.updateProduct(productId, productDTO1, allergies, freeFroms);
+//
+//        assertNotNull(result, "The result should not be null");
+//        verify(productRepository).save(any(Product.class));
+//        verify(productAllergyService).deleteProductAllergy(anyLong());
+//        verify(productAllergyService).createProductAllergy(any(Product.class), any());
+//        verify(productFreeFromService).deleteProductFreeFrom(anyLong());
+//        verify(productFreeFromService).createProductFreeFrom(any(Product.class), any());
     }
 
     @Test

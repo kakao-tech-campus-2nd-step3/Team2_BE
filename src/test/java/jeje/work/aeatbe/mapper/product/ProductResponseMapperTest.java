@@ -39,7 +39,7 @@ public class ProductResponseMapperTest {
     @DisplayName("DTO를 ProductResponseDTO로 변환(ID 필요한 경우) 테스트")
     public void testToEntityWithId() {
         // Act
-        ProductResponseDTO responseDTO = mapper.toEntity(productDTO, averageRating, freeFromList, allergyList, true);
+        ProductResponseDTO responseDTO = mapper.toEntity(productDTO, averageRating, freeFromList, allergyList, null,true);
 
         // Assert
         assertNotNull(responseDTO, "ProductResponseDTO는 null이 아님");
@@ -58,7 +58,7 @@ public class ProductResponseMapperTest {
     @DisplayName("DTO를 ProductResponseDTO로 변환(ID 필요하지 않은 경우) 테스트")
     public void testToEntityWithoutId() {
         // Act
-        ProductResponseDTO responseDTO = mapper.toEntity(productDTO, averageRating, freeFromList, allergyList, false);
+        ProductResponseDTO responseDTO = mapper.toEntity(productDTO, averageRating, freeFromList, allergyList,null ,false);
 
         // Assert
         assertNotNull(responseDTO, "ProductResponseDTO는 null이 아님");
