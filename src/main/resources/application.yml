@@ -1,4 +1,9 @@
 spring:
+
+  config:
+    import:
+      - .env[.properties]
+
   application:
     name: aeatbe
 
@@ -6,15 +11,12 @@ spring:
     active: development
 
   datasource:
-    url: jdbc:mysql://localhost:3306/mydb
-    username: user
-    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create-drop}
-    show-sql: true
+    show-sql: ${SPRING_JPA_SHOW_SQL:true}
     properties:
       hibernate:
         format_sql: true
@@ -27,12 +29,16 @@ spring:
   docker:
     compose:
       file: ./docker/compose.yml
+      skip:
+        in-tests: false
+      start:
+        skip: if_running
 
 jwt:
   secret:
-    key: Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E
+    key: ${JWT_SECRET_KEY}
 
 kakao:
-  client_id: 4d3d60da75b24635e63c62f780ab3ea9
+  client_id: ${KAKAO_CLIENT_ID}
   redirect_url: http://localhost:8080/api/users/callback
   auth_url: https://kauth.kakao.com/oauth/authorize

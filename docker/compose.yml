@@ -3,16 +3,20 @@ services:
     image: mysql:latest  #MySQL 이미지 버전맞춰서하면될듯
     container_name: db
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: mydb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     healthcheck:
-      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u user --password=password" ]
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u ${DB_USERNAME} --password=${DB_PASSWORD}" ]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 30s
     ports:
-      - "3306:3306"
+      - ${DB_HOST_PORT}:${DB_CONTAINER_PORT}
     command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+
+#  app:
+#    env_file:
+#      - .env
