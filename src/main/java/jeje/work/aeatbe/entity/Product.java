@@ -1,6 +1,7 @@
 package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import lombok.*;
 
 import java.util.List;
@@ -51,10 +52,10 @@ public class Product extends BaseEntity{
     private Long price;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductAllergy> productAllergies;
+    private List<ProductAllergy> productAllergies =  new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductFreeFrom> productFreeFroms;
+    private List<ProductFreeFrom> productFreeFroms = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
