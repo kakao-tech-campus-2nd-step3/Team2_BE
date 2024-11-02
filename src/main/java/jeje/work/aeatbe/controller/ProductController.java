@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -78,7 +79,7 @@ public class ProductController {
      * 새 상품 추가
      *
      * @param productDTO 상품 DTO
-     * @param allegies   알러지 카테고리
+     * @param allergies   알러지 카테고리
      * @param freeFroms  프리프롬 카테고리
      * @return 201 응답 코드 반환
      *
@@ -86,12 +87,12 @@ public class ProductController {
      */
     @PostMapping
     public ResponseEntity<?> postProducts(
-        @RequestParam ProductDTO productDTO,
-        @RequestParam List<String> allegies,
+        @RequestBody ProductDTO productDTO,
+        @RequestParam List<String> allergies,
         @RequestParam List<String> freeFroms
 //        ,@LoginUser Long userId
     ){
-        ProductResponseDTO product = productService.createProduct(productDTO, allegies, freeFroms);
+        ProductResponseDTO product = productService.createProduct(productDTO, allergies, freeFroms);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
@@ -100,7 +101,7 @@ public class ProductController {
      *
      * @param id         상품 id
      * @param productDTO 상품 DTO
-     * @param allegies   알러지 카테고리
+     * @param allergies   알러지 카테고리
      * @param freeFroms  프리프롬 카테고리
      * @return 200 응답 코드
      *
@@ -108,13 +109,13 @@ public class ProductController {
      */
     @PatchMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProducts(@PathVariable Long id,
-        @RequestParam ProductDTO productDTO,
-        @RequestParam List<String> allegies,
+        @RequestBody ProductDTO productDTO,
+        @RequestParam List<String> allergies,
         @RequestParam List<String> freeFroms
         //        ,@LoginUser Long userId
     ) {
 
-        ProductResponseDTO product = productService.updateProduct(id, productDTO, allegies, freeFroms);
+        ProductResponseDTO product = productService.updateProduct(id, productDTO, allergies, freeFroms);
         return ResponseEntity.ok(product);
     }
 
