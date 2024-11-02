@@ -2,7 +2,6 @@ package jeje.work.aeatbe.service;
 
 
 import java.util.stream.Collectors;
-import jeje.work.aeatbe.dto.product.PageInfoDTO;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
 import jeje.work.aeatbe.entity.Product;
@@ -45,7 +44,6 @@ public class ProductService {
                 reviewService.getAverageRating(productDTO.id()),
                 productFreeFromService.getFreeFromTags(productDTO.id()),
                 productAllergyService.getAllergyTags(productDTO.id()),
-                PageInfoDTO.builder().build(),
                 true
         );
     }
@@ -70,11 +68,7 @@ public class ProductService {
 
         Page<Product> productsPage = findProductsByCriteria(q, allergies, freeFroms, priceMin, priceMax, sortedPageable);
 
-        PageInfoDTO pageInfo = new PageInfoDTO(
-            (int) productsPage.getTotalElements(),
-            pageable.getPageSize()
-        );
-        List<ProductResponseDTO> productDTOs = mapToResponseDTO(productsPage.getContent(), pageInfo);
+        List<ProductResponseDTO> productDTOs = mapToResponseDTO(productsPage.getContent());
 
         return new PageImpl<>(productDTOs, sortedPageable, productsPage.getTotalElements());
     }
@@ -254,14 +248,13 @@ public class ProductService {
         }
     }
 
-    private List<ProductResponseDTO> mapToResponseDTO(List<Product> products, PageInfoDTO pageInfoDTO) {
+    private List<ProductResponseDTO> mapToResponseDTO(List<Product> products) {
         return products.stream()
             .map(product -> productResponseMapper.toEntity(
                 productMapper.toDTO(product),
                 reviewService.getAverageRating(product.getId()),
                 productFreeFromService.getFreeFromTags(product.getId()),
                 productAllergyService.getAllergyTags(product.getId()),
-                pageInfoDTO,
                 true
             ))
             .collect(Collectors.toList());

@@ -198,7 +198,7 @@ class ProductServiceTest {
         when(productMapper.toEntity(any(ProductDTO.class))).thenReturn(mockProduct);
         when(productRepository.save(any(Product.class))).thenReturn(mockProduct);
         when(productMapper.toDTO(any(Product.class))).thenReturn(productDTO1);
-        when(productResponseMapper.toEntity(any(), any(), any(), any(), any(), anyBoolean()))
+        when(productResponseMapper.toEntity(any(), any(), any(), any(), anyBoolean()))
             .thenReturn(productResponseDTO);
 
         // when

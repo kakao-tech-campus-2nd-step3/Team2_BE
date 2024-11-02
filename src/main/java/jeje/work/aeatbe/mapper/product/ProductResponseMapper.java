@@ -1,6 +1,5 @@
 package jeje.work.aeatbe.mapper.product;
 
-import jeje.work.aeatbe.dto.product.PageInfoDTO;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,7 @@ public class ProductResponseMapper{
      * @param idRequired id 필요 여부
      * @return ProductResponseDTO
      */
-    public ProductResponseDTO toEntity(ProductDTO dto, Double avergeRating, List<String> freeFromList, List<String> allergyList, PageInfoDTO pageInfoDTO, boolean idRequired) {
+    public ProductResponseDTO toEntity(ProductDTO dto, Double avergeRating, List<String> freeFromList, List<String> allergyList, boolean idRequired) {
         return ProductResponseDTO.builder()
                 .id(idRequired ? dto.id() : null)
                 .name(dto.productName())
@@ -30,7 +29,6 @@ public class ProductResponseMapper{
                 .description(dto.metaImageUrl())
                 .freeFrom(freeFromList.toArray(new String[0]))
                 .allergy(allergyList.toArray(new String[0]))
-                .pageInfo(pageInfoDTO)
                 .build();
     }
 }
