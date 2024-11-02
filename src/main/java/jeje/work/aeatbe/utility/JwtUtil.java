@@ -23,7 +23,7 @@ public class JwtUtil {
      */
     public String createToken(User user){
         return Jwts.builder()
-            .subject(user.getUserId())
+            .subject(user.getKakaoId())
             .issuedAt(new Date(System.currentTimeMillis()))
             .expiration(new Date(System.currentTimeMillis()+tokenExpTime))
             .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))

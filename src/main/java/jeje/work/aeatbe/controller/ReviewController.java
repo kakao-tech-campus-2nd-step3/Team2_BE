@@ -49,14 +49,14 @@ public class ReviewController {
     /**
      * 특정 유저에 대한 리뷰를 조회
      *
-     * @param kakaoId the kakao id
+     * @param userId userId
      * @return 특정 유저에 관한 리뷰 리스트
      *
      * @todo: kakaoId -> userId로 수정 필요
      */
     @GetMapping("/my")
-    public ResponseEntity<?> getReivewsByUser(@LoginUser String kakaoId) {
-        List<ReviewDTO> review = reviewService.getReviewsByUser(kakaoId);
+    public ResponseEntity<?> getReivewsByUser(@LoginUser Long userId) {
+        List<ReviewDTO> review = reviewService.getReviewsByUser(userId);
 
         return ResponseEntity.ok(review);
     }
@@ -73,8 +73,8 @@ public class ReviewController {
      */
     @PostMapping
     public ResponseEntity<?> postReviews(@RequestBody ReviewDTO reviewDTO,
-        @LoginUser String kakaoId) {
-        reviewService.createReview(reviewDTO, kakaoId);
+        @LoginUser Long userId) {
+        reviewService.createReview(reviewDTO, userId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
@@ -92,8 +92,8 @@ public class ReviewController {
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateReviews(@PathVariable Long id,
         @RequestBody ReviewDTO reviewDTO,
-        @LoginUser String kakaoId) {
-        reviewService.updateReviews(id, reviewDTO, kakaoId);
+        @LoginUser Long userId) {
+        reviewService.updateReviews(id, reviewDTO, userId);
         return ResponseEntity.ok().build();
     }
 
@@ -109,8 +109,8 @@ public class ReviewController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteReviews(@PathVariable Long id,
-        @LoginUser String kakaoId) {
-        reviewService.deleteReviews(id, kakaoId);
+        @LoginUser Long userId) {
+        reviewService.deleteReviews(id, userId);
         return ResponseEntity.noContent().build();
     }
 

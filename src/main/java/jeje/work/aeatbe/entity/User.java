@@ -8,15 +8,14 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 public class User extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false, unique = true)
-    private String userId;
+    @Column(name = "kakao_id", nullable = false, unique = true)
+    private String kakaoId;
 
     @Column(length = 100)
     private String allergies;
@@ -31,16 +30,29 @@ public class User extends BaseEntity{
     private String userImgUrl;
 
     @Column
-    private String kakaoId;
-
-    @Column
     private String accessToken;
 
     @Column
     private String refreshToken;
 
+    @Builder
+    public User(String kakaoId, String allergies, String freeFrom,
+        String userName, String userImgUrl, String accessToken, String refreshToken) {
+        this.kakaoId = kakaoId;
+        this.allergies = allergies;
+        this.freeFrom = freeFrom;
+        this.userName = userName;
+        this.userImgUrl = userImgUrl;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+    }
+
     public void kakaoTokenUpdate(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
