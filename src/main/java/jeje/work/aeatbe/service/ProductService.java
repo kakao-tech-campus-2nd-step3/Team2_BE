@@ -167,8 +167,7 @@ public class ProductService {
      * @return ProductResponseDTO 상품 상세 정보
      */
     @Transactional
-    public ProductResponseDTO updateProduct(Long id, ProductDTO productDTO,
-        List<String> allergies, List<String> freeFroms) {
+    public ProductResponseDTO updateProduct(Long id, ProductDTO productDTO, List<String> allergies, List<String> freeFroms) {
         var product = getProductEntity(id);
 
         var nowAllergiesEntity = product.getProductAllergies();
