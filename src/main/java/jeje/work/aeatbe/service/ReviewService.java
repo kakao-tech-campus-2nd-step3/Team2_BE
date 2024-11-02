@@ -66,6 +66,7 @@ public class ReviewService {
      * @return 특정 유저에 대한 list 형식의 reviewDTO
      *
      * todo: kakaoId가 아닌 userId를 받아와서 작업
+     * @todo user를 사용하여 리뷰 삭제 권한 확인....
      */
     public List<ReviewDTO> getReviewsByUser(Long userId) {
         User user = userRepository.findById(userId)
@@ -132,8 +133,10 @@ public class ReviewService {
      * @param reviewDTO 리뷰 DTO
      *
      * @todo: kakaoId가 아닌 userId를 받아와서 작업
+     * @todo user를 사용하여 리뷰 삭제 권한 확인....
      */
     public void updateReviews(Long id, ReviewDTO reviewDTO, Long userId) {
+        // 여기 user를 어떻게 활용할 수 있을까....
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
@@ -143,6 +146,7 @@ public class ReviewService {
         if (!existingReview.getUser().getId().equals(userId)) {
             throw new IllegalStateException("해당 리뷰를 수정할 권한이 없습니다.");
         }
+
 
         Review updateReview = new Review(
             existingReview.getId(),
@@ -162,6 +166,7 @@ public class ReviewService {
      * @param userId 유저 id
      *
      * @todo kakaoId가 아닌 userId를 받아와서 작업
+     * @todo user를 사용하여 리뷰 삭제 권한 확인....
      */
     public void deleteReviews(Long id, Long userId) {
         User user = userRepository.findById(userId)
