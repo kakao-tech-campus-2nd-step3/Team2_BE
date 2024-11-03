@@ -39,8 +39,8 @@ jobs:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
-          DB_HOST_PORT: ${{ env.DB_HOST_PORT }}
-          DB_CONTAINER_PORT: ${{ env.DB_CONTAINER_PORT }}
+          DB_HOST_PORT: 3306
+          DB_CONTAINER_PORT: 3306
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_CONTAINER_NAME: ${{ secrets.DB_CONTAINER_NAME }}
         run: |
