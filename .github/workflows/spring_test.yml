@@ -42,7 +42,7 @@ jobs:
           DB_HOST_PORT: 3306
           DB_CONTAINER_PORT: 3306
           DB_NAME: ${{ secrets.DB_NAME }}
-          DB_CONTAINER_NAME: ${{ env.DB_CONTAINER_NAME }}
+          DB_CONTAINER_NAME: hahahdklfjslfjklsdjfldsj
         run: |
           chmod +x ./gradlew
           cd ./docker
