@@ -7,7 +7,7 @@ import lombok.*;
  */
 @Builder
 public record PageInfoDTO(
-    int totalElements,
-    int pageSize
+    int totalResults,
+    int resultsPerPage
 ) {
 }

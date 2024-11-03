@@ -1,6 +1,7 @@
 package jeje.work.aeatbe.dto.review;
 
-import jeje.work.aeatbe.dto.User.UserDTO;
+import java.util.Optional;
+import jeje.work.aeatbe.dto.user.UserDTO;
 import lombok.Builder;
 
 @Builder
@@ -8,6 +9,7 @@ public record ReviewDTO(Long id,
                         int rate,
                         String content,
                         UserDTO user,
-                        Long productId) {
+                        Long productId,
+                        Optional<String> productImgUrl) {
 
 }
