@@ -52,8 +52,8 @@ jobs:
           echo "DB_CONTAINER_PORT: $DB_CONTAINER_PORT"
           echo "DB_NAME: $DB_NAME"
           echo "DB_CONTAINER_NAME: $DB_CONTAINER_NAME"
-#          cd ./docker
-#          docker compose up -d
+          cd ./docker
+          docker compose up -d
           # Wait for database to be ready
           echo "Waiting for database to be ready..."
           timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=${{ vars.DB_CONTAINER_NAME }}") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
