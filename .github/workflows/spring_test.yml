@@ -42,14 +42,14 @@ jobs:
           DB_HOST_PORT: 3306
           DB_CONTAINER_PORT: 3306
           DB_NAME: ${{ secrets.DB_NAME }}
-          DB_CONTAINER_NAME: ${{ secrets.DB_CONTAINER_NAME }}
+          DB_CONTAINER_NAME: ${{ env.DB_CONTAINER_NAME }}
         run: |
           chmod +x ./gradlew
           cd ./docker
           docker compose up -d
           # Wait for database to be ready
           echo "Waiting for database to be ready..."
-          timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=${{ secrets.DB_CONTAINER_NAME }}") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
+          timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=${{ env.DB_CONTAINER_NAME }}") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
 
       - name: Install dependencies
         run: ./gradlew build -x test
