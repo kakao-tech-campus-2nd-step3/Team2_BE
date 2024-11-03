@@ -40,7 +40,7 @@ jobs:
           cd ./docker
           docker compose up -d \
             --build-arg DB_USERNAME="${{env.DB_USERNAME}}" \
-            --build-arg DB_PASSWORD=${{env.DB_PASSWORD}}" \
+            --build-arg DB_PASSWORD="${{env.DB_PASSWORD}}" \
             --build-arg DB_ROOT_PASSWORD="${{env.DB_ROOT_PASSWORD}}" \
             --build-arg DB_HOST_PORT="${{env.DB_HOST_PORT}}" \
             --build-arg DB_CONTAINER_PORT="${{env.DB_CONTAINER_PORT}}" \
