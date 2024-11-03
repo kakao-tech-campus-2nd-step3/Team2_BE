@@ -14,11 +14,17 @@ public class UserAllergy extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "allergy_id", nullable = false)
     private AllergyCategory allergy;
+
+    public void addUserAllergy(User user, AllergyCategory allergy) {
+        this.user = user;
+        this.allergy = allergy;
+        user.getAllergies().add(this);
+    }
 }
