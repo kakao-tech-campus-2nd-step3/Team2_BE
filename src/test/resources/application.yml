@@ -1,0 +1,24 @@
+spring:
+
+  config:
+    import:
+      - optional:file:./docker/.env[.properties]
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS} # didn't work in production
+    username: ${DB_USERNAME} # didn't work in production
+    password: ${DB_PASSWORD} # didn't work in production
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create-drop}
+    show-sql: ${SPRING_JPA_SHOW_SQL:true}
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: never
