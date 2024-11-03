@@ -38,7 +38,14 @@ jobs:
         run: |
           chmod +x ./gradlew
           cd ./docker
-          docker compose up -d
+          docker compose up -d \
+            --build-arg DB_USERNAME="${{env.DB_USERNAME}}" \
+            --build-arg DB_PASSWORD="${{env.DB_PASSWORD}}" \
+            --build-arg DB_ROOT_PASSWORD="${{env.DB_ROOT_PASSWORD}}" \
+            --build-arg DB_HOST_PORT="${{env.DB_HOST_PORT}}" \
+            --build-arg DB_CONTAINER_PORT="${{env.DB_CONTAINER_PORT}}" \
+            --build-arg DB_NAME="${{env.DB_NAME}}" \
+            --build-arg DB_CONTAINER_NAME="${{env.DB_CONTAINER_NAME}}"
           # Wait for database to be ready
           echo "Waiting for database to be ready..."
           timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=db") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
