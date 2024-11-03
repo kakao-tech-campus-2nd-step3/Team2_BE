@@ -45,7 +45,7 @@ jobs:
             --build-arg DB_HOST_PORT="${{secrets.DB_HOST_PORT}}" \
             --build-arg DB_CONTAINER_PORT="${{secrets.DB_CONTAINER_PORT}}" \
             --build-arg DB_NAME="${{secrets.DB_NAME}}" \
-            --build-arg DB_CONTAINER_NAME="${{secrets.DB_CONTAINER_NAME}}"
+            --build-arg DB_CONTAINER_NAME="${{secrets.DB_CONTAINER_NAME}}" --verbose
           # Wait for database to be ready
           echo "Waiting for database to be ready..."
           timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=db") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
