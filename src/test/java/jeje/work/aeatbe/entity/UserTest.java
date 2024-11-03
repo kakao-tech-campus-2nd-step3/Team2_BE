@@ -20,14 +20,12 @@ public class UserTest {
     void setup() {
         user = User.builder()
             .kakaoId("12345")
-            .allergies("Peanut, Dairy")
-            .freeFrom("Gluten-Free")
             .userName("TestUser")
             .userImgUrl("http://example.com/user.jpg")
             .accessToken("initialAccessToken")
             .refreshToken("initialRefreshToken")
             .build();
-        user.setId(1L);
+
     }
 
     @Test
@@ -35,19 +33,15 @@ public class UserTest {
     void testUserCreation() {
         User newUser = User.builder()
             .kakaoId("12345")
-            .allergies("Peanut, Dairy")
-            .freeFrom("Gluten-Free")
             .userName("TestUser")
             .userImgUrl("http://example.com/user.jpg")
             .accessToken("initialAccessToken")
             .refreshToken("initialRefreshToken")
             .build();
-        newUser.setId(1L);
 
-        assertThat(newUser.getId()).isEqualTo(1L);
+
         assertThat(newUser.getKakaoId()).isEqualTo("12345");
         assertThat(newUser.getAllergies()).isEqualTo("Peanut, Dairy");
-        assertThat(newUser.getFreeFrom()).isEqualTo("Gluten-Free");
         assertThat(newUser.getUserName()).isEqualTo("TestUser");
         assertThat(newUser.getUserImgUrl()).isEqualTo("http://example.com/user.jpg");
         assertThat(newUser.getAccessToken()).isEqualTo("initialAccessToken");
@@ -62,7 +56,6 @@ public class UserTest {
         assertNotNull(user);
         assertNull(user.getKakaoId());
         assertNull(user.getAllergies());
-        assertNull(user.getFreeFrom());
         assertNull(user.getUserName());
         assertNull(user.getUserImgUrl());
         assertNull(user.getAccessToken());
