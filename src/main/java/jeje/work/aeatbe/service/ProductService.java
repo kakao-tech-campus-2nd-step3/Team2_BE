@@ -170,7 +170,6 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long id) {
         var product = getProductEntity(id);
-        reviewService.deleteReviewsByProductId(id);
         productRepository.delete(product);
     }
 }

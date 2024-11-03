@@ -1,4 +1,4 @@
-package jeje.work.aeatbe.dto.User;
+package jeje.work.aeatbe.dto.Kakao;
 
 import lombok.Builder;
 
