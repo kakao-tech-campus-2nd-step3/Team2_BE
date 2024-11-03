@@ -39,13 +39,13 @@ jobs:
           chmod +x ./gradlew
           cd ./docker
           docker compose up -d \
-            --build-arg DB_USERNAME="${{secrets.DB_USERNAME}}" \
-            --build-arg DB_PASSWORD="${{secrets.DB_PASSWORD}}" \
-            --build-arg DB_ROOT_PASSWORD="${{secrets.DB_ROOT_PASSWORD}}" \
-            --build-arg DB_HOST_PORT="${{secrets.DB_HOST_PORT}}" \
-            --build-arg DB_CONTAINER_PORT="${{secrets.DB_CONTAINER_PORT}}" \
-            --build-arg DB_NAME="${{secrets.DB_NAME}}" \
-            --build-arg DB_CONTAINER_NAME="${{secrets.DB_CONTAINER_NAME}}" --verbose
+            -e DB_USERNAME="${{secrets.DB_USERNAME}}" \
+            -e DB_PASSWORD="${{secrets.DB_PASSWORD}}" \
+            -e DB_ROOT_PASSWORD="${{secrets.DB_ROOT_PASSWORD}}" \
+            -e DB_HOST_PORT="${{secrets.DB_HOST_PORT}}" \
+            -e DB_CONTAINER_PORT="${{secrets.DB_CONTAINER_PORT}}" \
+            -e DB_NAME="${{secrets.DB_NAME}}" \
+            -e DB_CONTAINER_NAME="${{secrets.DB_CONTAINER_NAME}}"
           # Wait for database to be ready
           echo "Waiting for database to be ready..."
           timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=db") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
