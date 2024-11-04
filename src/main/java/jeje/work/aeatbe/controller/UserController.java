@@ -1,6 +1,7 @@
 package jeje.work.aeatbe.controller;
 
 import jeje.work.aeatbe.annotation.LoginUser;
+import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.dto.user.UserInfoResponseDto;
 import jeje.work.aeatbe.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/info")
-    public ResponseEntity<UserInfoResponseDto> getUserInfo(@LoginUser Long userId){
-        UserInfoResponseDto userInfoResponseDto = userService.getUserInfo(userId);
+    public ResponseEntity<UserInfoResponseDto> getUserInfo(@LoginUser LoginUserInfo loginUserInfo){
+        UserInfoResponseDto userInfoResponseDto = userService.getUserInfo(loginUserInfo.userId());
         return ResponseEntity.ok(userInfoResponseDto);
     }
 }

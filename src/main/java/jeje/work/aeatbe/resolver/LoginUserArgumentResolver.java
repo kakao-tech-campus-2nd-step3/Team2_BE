@@ -6,7 +6,6 @@ import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.exception.TokenException;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

@@ -1,12 +1,7 @@
 package jeje.work.aeatbe.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
-import java.net.URI;
 import java.util.Optional;
-import jeje.work.aeatbe.domian.KakaoProperties;
-import jeje.work.aeatbe.domian.KakaoTokenResponsed;
-import jeje.work.aeatbe.domian.KakaoUserInfo;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.dto.user.UserInfoResponseDto;
 import jeje.work.aeatbe.entity.User;
@@ -14,10 +9,7 @@ import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.UserRepository;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.client.RestClient;
 
 @Service
 @RequiredArgsConstructor
