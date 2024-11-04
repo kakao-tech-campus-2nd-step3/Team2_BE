@@ -36,22 +36,15 @@ jobs:
 
       - name: Start Docker Compose and wait for database
         env:
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          DB_USERNAME: user
+          DB_PASSWORD: poo
+          DB_ROOT_PASSWORD: rootpoo
           DB_HOST_PORT: 3306
           DB_CONTAINER_PORT: 3306
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_CONTAINER_NAME: ${{ vars.DB_CONTAINER_NAME }}
+          DB_NAME: foo
+          DB_CONTAINER_NAME: Aea_db_ci
         run: |
           chmod +x ./gradlew
-          echo "DB_USERNAME: $DB_USERNAME"
-          echo "DB_PASSWORD: $DB_PASSWORD"
-          echo "DB_ROOT_PASSWORD: $DB_ROOT_PASSWORD"
-          echo "DB_HOST_PORT: $DB_HOST_PORT"
-          echo "DB_CONTAINER_PORT: $DB_CONTAINER_PORT"
-          echo "DB_NAME: $DB_NAME"
-          echo "DB_CONTAINER_NAME: $DB_CONTAINER_NAME"
           cd ./docker
           docker compose up -d
           # Wait for database to be ready
