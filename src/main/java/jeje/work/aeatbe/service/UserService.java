@@ -7,6 +7,7 @@ import java.util.Optional;
 import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
 import jeje.work.aeatbe.domian.KakaoUserInfo;
+import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.dto.user.UserInfoResponseDto;
 import jeje.work.aeatbe.entity.User;
 import jeje.work.aeatbe.exception.UserNotFoundException;
@@ -47,8 +48,8 @@ public class UserService {
      * @return boolean 이미 존재하는 유저인지
      */
     public boolean validateToken(String token) {
-        String kakaoId = jwtUtil.getKakaoId(token);
-        return userRepository.findByKakaoId(kakaoId).isPresent();
+        LoginUserInfo loginUserInfo= jwtUtil.getLoginUserInfo(token);
+        return userRepository.findByKakaoId(loginUserInfo.kakaoId()).isPresent();
     }
 
     /**

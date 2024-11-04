@@ -7,6 +7,7 @@ import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
 import jeje.work.aeatbe.dto.Kakao.LogoutResponseDto;
 import jeje.work.aeatbe.dto.Kakao.TokenResponseDto;
+import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.service.KakaoService;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
@@ -61,10 +62,10 @@ public class KakaoAuthController {
      * @throws IOException
      */
     @PostMapping("/logout")
-    public void logout(HttpServletResponse response, @LoginUser Long userid) throws IOException{
+    public void logout(HttpServletResponse response, @LoginUser LoginUserInfo loginUserInfo) throws IOException{
         String url = kakaoProperties.logoutUrl() +
                 "?client_id=" + kakaoProperties.clientId() + "&logout_redirect_uri=" + kakaoProperties.logoutRedirectUrl();
-        LogoutResponseDto logoutResponseDto = kakaoService.logout(userid);
+        LogoutResponseDto logoutResponseDto = kakaoService.logout(loginUserInfo.userId());
         response.sendRedirect(url);
     }
 
