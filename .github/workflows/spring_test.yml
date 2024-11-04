@@ -52,9 +52,25 @@ jobs:
           timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=${{ vars.DB_CONTAINER_NAME }}") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
 
       - name: Install dependencies
+        env:
+          DB_USERNAME: user
+          DB_PASSWORD: poo
+          DB_ROOT_PASSWORD: rootpoo
+          DB_HOST_PORT: 3306
+          DB_CONTAINER_PORT: 3306
+          DB_NAME: foo
+          DB_CONTAINER_NAME: Aea_db_ci
         run: ./gradlew build -x test
 
       - name: Run Tests
+        env:
+          DB_USERNAME: user
+          DB_PASSWORD: poo
+          DB_ROOT_PASSWORD: rootpoo
+          DB_HOST_PORT: 3306
+          DB_CONTAINER_PORT: 3306
+          DB_NAME: foo
+          DB_CONTAINER_NAME: Aea_db_ci
         run: ./gradlew --info test
 
       - name: Publish Unit Test Results
