@@ -17,7 +17,7 @@ public class JwtUtil {
     @Value("${jwt.secret.key}")
     private String secretKey;
 
-    private Long tokenExpTime = 36000000L;
+    private Long tokenExpTime = 3600000L;
 
     /**
      * 토큰을 만든다.
