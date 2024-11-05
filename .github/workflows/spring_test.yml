@@ -1,4 +1,4 @@
-name: ㅊ
+name: spring_test
 
 on:
   pull_request:
