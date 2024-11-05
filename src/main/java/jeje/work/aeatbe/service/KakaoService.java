@@ -80,15 +80,18 @@ public class KakaoService {
                     .userImgUrl("")
                     .kakaoAccessToken(kakaoAccessToken)
                     .kakaoRefreshToken(kakaoRefreshToken)
+                    .jwtRefreshToken("")
                     .build();
             userRepository.save(newUser);
             String accessJwtToken = jwtUtil.createToken(newUser);
             String refreshJwtToken = jwtUtil.createRefreshToken(newUser);
+            newUser.updateJwtRefreshToken(refreshJwtToken);
             return new TokenResponseDto(accessJwtToken, refreshJwtToken);
         }
         user.get().kakaoTokenUpdate(kakaoAccessToken, kakaoRefreshToken);
         String accessJwtToken = jwtUtil.createToken(user.get());
         String refreshJwtToken = jwtUtil.createRefreshToken(user.get());
+        user.get().updateJwtRefreshToken(refreshJwtToken);
         return new TokenResponseDto(accessJwtToken, refreshJwtToken);
     }
 
