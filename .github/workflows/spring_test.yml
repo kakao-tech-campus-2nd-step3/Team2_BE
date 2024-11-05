@@ -7,6 +7,9 @@ on:
       - weekly/*
       - Review
 
+permissions:
+  members: read
+
 jobs:
   security-check:
     runs-on: ubuntu-latest
