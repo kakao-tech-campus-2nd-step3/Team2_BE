@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record TokenResponseDto(
-    String token
+    String accessToken,
+    String refreshToken
 ) {
 }
