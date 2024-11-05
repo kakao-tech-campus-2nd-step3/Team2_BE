@@ -6,7 +6,7 @@ import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
 import jeje.work.aeatbe.dto.Kakao.LogoutResponseDto;
-import jeje.work.aeatbe.dto.Kakao.TokenResponseDto;
+import jeje.work.aeatbe.dto.user.TokenResponseDTO;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.service.KakaoService;
 import jeje.work.aeatbe.service.UserService;
@@ -48,9 +48,9 @@ public class KakaoAuthController {
      * @return
      */
     @GetMapping("/callback")
-    public ResponseEntity<TokenResponseDto> getAccessToken(@RequestParam String code){
+    public ResponseEntity<TokenResponseDTO> getAccessToken(@RequestParam String code){
         KakaoTokenResponsed token = kakaoService.getKakaoTokenResponse(code);
-        TokenResponseDto tokenResponseDto = kakaoService.login(token.accessToken(), token.refreshToken());
+        TokenResponseDTO tokenResponseDto = kakaoService.login(token.accessToken(), token.refreshToken());
         return ResponseEntity.ok(tokenResponseDto);
     }
 

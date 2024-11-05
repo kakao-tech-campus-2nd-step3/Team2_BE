@@ -1,9 +1,10 @@
 package jeje.work.aeatbe.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
-import jeje.work.aeatbe.dto.user.UserInfoResponseDto;
+import jeje.work.aeatbe.dto.user.TokenResponseDTO;
+import jeje.work.aeatbe.dto.user.UserInfoResponseDTO;
 import jeje.work.aeatbe.entity.User;
 import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.UserRepository;
@@ -17,8 +18,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
-    private final ObjectMapper objectMapper;
-    private final KakaoService kakaoService;
 
 
     /**
@@ -49,16 +48,55 @@ public class UserService {
      * @param userId
      * @return UserInfoResponseDto
      */
-    public UserInfoResponseDto getUserInfo(Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new UserNotFoundException("잘못된 유저입니다."));
-        return UserInfoResponseDto.builder()
+    public UserInfoResponseDTO getUserInfo(Long userId){
+        User user = findById(userId);
+        return UserInfoResponseDTO.builder()
                 .id(user.getId())
                 .userName(user.getUserName())
                 .userImageUrl(user.getUserImgUrl())
                 .build();
 
     }
+
+
+    /**
+     * 올바른 리프레시 토큰인지 확인
+     * @param refreshToken
+     * @return boolean 올바른 리프레시 토큰인지
+     */
+    public boolean validateRefreshToken(String refreshToken){
+        Long userId = jwtUtil.getUserIdForRefreshToken(refreshToken);
+        User user = findById(userId);
+        return refreshToken.equals(user.getJwtRefreshToken());
+    }
+
+    /**
+     * userId로 user찾기
+     * @param userId
+     * @return user
+     */
+    public User findById(Long userId){
+        return userRepository.findById(userId)
+            .orElseThrow(()->new UserNotFoundException("잘못된 유저입니다."));
+    }
+
+    @Transactional
+    public TokenResponseDTO reissueAccessToken(String refreshToken){
+        Long userId = jwtUtil.getUserIdForRefreshToken(refreshToken);
+        User user = findById(userId);
+        String accessToken = jwtUtil.createToken(user);
+        if(!jwtUtil.enoughRefreshToken(refreshToken)){
+            refreshToken = jwtUtil.createRefreshToken(user);
+            user.updateJwtRefreshToken(refreshToken);
+        }
+        return TokenResponseDTO.builder()
+            .accessToken(accessToken)
+            .refreshToken(refreshToken)
+            .build();
+    }
+
+
+
 
 
 

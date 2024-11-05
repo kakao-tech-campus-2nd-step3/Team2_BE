@@ -7,7 +7,7 @@ import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
 import jeje.work.aeatbe.domian.KakaoUserInfo;
 import jeje.work.aeatbe.dto.Kakao.LogoutResponseDto;
-import jeje.work.aeatbe.dto.Kakao.TokenResponseDto;
+import jeje.work.aeatbe.dto.user.TokenResponseDTO;
 import jeje.work.aeatbe.entity.User;
 import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.UserRepository;
@@ -64,7 +64,7 @@ public class KakaoService {
      * @return jwt토큰
      */
     @Transactional
-    public TokenResponseDto login(String kakaoAccessToken, String kakaoRefreshToken){
+    public TokenResponseDTO login(String kakaoAccessToken, String kakaoRefreshToken){
         var uri = "https://kapi.kakao.com/v2/user/me";
         var response = restClient.get()
             .uri(URI.create(uri))
@@ -86,13 +86,13 @@ public class KakaoService {
             String accessJwtToken = jwtUtil.createToken(newUser);
             String refreshJwtToken = jwtUtil.createRefreshToken(newUser);
             newUser.updateJwtRefreshToken(refreshJwtToken);
-            return new TokenResponseDto(accessJwtToken, refreshJwtToken);
+            return new TokenResponseDTO(accessJwtToken, refreshJwtToken);
         }
         user.get().kakaoTokenUpdate(kakaoAccessToken, kakaoRefreshToken);
         String accessJwtToken = jwtUtil.createToken(user.get());
         String refreshJwtToken = jwtUtil.createRefreshToken(user.get());
         user.get().updateJwtRefreshToken(refreshJwtToken);
-        return new TokenResponseDto(accessJwtToken, refreshJwtToken);
+        return new TokenResponseDTO(accessJwtToken, refreshJwtToken);
     }
 
     /**

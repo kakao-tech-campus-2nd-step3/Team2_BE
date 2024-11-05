@@ -38,8 +38,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
-    @ExceptionHandler(ToekenExpException.class)
-    public ResponseEntity toekenExpException(ToekenExpException e) {
+    @ExceptionHandler(TokenExpException.class)
+    public ResponseEntity tokenExpException(TokenExpException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 

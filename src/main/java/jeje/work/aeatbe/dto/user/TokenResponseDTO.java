@@ -1,9 +1,9 @@
-package jeje.work.aeatbe.dto.Kakao;
+package jeje.work.aeatbe.dto.user;
 
 import lombok.Builder;
 
 @Builder
-public record TokenResponseDto(
+public record TokenResponseDTO(
     String accessToken,
     String refreshToken
 ) {
