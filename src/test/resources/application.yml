@@ -2,7 +2,14 @@ spring:
 
   config:
     import:
+      - .env[.properties]
       - optional:file:./docker/.env[.properties]
+
+  application:
+    name: aeatbe
+
+  profiles:
+    active: development
 
   datasource:
     url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS} # didn't work in production
@@ -21,4 +28,21 @@ spring:
 
   sql:
     init:
-      mode: never
+      mode: always
+
+  docker:
+    compose:
+      file: ./docker/compose.yml
+      skip:
+        in-tests: false
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
+
+kakao:
+  client_id: ${KAKAO_CLIENT_ID}
+  redirect_url: https://${FRONTEND_DOMAIN}/login/redirect
+  auth_url: https://${FRONTEND_DOMAIN}/oauth/authorize
+  logout_url: https://kauth.kakao.com/oauth/logout
+  logout_redirect_url: http://localhost:8080/api/users/logoutWithKakao/callback
