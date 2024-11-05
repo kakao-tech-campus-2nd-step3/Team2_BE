@@ -59,16 +59,16 @@ public class KakaoService {
 
     /**
      * 로그인을한다.
-     * @param accessToken 카카오 엑세스 토큰
-     * @param refreshToken 카카오 리프레시 토큰
+     * @param kakaoAccessToken 카카오 엑세스 토큰
+     * @param kakaoRefreshToken 카카오 리프레시 토큰
      * @return jwt토큰
      */
     @Transactional
-    public TokenResponseDto login(String accessToken, String refreshToken){
+    public TokenResponseDto login(String kakaoAccessToken, String kakaoRefreshToken){
         var uri = "https://kapi.kakao.com/v2/user/me";
         var response = restClient.get()
             .uri(URI.create(uri))
-            .header("Authorization", "Bearer " + accessToken)
+            .header("Authorization", "Bearer " + kakaoAccessToken)
             .retrieve()
             .body(KakaoUserInfo.class);
         String userName = response.kakaoAccount().profile().nickname();
@@ -78,15 +78,15 @@ public class KakaoService {
             User newUser = User.builder().kakaoId(kakaoId)
                     .userName(userName)
                     .userImgUrl("")
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
+                    .kakaoAccessToken(kakaoAccessToken)
+                    .kakaoRefreshToken(kakaoRefreshToken)
                     .build();
             userRepository.save(newUser);
             String accessJwtToken = jwtUtil.createToken(newUser);
             String refreshJwtToken = jwtUtil.createRefreshToken(newUser);
             return new TokenResponseDto(accessJwtToken, refreshJwtToken);
         }
-        user.get().kakaoTokenUpdate(accessToken, refreshToken);
+        user.get().kakaoTokenUpdate(kakaoAccessToken, kakaoRefreshToken);
         String accessJwtToken = jwtUtil.createToken(user.get());
         String refreshJwtToken = jwtUtil.createRefreshToken(user.get());
         return new TokenResponseDto(accessJwtToken, refreshJwtToken);
@@ -106,7 +106,7 @@ public class KakaoService {
         var response = restClient.post()
                 .uri(URI.create(uri))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .header("Authorization", "Bearer " + user.getAccessToken())
+                .header("Authorization", "Bearer " + user.getKakaoAccessToken())
                 .retrieve()
                 .body(LogoutResponseDto.class);
         user.kakaoTokenUpdate("","");

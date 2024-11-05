@@ -57,7 +57,7 @@ public class KakaoAuthController {
     /**
      * 카카오 로그아웃후 카카오계정과 함께 로그아웃으로 리다이렉션
      * @param response
-     * @param userid
+     * @param loginUserInfo
      * @throws IOException
      */
     @PostMapping("/logout")
