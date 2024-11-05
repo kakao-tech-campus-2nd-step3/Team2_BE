@@ -52,7 +52,6 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Run Tests
-        continue-on-error: true
         run: ./gradlew test
 
       - name: Publish Test Report
