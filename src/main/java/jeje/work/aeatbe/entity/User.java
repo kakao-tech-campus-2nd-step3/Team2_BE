@@ -1,6 +1,7 @@
 package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -17,11 +18,11 @@ public class User extends BaseEntity{
     @Column(name = "kakao_id", nullable = false, unique = true)
     private String kakaoId;
 
-    @Column(length = 100)
-    private String allergies;
+    @OneToMany(mappedBy="user")
+    private List<UserAllergy> allergies;
 
-    @Column(name = "free_from", length = 100)
-    private String freeFrom;
+    @OneToMany(mappedBy="user")
+    private List<UserFreeFrom> freeFroms;
 
     @Column(name = "user_name", length = 15)
     private String userName;
@@ -36,11 +37,9 @@ public class User extends BaseEntity{
     private String refreshToken;
 
     @Builder
-    public User(String kakaoId, String allergies, String freeFrom,
-        String userName, String userImgUrl, String accessToken, String refreshToken) {
+    public User(String kakaoId, String userName,
+        String userImgUrl, String accessToken, String refreshToken) {
         this.kakaoId = kakaoId;
-        this.allergies = allergies;
-        this.freeFrom = freeFrom;
         this.userName = userName;
         this.userImgUrl = userImgUrl;
         this.accessToken = accessToken;
@@ -52,7 +51,4 @@ public class User extends BaseEntity{
         this.refreshToken = refreshToken;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
