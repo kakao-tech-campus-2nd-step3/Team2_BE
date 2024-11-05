@@ -2,7 +2,7 @@ spring:
 
   config:
     import:
-      - .env[.properties]
+      - optional:.env[.properties]
 
   application:
     name: aeatbe

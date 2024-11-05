@@ -1,12 +1,46 @@
-name: Continuous Integration
+name: Secure Continuous Integration
+
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - dev
       - weekly/*
       - Review
+
 jobs:
-  CI:
+  security-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check user permissions
+        id: check-permissions
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner } = context.repo;
+            const author = context.payload.pull_request.user.login;
+            
+            // Check if user is org member with appropriate role
+            try {
+              const { data: membership } = await github.rest.orgs.getMembershipForUser({
+                org: owner,
+                username: author
+              });
+            
+              if (membership.role === 'admin' || membership.role === 'member') {
+                return 'true';
+              }
+            } catch (e) {
+              console.error(`Error checking membership for user ${author}:`, e);
+            }
+            
+            return 'false';
+          result-encoding: string
+    outputs:
+      is-trusted: ${{ steps.check-permissions.outputs.result }}
+
+  protected-job:
+    needs: security-check
+    if: needs.security-check.outputs.is-trusted == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,26 +57,15 @@ jobs:
         with:
           gradle-version: 8.10
 
-      # 캐시 생성 비용이 더 큼
-      # - name: Cache Gradle packages
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       ~/.gradle/caches
-      #       ~/.gradle/wrapper
-      #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gradle-
-
       - name: Start Docker Compose and wait for database
         env:
-          DB_USERNAME: user
-          DB_PASSWORD: poo
-          DB_ROOT_PASSWORD: rootpoo
-          DB_HOST_PORT: 3306
-          DB_CONTAINER_PORT: 3306
-          DB_NAME: foo
-          DB_CONTAINER_NAME: Aea_db_ci
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          DB_HOST_PORT: ${{ secrets.DB_HOST_PORT }}
+          DB_CONTAINER_PORT: ${{ secrets.DB_CONTAINER_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_CONTAINER_NAME: ${{ secrets.DB_CONTAINER_NAME }}
         run: |
           chmod +x ./gradlew
           cd ./docker
@@ -53,24 +76,16 @@ jobs:
 
       - name: Install dependencies
         env:
-          DB_USERNAME: user
-          DB_PASSWORD: poo
-          DB_ROOT_PASSWORD: rootpoo
-          DB_HOST_PORT: 3306
-          DB_CONTAINER_PORT: 3306
-          DB_NAME: foo
-          DB_CONTAINER_NAME: Aea_db_ci
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          DB_HOST_PORT: ${{ secrets.DB_HOST_PORT }}
+          DB_CONTAINER_PORT: ${{ secrets.DB_CONTAINER_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_CONTAINER_NAME: ${{ secrets.DB_CONTAINER_NAME }}
         run: ./gradlew build -x test
 
       - name: Run Tests
-        env:
-          DB_USERNAME: user
-          DB_PASSWORD: poo
-          DB_ROOT_PASSWORD: rootpoo
-          DB_HOST_PORT: 3306
-          DB_CONTAINER_PORT: 3306
-          DB_NAME: foo
-          DB_CONTAINER_NAME: Aea_db_ci
         run: ./gradlew --info test
 
       - name: Publish Unit Test Results
