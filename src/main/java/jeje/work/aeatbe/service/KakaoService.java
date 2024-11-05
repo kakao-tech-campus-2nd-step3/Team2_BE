@@ -113,6 +113,7 @@ public class KakaoService {
                 .retrieve()
                 .body(LogoutResponseDto.class);
         user.kakaoTokenUpdate("","");
+        user.updateJwtRefreshToken("");
         return response;
 
     }
