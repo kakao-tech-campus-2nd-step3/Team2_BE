@@ -65,7 +65,6 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: success() || failure()
         with:
-          comment: true
           report_paths: '**/build/test-results/test/TEST-*.xml'
 
       - name: Package the application
