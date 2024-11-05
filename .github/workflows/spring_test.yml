@@ -8,6 +8,7 @@ on:
       - Review
 
 jobs:
+  build_and_test:  # Added job ID here
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -15,16 +16,16 @@ jobs:
 
       - name: make .env file
         run: |
-            cd ./docker
-            cat <<EOF > .env
-            DB_USERNAME=ci_tester
-            DB_PASSWORD=plz
-            DB_ROOT_PASSWORD=never_use_in_root
-            DB_HOST_PORT=3306
-            DB_CONTAINER_PORT=3306
-            DB_NAME=super_poo
-            DB_CONTAINER_NAME=super_poo_container
-            EOF
+          cd ./docker
+          cat <<EOF > .env
+          DB_USERNAME=ci_tester
+          DB_PASSWORD=plz
+          DB_ROOT_PASSWORD=never_use_in_root
+          DB_HOST_PORT=3306
+          DB_CONTAINER_PORT=3306
+          DB_NAME=super_poo
+          DB_CONTAINER_NAME=super_poo_container
+          EOF
 
       - name: Set up JDK 21
         uses: actions/setup-java@v3
