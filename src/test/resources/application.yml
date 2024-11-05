@@ -8,9 +8,6 @@ spring:
   application:
     name: aeatbe
 
-  profiles:
-    active: development
-
   datasource:
     url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS} # didn't work in production
     username: ${DB_USERNAME} # didn't work in production
@@ -28,7 +25,7 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: never
 
   docker:
     compose:
