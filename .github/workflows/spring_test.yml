@@ -1,12 +1,46 @@
-name: Continuous Integration
+name: Secure Continuous Integration
+
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - dev
       - weekly/*
       - Review
+
 jobs:
-  CI:
+  security-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check user permissions
+        id: check-permissions
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner } = context.repo;
+            const author = context.payload.pull_request.user.login;
+            
+            // Check if user is org member with appropriate role
+            try {
+              const { data: membership } = await github.rest.orgs.getMembershipForUser({
+                org: owner,
+                username: author
+              });
+              
+              if (membership.role === 'admin' || membership.role === 'member') {
+                return 'true';
+              }
+            } catch (e) {
+              console.error(`Error checking membership for user ${author}:`, e);
+            }
+            
+            return 'false';
+          result-encoding: string
+    outputs:
+      is-trusted: ${{ steps.check-permissions.outputs.result }}
+
+  protected-job:
+    needs: security-check
+    if: needs.security-check.outputs.is-trusted == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,31 +57,48 @@ jobs:
         with:
           gradle-version: 8.10
 
-      # 캐시 생성 비용이 더 큼
-      # - name: Cache Gradle packages
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       ~/.gradle/caches
-      #       ~/.gradle/wrapper
-      #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gradle-
-
       - name: Start Docker Compose and wait for database
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          DB_HOST_PORT: ${{ secrets.DB_HOST_PORT }}
+          DB_CONTAINER_PORT: ${{ secrets.DB_CONTAINER_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_CONTAINER_NAME: ${{ secrets.DB_CONTAINER_NAME }}
         run: |
           chmod +x ./gradlew
           cd ./docker
           docker compose up -d
           # Wait for database to be ready
           echo "Waiting for database to be ready..."
-          timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=db") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
+          timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=${{ vars.DB_CONTAINER_NAME }}") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
 
       - name: Install dependencies
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          DB_HOST_PORT: ${{ secrets.DB_HOST_PORT }}
+          DB_CONTAINER_PORT: ${{ secrets.DB_CONTAINER_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_CONTAINER_NAME: ${{ secrets.DB_CONTAINER_NAME }}
         run: ./gradlew build -x test
 
       - name: Run Tests
-        run: ./gradlew test
+        run: ./gradlew --info test
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: ${{ always() }}
+        with:
+          files: build/test-results/**/*.xml
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: success() || failure() # always run even if the previous step fails
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
 
       - name: Package the application
         run: ./gradlew assemble
