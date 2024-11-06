@@ -5,6 +5,7 @@ import java.util.Optional;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.dto.user.TokenResponseDTO;
 import jeje.work.aeatbe.dto.user.UserInfoResponseDTO;
+import jeje.work.aeatbe.dto.user.UserInfoUpdateReqeustDTO;
 import jeje.work.aeatbe.entity.User;
 import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.UserRepository;
@@ -59,6 +60,13 @@ public class UserService {
     }
 
 
+    @Transactional
+    public void updateUserInfo(UserInfoUpdateReqeustDTO userInfoUpdateReqeustDto,Long userId){
+        User user = findById(userId);
+        user.updateInfo(userInfoUpdateReqeustDto.userName(), userInfoUpdateReqeustDto.userImageUrl());
+    }
+
+
     /**
      * 올바른 리프레시 토큰인지 확인
      * @param refreshToken
@@ -94,6 +102,8 @@ public class UserService {
             .refreshToken(refreshToken)
             .build();
     }
+
+
 
 
 

@@ -59,4 +59,9 @@ public class User extends BaseEntity{
         this.jwtRefreshToken = jwtRefreshToken;
     }
 
+    public void updateInfo(String userName, String userImgUrl){
+        this.userName = userName;
+        this.userImgUrl = userImgUrl;
+    }
+
 }
