@@ -4,6 +4,7 @@ import jeje.work.aeatbe.dto.user.RefreshTokenRequestDTO;
 import jeje.work.aeatbe.dto.user.TokenResponseDTO;
 import jeje.work.aeatbe.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,8 @@ public class TokenController {
 
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponseDTO> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
-        TokenResponseDTO tokenResponseDTO = userService.reissueAccessToken(refreshTokenRequestDTO.refreshToken());
-        return ResponseEntity.ok(tokenResponseDTO);
+        TokenResponseDTO tokenResponseDto = userService.reissueAccessToken(refreshTokenRequestDTO.refreshToken());
+        HttpHeaders httpHeaders = userService.setCookie(tokenResponseDto);
+        return ResponseEntity.ok().headers(httpHeaders).build();
     }
 }
