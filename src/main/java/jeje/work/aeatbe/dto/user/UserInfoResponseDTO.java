@@ -3,7 +3,7 @@ package jeje.work.aeatbe.dto.user;
 import lombok.Builder;
 
 @Builder
-public record UserInfoResponseDto(
+public record UserInfoResponseDTO(
         Long id,
         String userName,
         String userImageUrl
