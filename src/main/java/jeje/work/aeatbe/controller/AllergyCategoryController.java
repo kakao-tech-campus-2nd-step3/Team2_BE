@@ -1,6 +1,6 @@
 package jeje.work.aeatbe.controller;
 
-import jeje.work.aeatbe.dto.AllergyCategory.AllergyCategoryDTO;
+import jeje.work.aeatbe.dto.allergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.service.AllergyCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

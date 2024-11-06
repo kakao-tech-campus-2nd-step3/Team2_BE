@@ -1,6 +1,6 @@
 package jeje.work.aeatbe.service;
 
-import jeje.work.aeatbe.dto.AllergyCategory.AllergyCategoryDTO;
+import jeje.work.aeatbe.dto.allergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.dto.product.ProductAllergyDTO;
 import jeje.work.aeatbe.entity.AllergyCategory;
 import jeje.work.aeatbe.entity.Product;
