@@ -3,18 +3,12 @@ spring:
   config:
     import:
       - optional:.env[.properties]
-
-  application:
-    name: aeatbe
-
-  profiles:
-    active: development
+      - optional:file:./docker/.env[.properties]
 
   datasource:
-    url: jdbc:mysql://localhost:3306/mydb
-    username: user
-    password: password
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS} # didn't work in production
+    username: ${DB_USERNAME} # didn't work in production
+    password: ${DB_PASSWORD} # didn't work in production
 
   jpa:
     hibernate:
@@ -27,13 +21,7 @@ spring:
 
   sql:
     init:
-      mode: always
-
-  docker:
-    compose:
-      file: ./docker/compose.yml
-      skip:
-        in-tests: false
+      mode: never
 
 jwt:
   secret:
@@ -42,7 +30,6 @@ jwt:
 kakao:
   client_id: ${KAKAO_CLIENT_ID}
   redirect_url: https://${FRONTEND_DOMAIN}/login/redirect
-#  redirect_url: http://localhost:8080/api/users/callback
-  auth_url: https://kauth.kakao.com/oauth/authorize
+  auth_url: https://${FRONTEND_DOMAIN}/oauth/authorize
   logout_url: https://kauth.kakao.com/oauth/logout
   logout_redirect_url: http://localhost:8080/api/users/logoutWithKakao/callback
