@@ -6,6 +6,7 @@ import jeje.work.aeatbe.exception.TokenException;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -14,10 +15,11 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final JwtUtil jwtUtil;
+    private final UserService userService;
 
 
     @Override
@@ -32,7 +34,8 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         String token = request.getHeader("Authorization");
         if(token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
-            return jwtUtil.getKakaoId(token);
+            String kakaoId = jwtUtil.getKakaoId(token);
+            return userService.getUserId(kakaoId);
 
         }
         throw new TokenException("권한이 없습니다.");

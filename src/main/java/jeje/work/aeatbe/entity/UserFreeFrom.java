@@ -14,11 +14,18 @@ public class UserFreeFrom extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "free_from_id", nullable = false)
     private FreeFromCategory freeFromCategory;
+
+    public void addUserFreefrom(User user, FreeFromCategory freeFromCategory) {
+        this.user = user;
+        this.freeFromCategory = freeFromCategory;
+        user.getFreeFroms().add(this);
+    }
+
 }

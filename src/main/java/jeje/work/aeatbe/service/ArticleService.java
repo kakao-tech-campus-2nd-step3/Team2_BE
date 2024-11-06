@@ -61,7 +61,8 @@ public class ArticleService {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "date");
 
-        Pageable pageable = PageRequest.of(Integer.parseInt(pageToken), maxResults, sort);
+        int page = pageToken == null ? 0 : Integer.parseInt(pageToken);
+        Pageable pageable = PageRequest.of(page, maxResults, sort);
         Page<Article> articlePage;
 
         if (category != null && !category.isEmpty() && title != null && !title.isEmpty() && subtitle != null && !subtitle.isEmpty()) {
@@ -82,6 +83,8 @@ public class ArticleService {
             articlePage = articleRepository.findAll(pageable);
         }
 
+        String nextPageToken = articlePage.hasNext() ? String.valueOf(page + 1) : null;
+
         PageInfoDTO pageInfo = new PageInfoDTO(
             (int) articlePage.getTotalElements(),
             maxResults
@@ -100,8 +103,7 @@ public class ArticleService {
                 .build())
             .collect(Collectors.toList());
 
-
-        return new ArticleListResponseDTO(columns, pageToken, pageInfo);
+        return new ArticleListResponseDTO(columns, nextPageToken, pageInfo);
     }
 
     /**

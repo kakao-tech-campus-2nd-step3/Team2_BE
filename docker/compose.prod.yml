@@ -8,34 +8,36 @@ services:
   db:
     volumes:
       - aeatbe-data-prod:/var/lib/mysql  # 볼륨 연결
-    container_name: db_prod
     ports: []
     deploy:
       resources:
         limits:
-          memory: 1014M
+          memory: ${DB_CONTAINER_MAX_MEM}
  
   app:
     build:
       context: ..
       dockerfile: ./docker/Dockerfile  # Dockerfile 파일 경로
-    image: aeatbe
-    container_name: AEat_prod
+    image: ${SPRING_IMAGE_NAME}
+    container_name: ${SPRING_CONTAINER_NAME}
     deploy:
       resources:
         limits:
-          memory: 1014M
+          memory: ${SPRING_CONTAINER_MAX_MEM}
     depends_on:
       db:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: production
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
-      SPRING_DATASOURCE_URL: jdbc:mysql://db_prod:3306/mydb?useUnicode=true&characterEncoding=utf8
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_URL: jdbc:mysql://${DB_CONTAINER_NAME}:3306/${DB_NAME}${DB_PARAMS}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JAVA_MIN_MEM: ${JAVA_MIN_MEM}
+      JAVA_MAX_MEM: ${JAVA_MAX_MEM}
+      JAVA_MAX_METASPACE: ${JAVA_MAX_METASPACE}
     ports:
-      - "8081:8080"
+      - ${SPRING_HOST_PORT}:${SPRING_CONTAINER_PORT}
 
 volumes:
   aeatbe-data-prod:
