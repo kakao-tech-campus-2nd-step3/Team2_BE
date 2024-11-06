@@ -2,6 +2,7 @@ package jeje.work.aeatbe.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jeje.work.aeatbe.exception.TokenExpException;
 import jeje.work.aeatbe.exception.TokenException;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
@@ -21,13 +22,30 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler)
         throws Exception {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7);
-            if(!userService.validateToken(token)) {
-                throw new TokenException("올바르지 않은 토큰");
-            }
-            return true;
+
+        if (header == null || !header.startsWith("Bearer ")) {
+            throw new TokenException("헤더에 올바른 인증 토큰이 필요합니다.(Bearer )");
         }
-        throw new TokenException("헤더에 올바른 인증 토큰이 필요합니다.(Bearer )");
+
+        String token = header.substring(7);
+
+
+        if(jwtUtil.validTokenExpiration(token, true)) {
+           throw new TokenExpException("만료된 토큰입니다.");
+        }
+
+
+        if(!userService.validateToken(token)){
+            throw new TokenException("올바르지 않은 토큰입니다.");
+        }
+        return true;
+
+
+
+
+
+
+
+
     }
 }
