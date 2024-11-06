@@ -11,6 +11,7 @@ import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.UserRepository;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -88,6 +89,11 @@ public class UserService {
             .orElseThrow(()->new UserNotFoundException("잘못된 유저입니다."));
     }
 
+    /**
+     * 토큰을 재발급 받는다.
+     * @param refreshToken
+     * @return TokenResponseDTO
+     */
     @Transactional
     public TokenResponseDTO reissueAccessToken(String refreshToken){
         Long userId = jwtUtil.getUserIdForRefreshToken(refreshToken);
@@ -104,6 +110,9 @@ public class UserService {
     }
 
 
+//    public ResponseCookie setCookie(TokenResponseDTO tokenResponseDTO){
+//
+//    }
 
 
 
