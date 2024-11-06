@@ -22,13 +22,13 @@ public class ProductResponseMapperTest {
     @BeforeEach
     public void setUp() {
         productDTO = ProductDTO.builder()
-                .id(1L)
-                .productName("테스트 제품")
-                .price(10000L)
-                .productImageUrl("http://example.com/product.jpg")
-                .seller("http://example.com/seller")
-                .metaImageUrl("간단한 설명")
-                .build();
+            .id(1L)
+            .productName("테스트 제품")
+            .price(10000L)
+            .productImageUrl("http://example.com/product.jpg")
+            .seller("http://example.com/seller")
+            .metaImageUrl("간단한 설명")
+            .build();
 
         averageRating = 4.5;
         freeFromList = List.of("Gluten-Free", "Sugar-Free");
@@ -39,7 +39,7 @@ public class ProductResponseMapperTest {
     @DisplayName("DTO를 ProductResponseDTO로 변환(ID 필요한 경우) 테스트")
     public void testToEntityWithId() {
         // Act
-        ProductResponseDTO responseDTO = mapper.toEntity(productDTO, averageRating, freeFromList, allergyList, null,true);
+        ProductResponseDTO responseDTO = mapper.toEntity(productDTO, averageRating, freeFromList, allergyList, true);
 
         // Assert
         assertNotNull(responseDTO, "ProductResponseDTO는 null이 아님");
@@ -58,7 +58,7 @@ public class ProductResponseMapperTest {
     @DisplayName("DTO를 ProductResponseDTO로 변환(ID 필요하지 않은 경우) 테스트")
     public void testToEntityWithoutId() {
         // Act
-        ProductResponseDTO responseDTO = mapper.toEntity(productDTO, averageRating, freeFromList, allergyList,null ,false);
+        ProductResponseDTO responseDTO = mapper.toEntity(productDTO, averageRating, freeFromList, allergyList, false);
 
         // Assert
         assertNotNull(responseDTO, "ProductResponseDTO는 null이 아님");
