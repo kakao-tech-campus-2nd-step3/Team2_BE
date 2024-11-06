@@ -1,16 +1,33 @@
-name: Continuous Integration
+name: spring_test
+
 on:
   pull_request:
     branches:
       - dev
       - weekly/*
       - Review
+
 jobs:
-  CI:
+  build_and_test:  # Added job ID here
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: make .env file
+        run: |
+          cd ./docker
+          cat <<EOF > .env
+          DB_PARAMS=?
+          DB_USERNAME=ci_tester
+          DB_PASSWORD=plz
+          DB_ROOT_PASSWORD=never_use_in_root
+          DB_HOST_PORT=3306
+          DB_CONTAINER_PORT=3306
+          DB_NAME=super_poo
+          DB_CONTAINER_NAME=super_poo_container
+          JWT_SECRET_KEY=top_secret_key_for_ci
+          EOF
 
       - name: Set up JDK 21
         uses: actions/setup-java@v3
@@ -23,17 +40,6 @@ jobs:
         with:
           gradle-version: 8.10
 
-      # 캐시 생성 비용이 더 큼
-      # - name: Cache Gradle packages
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       ~/.gradle/caches
-      #       ~/.gradle/wrapper
-      #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gradle-
-
       - name: Start Docker Compose and wait for database
         run: |
           chmod +x ./gradlew
@@ -41,13 +47,19 @@ jobs:
           docker compose up -d
           # Wait for database to be ready
           echo "Waiting for database to be ready..."
-          timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=db") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
+          timeout 60s bash -c 'until docker exec -i $(docker ps -q --filter "name=super_poo") mysqladmin ping -h "127.0.0.1" --silent; do sleep 1; done'
 
       - name: Install dependencies
         run: ./gradlew build -x test
 
       - name: Run Tests
-        run: ./gradlew test
+        run: ./gradlew test --info
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v3
+        if: success() || failure()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
 
       - name: Package the application
         run: ./gradlew assemble
