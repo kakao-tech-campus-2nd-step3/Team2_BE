@@ -49,7 +49,7 @@ public class KakaoAuthController {
      * @return
      */
     @GetMapping("/callback")
-    public ResponseEntity<?> getAccessToken(@RequestParam String code){
+    public ResponseEntity<?> getAccessToken(@RequestParam String code) {
         KakaoTokenResponsed token = kakaoService.getKakaoTokenResponse(code);
         TokenResponseDTO tokenResponseDto = kakaoService.login(token.accessToken(), token.refreshToken());
         HttpHeaders httpHeaders = userService.setCookie(tokenResponseDto);
