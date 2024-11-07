@@ -3,7 +3,6 @@ package jeje.work.aeatbe.controller;
 import java.util.List;
 import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.dto.review.ReviewDTO;
-import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.service.ReviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,8 +55,8 @@ public class ReviewController {
      * @todo: kakaoId -> userId로 수정 필요
      */
     @GetMapping("/my")
-    public ResponseEntity<?> getReivewsByUser(@LoginUser LoginUserInfo loginUserInfo) {
-        List<ReviewDTO> review = reviewService.getReviewsByUser(loginUserInfo.userId());
+    public ResponseEntity<?> getReivewsByUser(@LoginUser Long userId) {
+        List<ReviewDTO> review = reviewService.getReviewsByUser(userId);
 
         return ResponseEntity.ok(review);
     }
@@ -67,14 +66,15 @@ public class ReviewController {
      * 새 리뷰 생성
      *
      * @param reviewDTO 리뷰 DTO
-     * @param userId    the user id
+     * @param kakaoId   the kakao id
      * @return 201 created 응답 코드
+     *
      * @todo: kakaoId -> userId로 수정 필요
      */
     @PostMapping
     public ResponseEntity<?> postReviews(@RequestBody ReviewDTO reviewDTO,
-        @LoginUser LoginUserInfo loginUserInfo) {
-        reviewService.createReview(reviewDTO, loginUserInfo.userId());
+        @LoginUser Long userId) {
+        reviewService.createReview(reviewDTO, userId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
@@ -84,30 +84,33 @@ public class ReviewController {
      *
      * @param id        리뷰 id
      * @param reviewDTO 리뷰 DTO
-     * @param userId    the user id
+     * @param kakaoId   the kakao id
      * @return 200 ok 응답 코드
+     *
      * @todo: kakaoId -> userId로 수정 필요
      */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateReviews(@PathVariable Long id,
         @RequestBody ReviewDTO reviewDTO,
-        @LoginUser LoginUserInfo loginUserInfo) {
-        reviewService.updateReviews(id, reviewDTO, loginUserInfo.userId());
+        @LoginUser Long userId) {
+        reviewService.updateReviews(id, reviewDTO, userId);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 리뷰 삭제
      *
-     * @param id     리뷰 id
-     * @param userId the user id
+     * @param id      리뷰 id
+     * @param kakaoId the kakao id
      * @return 204 응답 코드 반환
+     *
      * @todo: kakaoId -> userId로 수정 필요
+     *
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteReviews(@PathVariable Long id,
-        @LoginUser LoginUserInfo loginUserInfo ) {
-        reviewService.deleteReviews(id, loginUserInfo.userId());
+        @LoginUser Long userId) {
+        reviewService.deleteReviews(id, userId);
         return ResponseEntity.noContent().build();
     }
 

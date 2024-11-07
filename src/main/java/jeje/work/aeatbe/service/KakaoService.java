@@ -7,7 +7,6 @@ import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
 import jeje.work.aeatbe.domian.KakaoUserInfo;
 import jeje.work.aeatbe.dto.Kakao.LogoutResponseDto;
-import jeje.work.aeatbe.dto.user.TokenResponseDTO;
 import jeje.work.aeatbe.entity.User;
 import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.UserRepository;
@@ -59,16 +58,16 @@ public class KakaoService {
 
     /**
      * 로그인을한다.
-     * @param kakaoAccessToken 카카오 엑세스 토큰
-     * @param kakaoRefreshToken 카카오 리프레시 토큰
+     * @param accessToken 카카오 엑세스 토큰
+     * @param refreshToken 카카오 리프레시 토큰
      * @return jwt토큰
      */
     @Transactional
-    public TokenResponseDTO login(String kakaoAccessToken, String kakaoRefreshToken){
+    public String login(String accessToken, String refreshToken){
         var uri = "https://kapi.kakao.com/v2/user/me";
         var response = restClient.get()
             .uri(URI.create(uri))
-            .header("Authorization", "Bearer " + kakaoAccessToken)
+            .header("Authorization", "Bearer " + accessToken)
             .retrieve()
             .body(KakaoUserInfo.class);
         String userName = response.kakaoAccount().profile().nickname();
@@ -78,21 +77,14 @@ public class KakaoService {
             User newUser = User.builder().kakaoId(kakaoId)
                     .userName(userName)
                     .userImgUrl("")
-                    .kakaoAccessToken(kakaoAccessToken)
-                    .kakaoRefreshToken(kakaoRefreshToken)
-                    .jwtRefreshToken("")
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
                     .build();
             userRepository.save(newUser);
-            String accessJwtToken = jwtUtil.createToken(newUser);
-            String refreshJwtToken = jwtUtil.createRefreshToken(newUser);
-            newUser.updateJwtRefreshToken(refreshJwtToken);
-            return new TokenResponseDTO(accessJwtToken, refreshJwtToken);
+            return jwtUtil.createToken(newUser);
         }
-        user.get().kakaoTokenUpdate(kakaoAccessToken, kakaoRefreshToken);
-        String accessJwtToken = jwtUtil.createToken(user.get());
-        String refreshJwtToken = jwtUtil.createRefreshToken(user.get());
-        user.get().updateJwtRefreshToken(refreshJwtToken);
-        return new TokenResponseDTO(accessJwtToken, refreshJwtToken);
+        user.get().kakaoTokenUpdate(accessToken, refreshToken);
+        return jwtUtil.createToken(user.get());
     }
 
     /**
@@ -109,11 +101,10 @@ public class KakaoService {
         var response = restClient.post()
                 .uri(URI.create(uri))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .header("Authorization", "Bearer " + user.getKakaoAccessToken())
+                .header("Authorization", "Bearer " + user.getAccessToken())
                 .retrieve()
                 .body(LogoutResponseDto.class);
         user.kakaoTokenUpdate("","");
-        user.updateJwtRefreshToken("");
         return response;
 
     }

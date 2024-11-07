@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode
 @Table(name = "users_free_from")
 public class UserFreeFrom extends BaseEntity{
     @Id
