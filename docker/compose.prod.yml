@@ -2,8 +2,6 @@
 
 # $docker compose -f compose.yml -f compose.prod.yml -p aeat_prod up --build
 
-version: '3.8'
-
 services:
   db:
     volumes:
@@ -31,7 +29,7 @@ services:
       SPRING_PROFILES_ACTIVE: production
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
       SPRING_DATASOURCE_URL: jdbc:mysql://${DB_CONTAINER_NAME}:3306/${DB_NAME}${DB_PARAMS}
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       JAVA_MIN_MEM: ${JAVA_MIN_MEM}
       JAVA_MAX_MEM: ${JAVA_MAX_MEM}

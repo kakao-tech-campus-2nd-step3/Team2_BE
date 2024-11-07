@@ -19,7 +19,7 @@ jobs:
           cd ./docker
           cat <<EOF > .env
           DB_PARAMS=?
-          DB_USERNAME=ci_tester
+          DB_USER=ci_tester
           DB_PASSWORD=plz
           DB_ROOT_PASSWORD=never_use_in_root
           DB_HOST_PORT=3306

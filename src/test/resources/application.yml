@@ -5,11 +5,6 @@ spring:
       - optional:.env[.properties]
       - optional:file:./docker/.env[.properties]
 
-  datasource:
-    url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS} # didn't work in production
-    username: ${DB_USERNAME} # didn't work in production
-    password: ${DB_PASSWORD} # didn't work in production
-
   jpa:
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create-drop}
