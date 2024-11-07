@@ -2,7 +2,8 @@ spring:
 
   config:
     import:
-      - optional:.env[.properties]
+      - .env[.properties]
+      # - optional:file:./docker/.env[.properties]
 
   application:
     name: aeatbe
@@ -12,6 +13,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    # url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS}
+    # username: ${DB_USERNAME}
+    # password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -20,6 +24,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
     defer-datasource-initialization: true
 
   sql:
@@ -31,10 +36,6 @@ spring:
       file: ./docker/compose.yml
       skip:
         in-tests: false
-
-jwt:
-  secret:
-    key: ${JWT_SECRET_KEY}
 
 kakao:
   client_id: ${KAKAO_CLIENT_ID}

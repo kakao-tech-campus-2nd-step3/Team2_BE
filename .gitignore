@@ -41,3 +41,4 @@ compose.yml.network.yml
 
 ## dev options
 .env*
+*.network.yml
