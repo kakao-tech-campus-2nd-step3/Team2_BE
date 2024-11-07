@@ -22,13 +22,13 @@ public class ProductResponseMapperTest {
     @BeforeEach
     public void setUp() {
         productDTO = ProductDTO.builder()
-                .id(1L)
-                .productName("테스트 제품")
-                .price(10000L)
-                .productImageUrl("http://example.com/product.jpg")
-                .seller("http://example.com/seller")
-                .metaImageUrl("간단한 설명")
-                .build();
+            .id(1L)
+            .productName("테스트 제품")
+            .price(10000L)
+            .productImageUrl("http://example.com/product.jpg")
+            .seller("http://example.com/seller")
+            .metaImageUrl("간단한 설명")
+            .build();
 
         averageRating = 4.5;
         freeFromList = List.of("Gluten-Free", "Sugar-Free");

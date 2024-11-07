@@ -26,7 +26,7 @@ public class ArticleLikeController {
     /**
      * 좋아요를 가져온다
      * @param articleId
-     * @param loginUser
+     * @param loginUserInfo
      * @return ArticleLikeResponseDTO
      */
     @GetMapping
@@ -52,7 +52,7 @@ public class ArticleLikeController {
     /**
      * 좋아요 삭제
      * @param articleLikeId
-     * @param loginUserInfo Authorization 헤더에 포함된 토큰으로부터 가져온 유저 정보
+     * @param loginUserInfo
      * @return HTTP.status.OK
      */
     @DeleteMapping("/{articleLikeId}")
