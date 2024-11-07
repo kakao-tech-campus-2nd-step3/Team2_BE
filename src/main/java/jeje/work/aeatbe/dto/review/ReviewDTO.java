@@ -1,6 +1,6 @@
 package jeje.work.aeatbe.dto.review;
 
-import java.util.Optional;
+import jakarta.annotation.Nullable;
 import jeje.work.aeatbe.dto.user.UserDTO;
 import lombok.Builder;
 
@@ -10,6 +10,8 @@ public record ReviewDTO(Long id,
                         String content,
                         UserDTO user,
                         Long productId,
-                        Optional<String> productImgUrl) {
+
+                        @Nullable
+                        String productImgUrl) {
 
 }
