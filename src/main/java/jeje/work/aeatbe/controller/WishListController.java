@@ -27,7 +27,7 @@ public class WishListController {
     /**
      * 위시리스트에 새로운 상품을 추가하는 API 엔드포인트
      *
-     * @param loginUserId Authorization 헤더에 포함된 사용자 인증 토큰
+     *@param loginUserInfo Authorization 헤더에 포함된 토큰으로부터 가져온 유저 정보
      * @param productId 추가할 상품의 ID (쿼리 파라미터로 전달)
      * @return 추가된 위시리스트 항목을 담은 WishDTO와 HTTP 상태 코드 201 CREATED
      */
@@ -40,7 +40,7 @@ public class WishListController {
     /**
      * 사용자의 위시리스트를 조회하는 API 엔드포인트
      *
-     * @param loginUserId Authorization 헤더에 포함된 사용자 인증 토큰
+     *@param loginUserInfo Authorization 헤더에 포함된 토큰으로부터 가져온 유저 정보
      * @return 사용자의 위시리스트 항목들을 담은 리스트와 HTTP 상태 코드 200 OK
      */
     @GetMapping
@@ -52,7 +52,7 @@ public class WishListController {
     /**
      * 위시리스트의 특정 항목을 수정하는 API 엔드포인트.
      *
-     * @param loginUserId Authorization 헤더에 포함된 사용자 인증 토큰
+     * @param loginUserInfo Authorization 헤더에 포함된 토큰으로부터 가져온 유저 정보
      * @param id 수정할 위시리스트 항목의 ID (PathVariable로 전달)
      * @param newProductId 새로운 상품의 ID (쿼리 파라미터로 전달)
      * @return HTTP 상태 코드 204 No Content.
@@ -66,7 +66,7 @@ public class WishListController {
     /**
      * 위시리스트에서 특정 항목을 삭제하는 API 엔드포인트
      *
-     * @param loginUserId Authorization 헤더에 포함된 사용자 인증 토큰
+     * @param loginUserInfo Authorization 헤더에 포함된 토큰으로부터 가져온 유저 정보
      * @param id 삭제할 위시리스트 항목의 ID (PathVariable로 전달)
      * @return HTTP 상태 코드 204 No Content
      */

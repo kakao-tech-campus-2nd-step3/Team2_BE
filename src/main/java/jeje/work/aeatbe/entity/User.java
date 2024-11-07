@@ -27,7 +27,8 @@ public class User extends BaseEntity{
     @Column(name = "user_name", length = 15)
     private String userName;
 
-    @Column(name = "user_img_url", length = 255)
+    @Lob
+    @Column(name = "user_img_url", columnDefinition = "TEXT")
     private String userImgUrl;
 
     @Column

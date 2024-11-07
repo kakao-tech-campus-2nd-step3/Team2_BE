@@ -50,10 +50,9 @@ public class ReviewController {
     /**
      * 특정 유저에 대한 리뷰를 조회
      *
-     * @param userId userId
+     * @param loginUserInfo Authorization 헤더에 포함된 토큰으로부터 가져온 유저 정보
      * @return 특정 유저에 관한 리뷰 리스트
      *
-     * @todo: kakaoId -> userId로 수정 필요
      */
     @GetMapping("/my")
     public ResponseEntity<?> getReivewsByUser(@LoginUser LoginUserInfo loginUserInfo) {
@@ -67,10 +66,9 @@ public class ReviewController {
      * 새 리뷰 생성
      *
      * @param reviewDTO 리뷰 DTO
-     * @param kakaoId   the kakao id
+     * @param loginUserInfo Authorization 헤더에 포함된 토큰으로부터 가져온 유저 정보
      * @return 201 created 응답 코드
      *
-     * @todo: kakaoId -> userId로 수정 필요
      */
     @PostMapping
     public ResponseEntity<?> postReviews(@RequestBody ReviewDTO reviewDTO,
@@ -85,10 +83,9 @@ public class ReviewController {
      *
      * @param id        리뷰 id
      * @param reviewDTO 리뷰 DTO
-     * @param kakaoId   the kakao id
+     * @param loginUserInfo Authorization 헤더에 포함된 토큰으로부터 가져온 유저 정보
      * @return 200 ok 응답 코드
      *
-     * @todo: kakaoId -> userId로 수정 필요
      */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateReviews(@PathVariable Long id,
@@ -102,10 +99,9 @@ public class ReviewController {
      * 리뷰 삭제
      *
      * @param id      리뷰 id
-     * @param kakaoId the kakao id
+     * @param loginUserInfo Authorization 헤더에 포함된 토큰으로부터 가져온 유저 정보
      * @return 204 응답 코드 반환
      *
-     * @todo: kakaoId -> userId로 수정 필요
      *
      */
     @DeleteMapping("/{id}")
