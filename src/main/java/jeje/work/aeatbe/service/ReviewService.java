@@ -79,7 +79,7 @@ public class ReviewService {
                 .id(review.getId())
                 .rate(review.getRate())
                 .content(review.getContent())
-                .productImgUrl(Optional.ofNullable(review.getProduct().getProductImageUrl()))
+                .productImgUrl(review.getProduct().getProductImageUrl())
                 .build()
             )
             .collect(Collectors.toList());

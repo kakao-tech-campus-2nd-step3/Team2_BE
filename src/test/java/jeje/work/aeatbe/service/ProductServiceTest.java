@@ -77,7 +77,7 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+//        MockitoAnnotations.openMocks(this);
 
         // 알러지 카테고리 DTO 인스턴스 생성
         AllergyCategoryDTO allergyGluten = new AllergyCategoryDTO(1L, "Gluten-Free");
@@ -157,58 +157,29 @@ class ProductServiceTest {
         allergyCategories.add(new AllergyCategoryDTO(1L, "Peanuts"));
     }
 
-//    @Test
-//    @DisplayName("상품 엔티티 조회 - 성공")
-//    void getProductEntity_Success() {
-//        // given
-//        Long productId = product.getId();
-//        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-//
-//        // when
-//        Product result = productService.getProductEntity(productId);
-//
-//        // then
-//        assertNotNull(result);
-//        assertEquals(product.getId(), result.getId());
-//        assertEquals(product.getProductName(), result.getProductName());
-//        verify(productRepository).findById(productId);
-//    }
-//
-//    @Test
-//    @DisplayName("상품 엔티티 조회 - 실패 (상품 없음)")
-//    void getProductEntity_NotFound() {
-//        // given
-//        Long productId = 999L;
-//        when(productRepository.findById(productId)).thenReturn(Optional.empty());
-//
-//        // when & then
-//        assertThrows(ProductNotFoundException.class, () -> productService.getProductEntity(productId));
-//        verify(productRepository).findById(productId);
-//    }
-//
-//    @Test
-//    @DisplayName("상품 생성 - 성공")
-//    void createProduct_Success() {
-//        // given
-//        ProductDTO productDTO1 = productDTO;
-//        List<String> allergies = Arrays.asList("Nuts", "Dairy");
-//        List<String> freeFroms = Arrays.asList("Gluten", "Soy");
-//        Product mockProduct = product;
-//
-//        when(productMapper.toEntity(any(ProductDTO.class))).thenReturn(mockProduct);
-//        when(productRepository.save(any(Product.class))).thenReturn(mockProduct);
-//        when(productMapper.toDTO(any(Product.class))).thenReturn(productDTO1);
-//        when(productResponseMapper.toEntity(any(), any(), any(), any(), anyBoolean()))
-//            .thenReturn(productResponseDTO);
-//
-//        // when
-//        ProductResponseDTO result = productService.createProduct(productDTO1, allergies, freeFroms);
-//
-//        // then
-//        assertEquals(productDTO1.id(), result.id());
-//        verify(productAllergyService, times(2)).createProductAllergy(any(), any());
-//        verify(productFreeFromService, times(2)).createProductFreeFrom(any(), any());
-//    }
+    @Test
+    @DisplayName("상품 생성 - 성공")
+    void createProduct_Success() {
+        // given
+        ProductDTO productDTO1 = productDTO;
+        List<String> allergies = Arrays.asList("Nuts", "Dairy");
+        List<String> freeFroms = Arrays.asList("Gluten", "Soy");
+        Product mockProduct = product;
+
+        when(productMapper.toEntity(any(ProductDTO.class))).thenReturn(mockProduct);
+        when(productRepository.save(any(Product.class))).thenReturn(mockProduct);
+        when(productMapper.toDTO(any(Product.class))).thenReturn(productDTO1);
+        when(productResponseMapper.toEntity(any(), any(), any(), any(), anyBoolean()))
+            .thenReturn(productResponseDTO);
+
+        // when
+        ProductResponseDTO result = productService.createProduct(productDTO1, allergies, freeFroms);
+
+        // then
+        assertEquals(productDTO1.id(), result.id());
+        verify(productAllergyService, times(2)).createProductAllergy(any(), any());
+        verify(productFreeFromService, times(2)).createProductFreeFrom(any(), any());
+    }
 
 
     @Test
