@@ -6,12 +6,12 @@ import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
 import jeje.work.aeatbe.dto.Kakao.LogoutResponseDto;
-import jeje.work.aeatbe.dto.Kakao.TokenResponseDto;
+import jeje.work.aeatbe.dto.user.TokenResponseDTO;
+import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.service.KakaoService;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,23 +48,23 @@ public class KakaoAuthController {
      * @return
      */
     @GetMapping("/callback")
-    public ResponseEntity<TokenResponseDto> getAccessToken(@RequestParam String code){
+    public ResponseEntity<TokenResponseDTO> getAccessToken(@RequestParam String code){
         KakaoTokenResponsed token = kakaoService.getKakaoTokenResponse(code);
-        String jwt = kakaoService.login(token.accessToken(), token.refreshToken());
-        return ResponseEntity.ok(new TokenResponseDto(jwt));
+        TokenResponseDTO tokenResponseDto = kakaoService.login(token.accessToken(), token.refreshToken());
+        return ResponseEntity.ok(tokenResponseDto);
     }
 
     /**
      * 카카오 로그아웃후 카카오계정과 함께 로그아웃으로 리다이렉션
      * @param response
-     * @param userid
+     * @param loginUserInfo
      * @throws IOException
      */
     @PostMapping("/logout")
-    public void logout(HttpServletResponse response, @LoginUser Long userid) throws IOException{
+    public void logout(HttpServletResponse response, @LoginUser LoginUserInfo loginUserInfo) throws IOException{
         String url = kakaoProperties.logoutUrl() +
                 "?client_id=" + kakaoProperties.clientId() + "&logout_redirect_uri=" + kakaoProperties.logoutRedirectUrl();
-        LogoutResponseDto logoutResponseDto = kakaoService.logout(userid);
+        LogoutResponseDto logoutResponseDto = kakaoService.logout(loginUserInfo.userId());
         response.sendRedirect(url);
     }
 

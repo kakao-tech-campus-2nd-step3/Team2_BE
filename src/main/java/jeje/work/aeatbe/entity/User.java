@@ -31,24 +31,37 @@ public class User extends BaseEntity{
     private String userImgUrl;
 
     @Column
-    private String accessToken;
+    private String kakaoAccessToken;
 
     @Column
-    private String refreshToken;
+    private String kakaoRefreshToken;
+
+    @Column
+    private String jwtRefreshToken;
 
     @Builder
-    public User(String kakaoId, String userName,
-        String userImgUrl, String accessToken, String refreshToken) {
+    public User(String kakaoId, String userName, String userImgUrl,
+        String kakaoAccessToken, String kakaoRefreshToken, String jwtRefreshToken) {
         this.kakaoId = kakaoId;
         this.userName = userName;
         this.userImgUrl = userImgUrl;
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+        this.kakaoAccessToken = kakaoAccessToken;
+        this.kakaoRefreshToken = kakaoRefreshToken;
+        this.jwtRefreshToken = jwtRefreshToken;
     }
 
-    public void kakaoTokenUpdate(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+    public void kakaoTokenUpdate(String kakaoAccessToken, String kakaoRefreshToken) {
+        this.kakaoAccessToken = kakaoAccessToken;
+        this.kakaoRefreshToken = kakaoRefreshToken;
+    }
+
+    public void updateJwtRefreshToken(String jwtRefreshToken) {
+        this.jwtRefreshToken = jwtRefreshToken;
+    }
+
+    public void updateInfo(String userName, String userImgUrl){
+        this.userName = userName;
+        this.userImgUrl = userImgUrl;
     }
 
 }

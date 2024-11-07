@@ -2,6 +2,7 @@ package jeje.work.aeatbe.controller;
 
 import java.util.List;
 import jeje.work.aeatbe.annotation.LoginUser;
+import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.dto.wishlist.WishDTO;
 import jeje.work.aeatbe.service.WishListService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,8 @@ public class WishListController {
      * @return 추가된 위시리스트 항목을 담은 WishDTO와 HTTP 상태 코드 201 CREATED
      */
     @PostMapping
-    public ResponseEntity<WishDTO> createWish(@LoginUser Long loginUserId, @RequestParam Long productId) {
-        WishDTO wishDTO = wishListService.createWish(loginUserId, productId);
+    public ResponseEntity<WishDTO> createWish(@LoginUser LoginUserInfo loginUserInfo, @RequestParam Long productId) {
+        WishDTO wishDTO = wishListService.createWish(loginUserInfo.userId(), productId);
         return ResponseEntity.status(HttpStatus.CREATED).body(wishDTO);
     }
 
@@ -43,8 +44,8 @@ public class WishListController {
      * @return 사용자의 위시리스트 항목들을 담은 리스트와 HTTP 상태 코드 200 OK
      */
     @GetMapping
-    public ResponseEntity<List<WishDTO>> getWishlist(@LoginUser Long loginUserId) {
-        List<WishDTO> wishlist = wishListService.getWishlist(loginUserId);
+    public ResponseEntity<List<WishDTO>> getWishlist(@LoginUser LoginUserInfo loginUserInfo) {
+        List<WishDTO> wishlist = wishListService.getWishlist(loginUserInfo.userId());
         return ResponseEntity.ok(wishlist);
     }
 
@@ -57,8 +58,8 @@ public class WishListController {
      * @return HTTP 상태 코드 204 No Content.
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateWish(@LoginUser Long loginUserId, @PathVariable Long id, @RequestParam Long newProductId) {
-        wishListService.updateWish(loginUserId, id, newProductId);
+    public ResponseEntity<Void> updateWish(@LoginUser LoginUserInfo loginUserInfo, @PathVariable Long id, @RequestParam Long newProductId) {
+        wishListService.updateWish(loginUserInfo.userId(), id, newProductId);
         return ResponseEntity.noContent().build();
     }
 
@@ -70,8 +71,8 @@ public class WishListController {
      * @return HTTP 상태 코드 204 No Content
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWish(@LoginUser Long loginUserId, @PathVariable Long id) {
-        wishListService.deleteWish(loginUserId, id);
+    public ResponseEntity<Void> deleteWish(@LoginUser LoginUserInfo loginUserInfo, @PathVariable Long id) {
+        wishListService.deleteWish(loginUserInfo.userId(), id);
         return ResponseEntity.noContent().build();
     }
 }

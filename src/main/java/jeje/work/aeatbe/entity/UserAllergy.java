@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "users_allergies")
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Getter
 public class UserAllergy extends BaseEntity{
     @Id
