@@ -33,7 +33,7 @@ public class UserController {
 
     /**
      * 유저정보를 업데이트한다.
-     * @param userInfoUpdateReqeustDto 업데이트할 유저 정보
+     * @param userInfoUpdateReqeustDto 업데이트할 유저
      * @param loginUserInfo Authorization 헤더에 포함된 토큰으로부터 가져온 유저 정보
      * @return 업데이트 된 정보
      */
