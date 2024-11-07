@@ -77,7 +77,7 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+//        MockitoAnnotations.openMocks(this);
 
         // 알러지 카테고리 DTO 인스턴스 생성
         AllergyCategoryDTO allergyGluten = new AllergyCategoryDTO(1L, "Gluten-Free");
