@@ -1,6 +1,8 @@
 services:
   db:
-    image: mysql:latest  #MySQL 이미지 버전맞춰서하면될듯
+    env_file:
+     - .env
+    image: mysql:latest
     container_name: ${DB_CONTAINER_NAME}
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
@@ -15,7 +17,7 @@ services:
       start_period: 30s
     ports:
       - ${DB_HOST_PORT}:${DB_CONTAINER_PORT}
-    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--lower_case_table_names=2']
 
 #  app:
 #    env_file:

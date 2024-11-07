@@ -6,9 +6,9 @@ spring:
       - optional:file:./docker/.env[.properties]
 
   datasource:
-    url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS} # didn't work in production
-    username: ${DB_USERNAME} # didn't work in production
-    password: ${DB_PASSWORD} # didn't work in production
+    url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -23,13 +23,12 @@ spring:
     init:
       mode: never
 
-jwt:
-  secret:
-    key: ${JWT_SECRET_KEY}
-
 kakao:
   client_id: ${KAKAO_CLIENT_ID}
   redirect_url: https://${FRONTEND_DOMAIN}/login/redirect
   auth_url: https://${FRONTEND_DOMAIN}/oauth/authorize
   logout_url: https://kauth.kakao.com/oauth/logout
   logout_redirect_url: http://localhost:8080/api/users/logoutWithKakao/callback
+
+default:
+  image: https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbafebf27-4e21-4ed6-99e1-983eb90ad9c0%2F75c38d1f-215b-4536-a401-18cf179bf119%2Fimage.png?table=block&id=137a63f1-9420-8046-9cb6-d218151fd876&cache=v2

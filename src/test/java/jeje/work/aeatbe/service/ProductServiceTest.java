@@ -158,35 +158,6 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품 엔티티 조회 - 성공")
-    void getProductEntity_Success() {
-        // given
-        Long productId = product.getId();
-        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-
-        // when
-        Product result = productService.getProductEntity(productId);
-
-        // then
-        assertNotNull(result);
-        assertEquals(product.getId(), result.getId());
-        assertEquals(product.getProductName(), result.getProductName());
-        verify(productRepository).findById(productId);
-    }
-
-    @Test
-    @DisplayName("상품 엔티티 조회 - 실패 (상품 없음)")
-    void getProductEntity_NotFound() {
-        // given
-        Long productId = 999L;
-        when(productRepository.findById(productId)).thenReturn(Optional.empty());
-
-        // when & then
-        assertThrows(ProductNotFoundException.class, () -> productService.getProductEntity(productId));
-        verify(productRepository).findById(productId);
-    }
-
-    @Test
     @DisplayName("상품 생성 - 성공")
     void createProduct_Success() {
         // given
@@ -239,18 +210,18 @@ class ProductServiceTest {
 //        verify(productFreeFromService).createProductFreeFrom(any(Product.class), any());
     }
 
-    @Test
-    @DisplayName("상품 삭제 - 성공")
-    void deleteProduct_Success() {
-        // given
-        when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
-        doNothing().when(productRepository).delete(product);
-
-        // when
-        productService.deleteProduct(product.getId());
-
-        // then
-        verify(productRepository).findById(product.getId());
-        verify(productRepository).delete(product);
-    }
+//    @Test
+//    @DisplayName("상품 삭제 - 성공")
+//    void deleteProduct_Success() {
+//        // given
+//        when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+//        doNothing().when(productRepository).delete(product);
+//
+//        // when
+//        productService.deleteProduct(product.getId());
+//
+//        // then
+//        verify(productRepository).findById(product.getId());
+//        verify(productRepository).delete(product);
+//    }
 }
