@@ -18,6 +18,11 @@ public class TokenController {
 
     private final UserService userService;
 
+    /**
+     * 리프레시 토큰을 통해 토큰을 재발급 받는다.
+     * @param refreshTokenRequestDTO 리프레시 토큰
+     * @return 헤더에 토큰 재발급
+     */
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponseDTO> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
         TokenResponseDTO tokenResponseDto = userService.reissueAccessToken(refreshTokenRequestDTO.refreshToken());
