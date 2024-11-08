@@ -8,6 +8,7 @@ import jeje.work.aeatbe.dto.user.UserDTO;
 import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.entity.Review;
 import jeje.work.aeatbe.entity.User;
+import jeje.work.aeatbe.exception.ProductNotFoundException;
 import jeje.work.aeatbe.repository.ProductRepository;
 import jeje.work.aeatbe.repository.ReviewRepository;
 import jeje.work.aeatbe.repository.UserRepository;
@@ -40,7 +41,7 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByProductId(productId);
 
         if (reviews.isEmpty()) {
-            throw new IllegalArgumentException("해당 product_id로 조회된 리뷰가 없습니다.");
+            throw new ProductNotFoundException("해당 product_id로 조회된 리뷰가 없습니다.");
         }
 
         return reviews.stream()
