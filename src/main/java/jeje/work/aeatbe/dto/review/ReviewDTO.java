@@ -10,10 +10,9 @@ public record ReviewDTO(
         Long id,
         Long rate,
         String content,
-        UserDTO user,
+        Long userId,
         Long productId,
 
         @Nullable
         String productImgUrl) {
-
 }
