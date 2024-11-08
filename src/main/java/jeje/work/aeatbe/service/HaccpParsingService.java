@@ -2,6 +2,7 @@ package jeje.work.aeatbe.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import jeje.work.aeatbe.dto.allergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.dto.product.ProductAllergyDTO;
 import jeje.work.aeatbe.dto.product.ProductDTO;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class HaccpParsingService {
+    private final Random random = new Random();
 
     private final AllergyCategoryService allergyCategoryService;
     private final ProductMapper productMapper;
@@ -101,10 +103,15 @@ public class HaccpParsingService {
             .ingredients((String) item.get("rawmtrl"))
             .productBarcode((String) item.get("barcode"))
             .price(0L)
+            .tag(randomTagGenerator())
             .build();
     }
 
     private void saveProductDTO(ProductDTO productDTO) {
         productRepository.save(productMapper.toEntity(productDTO, true));
+    }
+
+    private String randomTagGenerator() {
+        return random.nextInt(100) == 0 ? "광고" : null;
     }
 }
