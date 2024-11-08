@@ -34,9 +34,16 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	//jwt
 	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+
+
+	//redis
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 }
 
 tasks.withType<Test> {

@@ -2,13 +2,24 @@ package jeje.work.aeatbe.service;
 
 
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.dto.user.TokenResponseDTO;
 import jeje.work.aeatbe.dto.user.UserInfoResponseDTO;
 import jeje.work.aeatbe.dto.user.UserInfoUpdateReqeustDTO;
+import jeje.work.aeatbe.entity.AllergyCategory;
+import jeje.work.aeatbe.entity.FreeFromCategory;
 import jeje.work.aeatbe.entity.User;
+import jeje.work.aeatbe.entity.UserAllergy;
+import jeje.work.aeatbe.entity.UserFreeFrom;
+import jeje.work.aeatbe.exception.AllergyCategoryNotFoundException;
 import jeje.work.aeatbe.exception.UserNotFoundException;
+import jeje.work.aeatbe.repository.AllergyCategoryRepository;
+import jeje.work.aeatbe.repository.FreeFromCategoryRepository;
+import jeje.work.aeatbe.repository.UserAllergyRepository;
+import jeje.work.aeatbe.repository.UserFreeFromRepository;
 import jeje.work.aeatbe.repository.UserRepository;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +34,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final UserAllergyRepository userAllergyRepository;
+    private final UserFreeFromRepository userFreeFromRepository;
+    private final AllergyCategoryRepository allergyCategoryRepository;
+    private final FreeFromCategoryRepository freeFromCategoryRepository;
 
 
     /**
@@ -55,11 +70,19 @@ public class UserService {
      */
     public UserInfoResponseDTO getUserInfo(Long userId){
         User user = findById(userId);
+        List<String> allergies = user.getAllergies().stream()
+            .map(userAllergy -> userAllergy.getAllergy().getAllergyType())
+            .collect(Collectors.toList());
+        List<String> freefrom = user.getAllergies().stream()
+            .map(userAllergy -> userAllergy.getAllergy().getAllergyType())
+            .collect(Collectors.toList());
         return UserInfoResponseDTO.builder()
-                .id(user.getId())
-                .userName(user.getUserName())
-                .userImageUrl(user.getUserImgUrl())
-                .build();
+            .id(user.getId())
+            .userName(user.getUserName())
+            .userImageUrl(user.getUserImgUrl())
+            .allergies(allergies)
+            .freefrom(freefrom)
+            .build();
 
     }
 
@@ -67,6 +90,21 @@ public class UserService {
     @Transactional
     public void updateUserInfo(UserInfoUpdateReqeustDTO userInfoUpdateReqeustDto,Long userId){
         User user = findById(userId);
+        userAllergyRepository.deleteAll(user.getAllergies());
+        userFreeFromRepository.deleteAll(user.getFreeFroms());
+
+        userInfoUpdateReqeustDto.allergies().forEach(allergyType -> {
+            AllergyCategory allergyCategory = allergyCategoryRepository.findByAllergyType(allergyType)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 알러지 입니다"));
+            user.addAllergy(allergyCategory);
+        });
+
+        // 새로운 free from 데이터 추가
+        userInfoUpdateReqeustDto.freefrom().forEach(freeFromType -> {
+            FreeFromCategory freeFromCategory = freeFromCategoryRepository.findByFreeFromType(freeFromType)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 freefrom입니다"));
+            user.addFreeFrom(freeFromCategory);
+        });
         user.updateInfo(userInfoUpdateReqeustDto.userName(), userInfoUpdateReqeustDto.userImageUrl());
     }
 
@@ -119,20 +157,22 @@ public class UserService {
      * @return HttpHeaders
      */
     public HttpHeaders setCookie(TokenResponseDTO tokenResponseDTO){
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", tokenResponseDTO.refreshToken())
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(3600)
-                .domain("aeat.jeje.work")
-                .build();
-        ResponseCookie accessCookie = ResponseCookie.from("accessToken", tokenResponseDTO.accessToken())
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(3600)
-                .domain("aeat.jeje.work")
-                .build();
+        ResponseCookie refreshCookie = ResponseCookie.from("Authorization-refreshToken", tokenResponseDTO.refreshToken())
+            .httpOnly(true)
+            .secure(true)
+            .path("/")
+            .maxAge(3600)
+            .domain(".aeat.jeje.work")
+            .sameSite("LAX")
+            .build();
+        ResponseCookie accessCookie = ResponseCookie.from("Authorization-accessToken", tokenResponseDTO.accessToken())
+            .httpOnly(true)
+            .secure(true)
+            .path("/")
+            .maxAge(3600)
+            .domain(".aeat.jeje.work")
+            .sameSite("LAX")
+            .build();
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
         headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());

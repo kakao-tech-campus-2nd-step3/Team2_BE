@@ -31,9 +31,9 @@ public class ArticleLikeController {
      */
     @GetMapping
     public ResponseEntity<ArticleLikeResponseDTO> getArticleLikes(@RequestParam Long articleId, @LoginUser LoginUserInfo loginUserInfo) {
-        ArticleLike articlelike = articleLikeService.findArticleLikeByUserAndArticle(loginUserInfo.userId(), articleId);
+        Long articleLikeId = articleLikeService.findArticleLikeByUserAndArticle(loginUserInfo.userId(), articleId);
         int like = articleLikeService.getArticleLikeCount(articleId);
-        return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articlelike.getId(),like));
+        return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articleLikeId,like));
     }
 
 
@@ -44,9 +44,9 @@ public class ArticleLikeController {
      */
     @PostMapping
     public ResponseEntity<ArticleLikeResponseDTO> addArticleLike(@RequestBody ArticleLikeRequestDTO articleLikeRequestDTO, @LoginUser LoginUserInfo loginUserInfo) {
-        ArticleLike articleLike = articleLikeService.likeArticle(loginUserInfo.userId(), articleLikeRequestDTO.articleId());
+        Long articleLikeId = articleLikeService.likeArticle(loginUserInfo.userId(), articleLikeRequestDTO.articleId());
         int like = articleLikeService.getArticleLikeCount(articleLikeRequestDTO.articleId());
-        return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articleLike.getId(),like));
+        return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articleLikeId,like));
     }
 
     /**
