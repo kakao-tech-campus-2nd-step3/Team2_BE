@@ -22,10 +22,14 @@ public class UserFreeFrom extends BaseEntity{
     @JoinColumn(name = "free_from_id", nullable = false)
     private FreeFromCategory freeFromCategory;
 
-    public void addUserFreefrom(User user, FreeFromCategory freeFromCategory) {
+    public void addUser(User user) {
+        this.user = user;
+    }
+
+    @Builder
+    public UserFreeFrom(User user, FreeFromCategory freeFromCategory) {
         this.user = user;
         this.freeFromCategory = freeFromCategory;
-        user.getFreeFroms().add(this);
     }
 
 }

@@ -18,10 +18,10 @@ public class User extends BaseEntity{
     @Column(name = "kakao_id", nullable = false, unique = true)
     private String kakaoId;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private List<UserAllergy> allergies;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private List<UserFreeFrom> freeFroms;
 
     @Column(name = "user_name", length = 15)
@@ -63,6 +63,23 @@ public class User extends BaseEntity{
     public void updateInfo(String userName, String userImgUrl){
         this.userName = userName;
         this.userImgUrl = userImgUrl;
+    }
+
+    public void addAllergy(AllergyCategory allergyCategory) {
+        UserAllergy userAllergy = UserAllergy.builder()
+            .user(this)
+            .allergy(allergyCategory)
+            .build();
+        this.allergies.add(userAllergy);
+    }
+
+
+    public void addFreeFrom(FreeFromCategory freeFromCategory) {
+        UserFreeFrom userFreeFrom = UserFreeFrom.builder()
+            .user(this)
+            .freeFromCategory(freeFromCategory)
+            .build();
+        this.freeFroms.add(userFreeFrom);
     }
 
 }
