@@ -45,8 +45,11 @@ public class Product extends BaseEntity{
     @Lob
     private String ingredients;
 
-    @Column(nullable = false, columnDefinition = "DEFAULT 0")
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long price;
+
+    @Column(name = "promotion_tag")
+    private String tag;
 
     @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
