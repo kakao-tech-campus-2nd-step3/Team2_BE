@@ -12,6 +12,7 @@ import jeje.work.aeatbe.service.KakaoService;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,10 +49,11 @@ public class KakaoAuthController {
      * @return
      */
     @GetMapping("/callback")
-    public ResponseEntity<TokenResponseDTO> getAccessToken(@RequestParam String code){
+    public ResponseEntity<?> getAccessToken(@RequestParam String code) {
         KakaoTokenResponsed token = kakaoService.getKakaoTokenResponse(code);
         TokenResponseDTO tokenResponseDto = kakaoService.login(token.accessToken(), token.refreshToken());
-        return ResponseEntity.ok(tokenResponseDto);
+        HttpHeaders httpHeaders = userService.setCookie(tokenResponseDto);
+        return ResponseEntity.ok().headers(httpHeaders).build();
     }
 
     /**

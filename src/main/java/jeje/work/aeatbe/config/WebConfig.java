@@ -26,7 +26,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtInterceptor)
             .addPathPatterns("/api/article/likes/**")
                 .addPathPatterns("/api/users/logout/**")
-                . addPathPatterns("/api/wishlist/**");
+                . addPathPatterns("/api/wishlist/**")
+                .addPathPatterns("/api/reviews/my/**");
     }
 
     @Override

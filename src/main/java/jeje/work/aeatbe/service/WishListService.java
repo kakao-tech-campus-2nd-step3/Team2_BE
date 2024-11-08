@@ -12,7 +12,6 @@ import jeje.work.aeatbe.exception.WishlistNotFoundException;
 import jeje.work.aeatbe.mapper.product.ProductMapper;
 import jeje.work.aeatbe.repository.UserRepository;
 import jeje.work.aeatbe.repository.WishlistRepository;
-import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,6 @@ public class WishListService {
     private final ProductService productService;
     private final ProductMapper productMapper;
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
 
     /**
      * 위시리스트 항목을 생성하는 메서드.
@@ -36,8 +34,7 @@ public class WishListService {
      * @throws WishlistNotFoundException 사용자를 찾지 못하거나, 상품을 찾지 못할 경우 예외 발생
      */
     public WishDTO createWish(Long loginUserId, Long productId) {
-        User user = userRepository.findById(loginUserId)
-            .orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = findUser(loginUserId);
 
         Product product = productMapper.toEntity(productService.getProductDTO(productId), true);
 
@@ -64,8 +61,7 @@ public class WishListService {
      * @throws WishlistNotFoundException 사용자 ID를 추출할 수 없거나, 위시리스트 항목을 찾지 못할 경우 예외 발생
      */
     public List<WishDTO> getWishlist(Long loginUserId) {
-        User user = userRepository.findById(loginUserId)
-            .orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = findUser(loginUserId);
         List<Wishlist> wishlistItems = wishlistRepository.findByUserId(user.getId());
 
         return wishlistItems.stream()
@@ -92,10 +88,8 @@ public class WishListService {
      */
     @Transactional
     public void updateWish(Long loginUserId, Long wishId, Long newProductId) {
-        User user = userRepository.findById(loginUserId)
-            .orElseThrow(() -> new UserNotFoundException("User not found"));
-        Wishlist existingWishlist = wishlistRepository.findByIdAndUserId(wishId, user.getId())
-            .orElseThrow(() -> new WishlistNotFoundException("Wish not found or not authorized"));
+        User user = findUser(loginUserId);
+        Wishlist existingWishlist = findWishlist(wishId, user.getId());
 
         Product newProduct = productMapper.toEntity(productService.getProductDTO(newProductId), true);
 
@@ -111,11 +105,18 @@ public class WishListService {
      * @throws WishlistNotFoundException 위시리스트 항목을 찾지 못하거나 권한이 없을 경우 예외 발생
      */
     public void deleteWish(Long loginUserId, Long wishId) {
-        User user = userRepository.findById(loginUserId)
-            .orElseThrow(() -> new UserNotFoundException("User not found"));
-        Wishlist wishlist = wishlistRepository.findByIdAndUserId(wishId, user.getId())
-            .orElseThrow(() -> new WishlistNotFoundException("Wish not found or not authorized"));
+        User user = findUser(loginUserId);
+        Wishlist wishlist = findWishlist(wishId, user.getId());
 
         wishlistRepository.delete(wishlist);
+    }
+
+    private User findUser(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
+    }
+    private Wishlist findWishlist(Long wishId, Long userId) {
+        return wishlistRepository.findByIdAndUserId(wishId, userId)
+            .orElseThrow(() -> new WishlistNotFoundException("Wish not found or not authorized"));
     }
 }

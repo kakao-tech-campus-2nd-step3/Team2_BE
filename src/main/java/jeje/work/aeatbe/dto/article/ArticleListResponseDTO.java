@@ -9,7 +9,6 @@ import lombok.*;
 @Builder
 public record ArticleListResponseDTO(
     List<ArticleResponseDTO> columns,
-    String nextPageToken,
     PageInfoDTO pageInfo
 ) {
 }

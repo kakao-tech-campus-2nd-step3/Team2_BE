@@ -50,7 +50,7 @@ public class ReviewController {
     /**
      * 특정 유저에 대한 리뷰를 조회
      *
-     * @param userId userId
+     * @param loginUserInfo userId
      * @return 특정 유저에 관한 리뷰 리스트
      *
      * @todo: kakaoId -> userId로 수정 필요
@@ -67,9 +67,8 @@ public class ReviewController {
      * 새 리뷰 생성
      *
      * @param reviewDTO 리뷰 DTO
-     * @param kakaoId   the kakao id
+     * @param loginUserInfo    the user id
      * @return 201 created 응답 코드
-     *
      * @todo: kakaoId -> userId로 수정 필요
      */
     @PostMapping
@@ -85,9 +84,8 @@ public class ReviewController {
      *
      * @param id        리뷰 id
      * @param reviewDTO 리뷰 DTO
-     * @param kakaoId   the kakao id
+     * @param loginUserInfo    the user id
      * @return 200 ok 응답 코드
-     *
      * @todo: kakaoId -> userId로 수정 필요
      */
     @PatchMapping("/{id}")
@@ -101,12 +99,10 @@ public class ReviewController {
     /**
      * 리뷰 삭제
      *
-     * @param id      리뷰 id
-     * @param kakaoId the kakao id
+     * @param id     리뷰 id
+     * @param loginUserInfo the user id
      * @return 204 응답 코드 반환
-     *
      * @todo: kakaoId -> userId로 수정 필요
-     *
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteReviews(@PathVariable Long id,

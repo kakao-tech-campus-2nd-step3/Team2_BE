@@ -5,6 +5,9 @@ import jeje.work.aeatbe.dto.article.ArticleListResponseDTO;
 import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
 import jeje.work.aeatbe.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +36,7 @@ public class ArticleController {
      * @param category 칼럼의 카테고리
      * @param title 칼럼의 제목
      * @param subtitle 칼럼의 소제목
-     * @param sortby 정렬 기준
-     * @param pageToken 페이지 토큰
-     * @param maxResults 한 페이지당 가져올 칼럼의 최대 개수 (기본값: 10)
+     * @param pageable 페이지네이션 정보 (기본값: 페이지 크기 10, 날짜 기준 내림차순 정렬)
      * @return 칼럼 목록과 페이지 정보가 포함된 DTO와 상태 코드 200 (OK)
      */
     @GetMapping
@@ -43,11 +44,9 @@ public class ArticleController {
         @RequestParam(required = false) String category,
         @RequestParam(required = false) String title,
         @RequestParam(required = false) String subtitle,
-        @RequestParam(defaultValue = "new") String sortby,
-        @RequestParam(defaultValue = "0") String pageToken,
-        @RequestParam(defaultValue = "10") int maxResults) {
+        @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        ArticleListResponseDTO articles = articleService.getArticles(category, title, subtitle, sortby, pageToken, maxResults);
+        ArticleListResponseDTO articles = articleService.getArticles(category, title, subtitle, pageable);
         return ResponseEntity.ok(articles);
     }
 
