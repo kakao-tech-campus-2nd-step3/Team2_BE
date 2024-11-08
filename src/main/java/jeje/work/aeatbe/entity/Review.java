@@ -22,7 +22,7 @@ public class Review extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int rate;
+    private Long rate;
 
     @Lob
     private String content;
