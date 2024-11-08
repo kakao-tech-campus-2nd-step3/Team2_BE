@@ -157,14 +157,14 @@ public class UserService {
      * @return HttpHeaders
      */
     public HttpHeaders setCookie(TokenResponseDTO tokenResponseDTO){
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", tokenResponseDTO.refreshToken())
+        ResponseCookie refreshCookie = ResponseCookie.from("Authorization refreshToken", tokenResponseDTO.refreshToken())
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
                 .maxAge(3600)
                 .domain("aeat.jeje.work")
                 .build();
-        ResponseCookie accessCookie = ResponseCookie.from("accessToken", tokenResponseDTO.accessToken())
+        ResponseCookie accessCookie = ResponseCookie.from("Authorization accessToken", tokenResponseDTO.accessToken())
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
