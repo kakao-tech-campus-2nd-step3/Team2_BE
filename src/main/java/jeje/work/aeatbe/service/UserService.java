@@ -157,7 +157,7 @@ public class UserService {
      * @return HttpHeaders
      */
     public HttpHeaders setCookie(TokenResponseDTO tokenResponseDTO){
-        ResponseCookie refreshCookie = ResponseCookie.from("Authorization refreshToken", tokenResponseDTO.refreshToken())
+        ResponseCookie refreshCookie = ResponseCookie.from("Authorization-refreshToken", tokenResponseDTO.refreshToken())
             .httpOnly(true)
             .secure(true)
             .path("/")
@@ -165,7 +165,7 @@ public class UserService {
             .domain(".aeat.jeje.work")
             .sameSite("LAX")
             .build();
-        ResponseCookie accessCookie = ResponseCookie.from("Authorization accessToken", tokenResponseDTO.accessToken())
+        ResponseCookie accessCookie = ResponseCookie.from("Authorization-accessToken", tokenResponseDTO.accessToken())
             .httpOnly(true)
             .secure(true)
             .path("/")
