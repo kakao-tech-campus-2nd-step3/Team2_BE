@@ -24,6 +24,7 @@ public record ProductDTO(
         @JsonProperty("prdlstNm") String productName, // 상품명
         @JsonProperty("rawmtrl") String ingredients, // 원재료
         Long price,  // 가격(추후에 사용 될 예정)
-        @JsonProperty("barcode") String productBarcode // 상품 바코드
+        @JsonProperty("barcode") String productBarcode, // 상품 바코드
+        String tag
 ) {
 }
