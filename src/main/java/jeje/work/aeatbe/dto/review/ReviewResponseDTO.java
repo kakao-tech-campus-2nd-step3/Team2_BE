@@ -1,10 +1,15 @@
 package jeje.work.aeatbe.dto.review;
 
+import jeje.work.aeatbe.dto.user.UserInfoResponseDTO;
+import lombok.Builder;
+
+@Builder
 public record ReviewResponseDTO(
         Long id,
-        Long Rate,
+        Long rate,
         String content,
+        UserInfoResponseDTO user,
         Long productId,
-        Long productImgUrl
+        String productImgUrl
 ) {
 }
