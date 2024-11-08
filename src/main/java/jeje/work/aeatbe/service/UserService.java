@@ -158,19 +158,21 @@ public class UserService {
      */
     public HttpHeaders setCookie(TokenResponseDTO tokenResponseDTO){
         ResponseCookie refreshCookie = ResponseCookie.from("Authorization refreshToken", tokenResponseDTO.refreshToken())
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(3600)
-                .domain("aeat.jeje.work")
-                .build();
+            .httpOnly(true)
+            .secure(true)
+            .path("/")
+            .maxAge(3600)
+            .domain("aeat.jeje.work")
+            .sameSite("LAX")
+            .build();
         ResponseCookie accessCookie = ResponseCookie.from("Authorization accessToken", tokenResponseDTO.accessToken())
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .maxAge(3600)
-                .domain("aeat.jeje.work")
-                .build();
+            .httpOnly(true)
+            .secure(true)
+            .path("/")
+            .maxAge(3600)
+            .domain("aeat.jeje.work")
+            .sameSite("LAX")
+            .build();
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
         headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
