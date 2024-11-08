@@ -7,11 +7,16 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(
+    name = "products",
+    indexes = {
+        @Index(name = "idx_product_name",columnList ="product_name"),
+        @Index(name = "idx_price", columnList = "price")
+    })
 public class Product extends BaseEntity{
 
     @Id
