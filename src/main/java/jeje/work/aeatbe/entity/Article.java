@@ -7,9 +7,9 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "articles")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class Article extends BaseEntity{
 
     @Id
@@ -47,6 +47,17 @@ public class Article extends BaseEntity{
 
     public void downLike(){
         this.likes --;
+    }
+
+    @Builder
+    public Article(String title, String author, String tags,
+        String content, String thumbnailUrl, int likes) {
+        this.title = title;
+        this.author = author;
+        this.tags = tags;
+        this.content = content;
+        this.thumbnailUrl = thumbnailUrl;
+        this.likes = likes;
     }
 
 }
