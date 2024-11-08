@@ -237,15 +237,23 @@ public class ProductService {
 
     private Page<Product> findProductsByCriteria(String q, List<String> allergies,
         List<String> freeFroms, int priceMin, int priceMax, Pageable pageable) {
+
+        if ((allergies == null || allergies.isEmpty()) && (freeFroms == null || freeFroms.isEmpty())) {
+            Pageable sortedByProductName = PageRequest.of(pageable.getPageNumber(),
+                pageable.getPageSize(), Sort.by("productName").ascending());
+            return productRepository.findByPriceBetween(priceMin, priceMax, sortedByProductName);
+        }
+
         if (q != null) {
             return productRepository.findByProductNameContaining(q, pageable);
-        } else if (allergies != null && !allergies.isEmpty()) {
-            return productRepository.findByAllergy(allergies, pageable);
-        } else if (freeFroms != null && !freeFroms.isEmpty()) {
-            return productRepository.findByFreeFrom(freeFroms, pageable);
-        } else {
-            return productRepository.findByPriceBetween(priceMin, priceMax, pageable);
         }
+        if (allergies != null && !allergies.isEmpty()) {
+            return productRepository.findByAllergy(allergies, pageable);
+        }
+        if (freeFroms != null && !freeFroms.isEmpty()) {
+            return productRepository.findByFreeFrom(freeFroms, pageable);
+        }
+        return productRepository.findByPriceBetween(priceMin, priceMax, pageable);
     }
 
     private List<ProductResponseDTO> mapToResponseDTO(List<Product> products) {
