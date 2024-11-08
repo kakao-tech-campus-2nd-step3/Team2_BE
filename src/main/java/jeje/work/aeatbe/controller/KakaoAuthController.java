@@ -46,7 +46,7 @@ public class KakaoAuthController {
     /**
      * 카카오 로그인후 jwt토큰 발급
      * @param code
-     * @return
+     * @return httpHeader(Cookie)
      */
     @GetMapping("/callback")
     public ResponseEntity<?> getAccessToken(@RequestParam String code) {
