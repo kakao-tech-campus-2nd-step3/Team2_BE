@@ -5,11 +5,16 @@ import lombok.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "articles")
+//@Table(name = "articles")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Table(
+    name = "articles",
+    indexes = {
+        @Index(name = "idx_title",columnList ="title"),
+    })
 public class Article extends BaseEntity{
 
     @Id
