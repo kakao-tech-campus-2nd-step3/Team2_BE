@@ -82,4 +82,5 @@ public class User extends BaseEntity{
         this.freeFroms.add(userFreeFrom);
     }
 
+
 }
