@@ -26,10 +26,10 @@ public class Product extends BaseEntity{
     @Lob
     private String nutritionalInfo;
 
-    @Column(name = "product_image_url", length = 255)
+    @Column(name = "product_image_url", columnDefinition = "TEXT")
     private String productImageUrl;
 
-    @Column(name = "meta_image_url", length = 255)
+    @Column(name = "meta_image_url", columnDefinition = "TEXT")
     private String metaImageUrl;
 
     @Column(name = "type_name", length = 200)
@@ -50,8 +50,9 @@ public class Product extends BaseEntity{
     @Lob
     private String ingredients;
 
+    @Builder.Default
     @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 99990000")
-    private Long price;
+    private Long price = 99990000L;
 
     @Column(name = "promotion_tag")
     private String tag;
@@ -67,4 +68,9 @@ public class Product extends BaseEntity{
     @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
+
+    @PrePersist
+    private void prePersist() {
+        this.price = 99990000L;
+    }
 }
