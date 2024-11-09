@@ -101,9 +101,6 @@ public class ReviewService {
             .collect(Collectors.toList());
     }
 
-
-
-
     /**
      * 특정 유저의 리뷰 조회
      *
@@ -120,22 +117,6 @@ public class ReviewService {
             .map(reviewMapper::toDTO)
             .map(this::getReviewResponseDTO)
             .collect(Collectors.toList());
-    }
-
-    /**
-     * 해당 상품의 리뷰 평균 평점 조회
-     * @param productId 상품 id
-     * @return 리뷰 평균 평점
-     */
-    public Double getAverageRating(Long productId) {
-        List<ReviewDTO> reviews = getReviewEntitiesByProduct(productId).stream()
-            .map(reviewMapper::toDTO)
-            .collect(Collectors.toList());
-
-        return reviews.stream()
-            .mapToDouble(ReviewDTO::rate)
-            .average()
-            .orElse(0);
     }
 
     /**
@@ -159,7 +140,7 @@ public class ReviewService {
      * 리뷰 수정
      *
      * @param id        리뷰 id
-     * @param ReviewRequestDTO 리뷰 DTO
+     * @param reviewRequestDTO 리뷰 DTO
      *
      * @todo user를 사용하여 리뷰 삭제 권한 확인....
      */
