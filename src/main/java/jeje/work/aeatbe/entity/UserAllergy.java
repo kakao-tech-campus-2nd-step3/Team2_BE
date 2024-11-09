@@ -22,9 +22,14 @@ public class UserAllergy extends BaseEntity{
     @JoinColumn(name = "allergy_id", nullable = false)
     private AllergyCategory allergy;
 
-    public void addUserAllergy(User user, AllergyCategory allergy) {
+    public void addUser(User user) {
+        this.user = user;
+    }
+
+    @Builder
+    public UserAllergy(User user, AllergyCategory allergy) {
         this.user = user;
         this.allergy = allergy;
-        user.getAllergies().add(this);
     }
+
 }

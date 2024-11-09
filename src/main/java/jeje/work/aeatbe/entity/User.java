@@ -22,10 +22,10 @@ public class User extends BaseEntity {
     @Column(name = "kakao_id", nullable = false, unique = true)
     private String kakaoId;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private List<UserAllergy> allergies;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private List<UserFreeFrom> freeFroms;
 
     @Column(name = "user_name", length = 15)
@@ -46,7 +46,7 @@ public class User extends BaseEntity {
 
     @Builder
     public User(String kakaoId, String userName, String userImgUrl,
-                String kakaoAccessToken, String kakaoRefreshToken, String jwtRefreshToken) {
+        String kakaoAccessToken, String kakaoRefreshToken, String jwtRefreshToken) {
         this.kakaoId = kakaoId;
         this.userName = userName;
         this.userImgUrl = userImgUrl;
@@ -68,6 +68,24 @@ public class User extends BaseEntity {
         this.userName = userName;
         this.userImgUrl = userImgUrl;
     }
+
+    public void addAllergy(AllergyCategory allergyCategory) {
+        UserAllergy userAllergy = UserAllergy.builder()
+            .user(this)
+            .allergy(allergyCategory)
+            .build();
+        this.allergies.add(userAllergy);
+    }
+
+
+    public void addFreeFrom(FreeFromCategory freeFromCategory) {
+        UserFreeFrom userFreeFrom = UserFreeFrom.builder()
+            .user(this)
+            .freeFromCategory(freeFromCategory)
+            .build();
+        this.freeFroms.add(userFreeFrom);
+    }
+
 
     /**
      * 테스트를 위해 id를 설정하는 메서드
