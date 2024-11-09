@@ -3,6 +3,7 @@ package jeje.work.aeatbe.controller;
 import java.util.List;
 import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.dto.review.ReviewDTO;
+import jeje.work.aeatbe.dto.review.ReviewResponseDTO;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.service.ReviewService;
 import org.springframework.http.HttpStatus;
@@ -39,10 +40,10 @@ public class ReviewController {
      *
      */
     @GetMapping
-    public ResponseEntity<List<ReviewDTO>> getReviews(
+    public ResponseEntity<List<ReviewResponseDTO>> getReviews(
         @RequestParam(required = true) Long productId) {
 
-        List<ReviewDTO> reviews = reviewService.getReviews(productId);
+        List<ReviewResponseDTO> reviews = reviewService.getReviews(productId);
         return ResponseEntity.ok(reviews);
     }
 
@@ -57,7 +58,7 @@ public class ReviewController {
      */
     @GetMapping("/my")
     public ResponseEntity<?> getReivewsByUser(@LoginUser LoginUserInfo loginUserInfo) {
-        List<ReviewDTO> review = reviewService.getReviewsByUser(loginUserInfo.userId());
+        List<ReviewResponseDTO> review = reviewService.getReviewsByUser(loginUserInfo.userId());
 
         return ResponseEntity.ok(review);
     }
