@@ -19,12 +19,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity illegalStateException(IllegalStateException e) {
+    public ResponseEntity<String> illegalStateException(IllegalStateException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
+    @ExceptionHandler(WishlistNotFoundException.class)
+    public ResponseEntity<String> wishlistNotFoundException(WishlistNotFoundException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
     @ExceptionHandler(TokenExpException.class)
-    public ResponseEntity tokenExpException(TokenExpException e) {
+    public ResponseEntity<String> tokenExpException(TokenExpException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
+
+
+
 }
