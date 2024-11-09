@@ -4,7 +4,9 @@ import jeje.work.aeatbe.dto.review.ReviewDTO;
 import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.entity.Review;
 import jeje.work.aeatbe.entity.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ReviewMapper {
     public ReviewDTO toDTO(Review review) {
         return ReviewDTO.builder()
