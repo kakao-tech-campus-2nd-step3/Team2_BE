@@ -3,6 +3,7 @@ package jeje.work.aeatbe.controller;
 import java.util.List;
 import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.dto.review.ReviewDTO;
+import jeje.work.aeatbe.dto.review.ReviewRequestDTO;
 import jeje.work.aeatbe.dto.review.ReviewResponseDTO;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.service.ReviewService;
@@ -53,8 +54,6 @@ public class ReviewController {
      *
      * @param loginUserInfo userId
      * @return 특정 유저에 관한 리뷰 리스트
-     *
-     * @todo: kakaoId -> userId로 수정 필요
      */
     @GetMapping("/my")
     public ResponseEntity<?> getReivewsByUser(@LoginUser LoginUserInfo loginUserInfo) {
@@ -70,10 +69,9 @@ public class ReviewController {
      * @param reviewDTO 리뷰 DTO
      * @param loginUserInfo    the user id
      * @return 201 created 응답 코드
-     * @todo: kakaoId -> userId로 수정 필요
      */
     @PostMapping
-    public ResponseEntity<?> postReviews(@RequestBody ReviewDTO reviewDTO,
+    public ResponseEntity<?> postReviews(@RequestBody ReviewRequestDTO reviewDTO,
         @LoginUser LoginUserInfo loginUserInfo) {
         reviewService.createReview(reviewDTO, loginUserInfo.userId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -87,11 +85,10 @@ public class ReviewController {
      * @param reviewDTO 리뷰 DTO
      * @param loginUserInfo    the user id
      * @return 200 ok 응답 코드
-     * @todo: kakaoId -> userId로 수정 필요
      */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateReviews(@PathVariable Long id,
-        @RequestBody ReviewDTO reviewDTO,
+        @RequestBody ReviewRequestDTO reviewDTO,
         @LoginUser LoginUserInfo loginUserInfo) {
         reviewService.updateReviews(id, reviewDTO, loginUserInfo.userId());
         return ResponseEntity.ok().build();
@@ -103,7 +100,6 @@ public class ReviewController {
      * @param id     리뷰 id
      * @param loginUserInfo the user id
      * @return 204 응답 코드 반환
-     * @todo: kakaoId -> userId로 수정 필요
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteReviews(@PathVariable Long id,
