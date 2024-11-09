@@ -6,7 +6,7 @@ import jeje.work.aeatbe.entity.Review;
 import jeje.work.aeatbe.entity.User;
 
 public class ReviewMapper {
-    public static ReviewDTO toDTO(Review review) {
+    public ReviewDTO toDTO(Review review) {
         return ReviewDTO.builder()
             .id(review.getId())
             .rate(review.getRate())
