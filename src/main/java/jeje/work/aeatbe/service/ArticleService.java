@@ -12,6 +12,8 @@ import jeje.work.aeatbe.entity.Article;
 import jeje.work.aeatbe.entity.User;
 import jeje.work.aeatbe.exception.ColumnNotFoundException;
 import jeje.work.aeatbe.exception.UserNotFoundException;
+import jeje.work.aeatbe.mapper.allergyCategory.AllergyCategoryMapper;
+import jeje.work.aeatbe.mapper.article.ArticleMapper;
 import jeje.work.aeatbe.repository.ArticleRepository;
 import jeje.work.aeatbe.utility.ArticleUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,8 @@ import org.springframework.stereotype.Service;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final ArticleMapper articleMapper;
+
 
     /**
      * 새로운 칼럼을 데이터베이스에 저장
@@ -45,7 +49,7 @@ public class ArticleService {
             .build();
 
         article = articleRepository.save(article);
-        return mapToDTO(article);
+        return articleMapper.toDTO(article);
     }
 
     /**
@@ -66,7 +70,7 @@ public class ArticleService {
             .build();
 
         List<ArticleResponseDTO> columns = articlePage.getContent().stream()
-            .map(this::mapToResponseDTO)
+            .map(articleMapper::toResponseDTO)
             .collect(Collectors.toList());
 
         return new ArticleListResponseDTO(columns, pageInfo);
@@ -80,7 +84,7 @@ public class ArticleService {
      */
     public ArticleResponseDTO getArticleById(Long id) {
         Article article = findArticle(id);
-        return mapToResponseDTO(article);
+        return articleMapper.toResponseDTO(article);
     }
 
     /**
@@ -105,7 +109,7 @@ public class ArticleService {
             .build();
 
         articleRepository.save(existingArticle);
-        return mapToDTO(existingArticle);
+        return articleMapper.toDTO(existingArticle);
     }
 
     /**
@@ -137,32 +141,6 @@ public class ArticleService {
     private Article findArticle(Long id) {
         return articleRepository.findById(id)
             .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
-    }
-
-    private ArticleDTO mapToDTO(Article article) {
-        return ArticleDTO.builder()
-            .id(article.getId())
-            .title(article.getTitle())
-            .date(article.getDate())
-            .author(article.getAuthor())
-            .tags(article.getTags())
-            .content(article.getContent())
-            .thumbnailUrl(article.getThumbnailUrl())
-            .likes(article.getLikes())
-            .build();
-    }
-
-    private ArticleResponseDTO mapToResponseDTO(Article article) {
-        return ArticleResponseDTO.builder()
-            .id(article.getId())
-            .title(article.getTitle())
-            .imgurl(article.getThumbnailUrl())
-            .createdAt(article.getDate())
-            .auth(article.getAuthor())
-            .keyword(Arrays.asList(article.getTags().split(",")))
-            .content(ArticleUtil.extractContentList(article.getContent()))
-            .subtitle(ArticleUtil.extractSubtitle(article.getContent()))
-            .build();
     }
 }
 
