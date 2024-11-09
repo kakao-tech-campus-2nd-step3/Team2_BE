@@ -157,6 +157,7 @@ class WishListServiceTest {
         // then
         verify(wishlistRepository).findByIdAndUserId(wishId, userId);
         verify(productService).getProductDTO(newProductId);
+        verify(wishlistRepository).save(any(Wishlist.class));
     }
 
     @Test
