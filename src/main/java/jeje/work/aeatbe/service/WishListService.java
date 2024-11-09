@@ -93,8 +93,7 @@ public class WishListService {
 
         Product newProduct = productMapper.toEntity(productService.getProductDTO(newProductId), true);
 
-        Wishlist updatedWishlist = new Wishlist(existingWishlist.getId(), existingWishlist.getUser(), newProduct);
-        wishlistRepository.save(updatedWishlist);
+        existingWishlist.setProduct(newProduct);
     }
 
     /**
