@@ -2,6 +2,7 @@ package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.context.annotation.Profile;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class User extends BaseEntity {
 
     @Id
@@ -76,12 +77,21 @@ public class User extends BaseEntity {
         this.allergies.add(userAllergy);
     }
 
-
     public void addFreeFrom(FreeFromCategory freeFromCategory) {
         UserFreeFrom userFreeFrom = UserFreeFrom.builder()
             .user(this)
             .freeFromCategory(freeFromCategory)
             .build();
         this.freeFroms.add(userFreeFrom);
+    }
+
+    /**
+     * 테스트용 메소드
+     * @param id id를 설정할 값
+     */
+    @Profile("test")
+    @Deprecated(forRemoval = true)
+    public void setId(Long id) {
+        this.id = id;
     }
 }
