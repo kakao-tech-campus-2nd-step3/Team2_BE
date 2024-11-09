@@ -11,7 +11,6 @@ import lombok.*;
         @Index(name = "idx_product_id", columnList = "product_id")
     })
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Wishlist extends BaseEntity{
