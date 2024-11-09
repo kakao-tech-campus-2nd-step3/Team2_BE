@@ -1,20 +1,30 @@
 package jeje.work.aeatbe.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.Builder;
 
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record ProductDTO(
         Long id,
-        //String allergens, // 역할 중복을 제거
-        String nutritionalInfo, // 현재 사용 안함
-        String productImageUrl, // 상품 이미지
-        String metaImageUrl, //상품 상세 설명 이미지
-        String typeName, // 현재 사용 안함
-        String manufacturer, // 제조사, 현재 사용 안함
-        String seller, // 판매 링크로 사용중
-        String capacity, // 용량, 현재 사용 안함
-        String productName, // 상품명
-        String ingredients, // 성분, 현재 사용 안함
-        Long price // 가격
+        @JsonProperty("allergy")
+        @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY) List<ProductAllergyDTO> allergy,
+        @JsonProperty("nutrient") String nutritionalInfo, // 영양성분
+        @JsonProperty("imgurl1") String productImageUrl, // 상품 이미지
+        @JsonProperty("imgurl2") String metaImageUrl, // 상품 상세 설명 이미지
+        @JsonProperty("prdkind") String typeName, // 제품 종류(유형명)
+        @JsonProperty("manufacture") String manufacturer, // 제조사
+        String seller, // 판매 링크(추후에 사용 될 예정)
+        @JsonProperty("capacity") String capacity, // 용량
+        @JsonProperty("prdlstNm") String productName, // 상품명
+        @JsonProperty("rawmtrl") String ingredients, // 원재료
+        Long price,  // 가격(추후에 사용 될 예정)
+        @JsonProperty("barcode") String productBarcode, // 상품 바코드
+        String tag
 ) {
 }

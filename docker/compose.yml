@@ -17,8 +17,10 @@ services:
       start_period: 30s
     ports:
       - ${DB_HOST_PORT}:${DB_CONTAINER_PORT}
-    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--lower_case_table_names=2']
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--lower_case_table_names=1']
 
 #  app:
+#    depends_on:
+#      - db
 #    env_file:
 #      - .env

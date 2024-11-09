@@ -24,6 +24,9 @@ repositories {
 }
 
 dependencies {
+	implementation ("com.googlecode.json-simple:json-simple:1.1")
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation ("io.netty:netty-resolver-dns-native-macos:4.1.70.Final:osx-aarch_64")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	compileOnly("org.projectlombok:lombok")

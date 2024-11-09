@@ -23,9 +23,6 @@ public class Product extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(length = 100)
-//    private String allergens;
-
     @Lob
     private String nutritionalInfo;
 
@@ -53,12 +50,15 @@ public class Product extends BaseEntity{
     @Lob
     private String ingredients;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 99990000")
     private Long price;
+
+    @Column(name = "promotion_tag")
+    private String tag;
 
     @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductAllergy> productAllergies =  new ArrayList<>();
+    private List<ProductAllergy> productAllergies = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -66,5 +66,5 @@ public class Product extends BaseEntity{
 
     @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews= new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
 }
