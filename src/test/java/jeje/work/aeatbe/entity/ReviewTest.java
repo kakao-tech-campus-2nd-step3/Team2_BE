@@ -33,13 +33,13 @@ public class ReviewTest {
             .price(1000L)
             .build();
 
-        review = new Review(1L, 5, "Great product!", user, product);
+        review = new Review(1L, 5L, "Great product!", user, product);
     }
 
     @Test
     @DisplayName("Review 객체 생성 테스트")
     void testReviewCreation() {
-        Review newReview = new Review(1L, 5, "Great product!", user, product);
+        Review newReview = new Review(1L, 5L, "Great product!", user, product);
 
         assertThat(newReview.getRate()).isEqualTo(5);
         assertThat(newReview.getContent()).isEqualTo("Great product!");
