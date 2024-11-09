@@ -1,26 +1,18 @@
 package jeje.work.aeatbe.service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import jeje.work.aeatbe.dto.article.ArticleDTO;
 import jeje.work.aeatbe.dto.article.ArticleListResponseDTO;
 import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
-import jeje.work.aeatbe.dto.article.ContentDTO;
 import jeje.work.aeatbe.dto.article.PageInfoDTO;
 import jeje.work.aeatbe.entity.Article;
-import jeje.work.aeatbe.entity.User;
 import jeje.work.aeatbe.exception.ColumnNotFoundException;
-import jeje.work.aeatbe.exception.UserNotFoundException;
-import jeje.work.aeatbe.mapper.allergyCategory.AllergyCategoryMapper;
 import jeje.work.aeatbe.mapper.article.ArticleMapper;
 import jeje.work.aeatbe.repository.ArticleRepository;
-import jeje.work.aeatbe.utility.ArticleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
