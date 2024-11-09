@@ -45,7 +45,7 @@ public class Product extends BaseEntity{
     @Lob
     private String ingredients;
 
-    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 99990000")
     private Long price;
 
     @Column(name = "promotion_tag")
