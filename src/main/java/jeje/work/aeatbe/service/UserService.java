@@ -161,7 +161,7 @@ public class UserService {
             .httpOnly(true)
             .secure(true)
             .path("/")
-            .maxAge(3600)
+            .maxAge(3600*24*14)
             .domain(".aeat.jeje.work")
             .sameSite("None")
             .build();
