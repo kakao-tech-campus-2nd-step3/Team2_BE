@@ -163,7 +163,7 @@ public class UserService {
             .path("/")
             .maxAge(3600)
             .domain(".aeat.jeje.work")
-            .sameSite("LAX")
+            .sameSite("None")
             .build();
         ResponseCookie accessCookie = ResponseCookie.from("Authorization-accessToken", tokenResponseDTO.accessToken())
             .httpOnly(true)
@@ -171,7 +171,7 @@ public class UserService {
             .path("/")
             .maxAge(3600)
             .domain(".aeat.jeje.work")
-            .sameSite("LAX")
+            .sameSite("None")
             .build();
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
