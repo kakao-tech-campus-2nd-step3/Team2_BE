@@ -19,7 +19,7 @@ public class ReviewMapper {
             .build();
     }
 
-    public static Review toEntity(ReviewDTO reviewDTO, User user, Product product, boolean idRequired) {
+    public Review toEntity(ReviewDTO reviewDTO, User user, Product product, boolean idRequired) {
         return Review.builder()
             .id(idRequired ? reviewDTO.id() : null)
             .rate(reviewDTO.rate())
@@ -29,7 +29,7 @@ public class ReviewMapper {
             .build();
     }
 
-    public static Review toEntity(ReviewDTO reviewDTO, User user, Product product) {
+    public Review toEntity(ReviewDTO reviewDTO, User user, Product product) {
         return toEntity(reviewDTO, user, product, false);
     }
 }
