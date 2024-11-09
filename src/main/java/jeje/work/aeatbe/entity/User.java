@@ -1,18 +1,22 @@
 package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
+import jeje.work.aeatbe.annotation.VisibleForTesting;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User extends BaseEntity{
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(name = "kakao_id", nullable = false, unique = true)
@@ -42,7 +46,7 @@ public class User extends BaseEntity{
 
     @Builder
     public User(String kakaoId, String userName, String userImgUrl,
-        String kakaoAccessToken, String kakaoRefreshToken, String jwtRefreshToken) {
+                String kakaoAccessToken, String kakaoRefreshToken, String jwtRefreshToken) {
         this.kakaoId = kakaoId;
         this.userName = userName;
         this.userImgUrl = userImgUrl;
@@ -65,4 +69,12 @@ public class User extends BaseEntity{
         this.userImgUrl = userImgUrl;
     }
 
+    /**
+     * 테스트를 위해 id를 설정하는 메서드
+     * @param id
+     */
+    @VisibleForTesting
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
