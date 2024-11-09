@@ -20,7 +20,6 @@ public class ArticleMapper {
      */
     public ArticleDTO toDTO(Article article) {
         return ArticleDTO.builder()
-            .id(article.getId())
             .title(article.getTitle())
             .date(article.getDate())
             .author(article.getAuthor())
