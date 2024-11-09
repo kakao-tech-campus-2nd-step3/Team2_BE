@@ -1,7 +1,6 @@
 package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
-import jeje.work.aeatbe.annotation.VisibleForTesting;
 import lombok.*;
 
 import java.util.List;
