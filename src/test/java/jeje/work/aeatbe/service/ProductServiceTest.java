@@ -44,7 +44,7 @@ class ProductServiceTest {
     private ProductResponseMapper productResponseMapper;
 
     @Mock
-    private ReviewService reviewService;
+    private ReviewRatingService reviewRatingService;
 
     @Mock
     private AllergyCategoryService allergyCategoryService;

@@ -21,7 +21,7 @@ public class Review extends BaseEntity{
     private Long id;
 
     @Builder.Default
-    @Column(columnDefinition = "TINYINT DEFAULT 0", nullable = false)
+    @Column(columnDefinition = "BIGINT DEFAULT 0", nullable = false)
     private Long rate = 0L;
 
     @Lob

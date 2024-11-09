@@ -89,8 +89,6 @@ public class ReviewService {
      *
      * @param productId    상품 id
      * @return list 형식의 reviewDTO
-     *
-     * @todo 토큰에서 파싱된 정보를 기반으로 userId에 들어갈 값을 수정 해야 함
      */
     public List<ReviewResponseDTO> getReviews(Long productId) {
         List<Review> reviews = getReviewEntitiesByProduct(productId);

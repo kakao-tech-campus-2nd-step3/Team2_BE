@@ -85,14 +85,4 @@ public class User extends BaseEntity {
             .build();
         this.freeFroms.add(userFreeFrom);
     }
-
-
-    /**
-     * 테스트를 위해 id를 설정하는 메서드
-     * @param id
-     */
-    @VisibleForTesting
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

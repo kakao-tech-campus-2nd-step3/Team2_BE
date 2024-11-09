@@ -54,7 +54,7 @@ public class ReviewTest {
 
         assertNotNull(review);
         assertNull(review.getContent());
-        assertEquals(0, review.getRate());
+        assertEquals(0L, review.getRate());
         assertNull(review.getUser());
         assertNull(review.getProduct());
     }
