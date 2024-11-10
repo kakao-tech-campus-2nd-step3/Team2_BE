@@ -38,6 +38,8 @@ public class JwtInterceptor implements HandlerInterceptor {
         if(!userService.validateToken(token)){
             throw new TokenException("올바르지 않은 토큰입니다.");
         }
+
+
         return true;
 
 
