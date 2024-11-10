@@ -16,5 +16,5 @@ public class BlackList {
     @Id
     private String token;
 
-    private Long id;
+    private String userId;
 }
