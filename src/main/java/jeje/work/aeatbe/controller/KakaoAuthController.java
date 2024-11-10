@@ -69,7 +69,7 @@ public class KakaoAuthController {
     public void logout(HttpServletResponse response, @RequestHeader("Authorization") String token, @LoginUser LoginUserInfo loginUserInfo) throws IOException{
         String url = kakaoProperties.logoutUrl() +
                 "?client_id=" + kakaoProperties.clientId() + "&logout_redirect_uri=" + kakaoProperties.logoutRedirectUrl();
-        tokenService.addBlackList(tokenService.removePrefix(token), loginUserInfo.userId());
+        tokenService.addBlackList(tokenService.removePrefix(token), loginUserInfo.userId().toString());
         LogoutResponseDto logoutResponseDto = kakaoService.logout(loginUserInfo.userId());
         response.sendRedirect(url);
     }
