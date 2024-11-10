@@ -24,7 +24,7 @@ public class ArticleLikeTest {
             .kakaoId("12345")
             .userName("TestUser")
             .build();
-        user.setId(1L);
+
 
         article = Article.builder()
             .id(1L)

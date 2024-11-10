@@ -7,10 +7,12 @@ import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
 import jeje.work.aeatbe.domian.KakaoUserInfo;
 import jeje.work.aeatbe.dto.Kakao.LogoutResponseDto;
+import jeje.work.aeatbe.dto.user.TokenResponseDTO;
 import jeje.work.aeatbe.entity.User;
 import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.UserRepository;
 import jeje.work.aeatbe.utility.JwtUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -23,6 +25,10 @@ public class KakaoService {
     private final RestClient restClient;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+
+    @Value("${default.image}")
+    private String DEFAULT_IMAGE;
+
 
     public KakaoService(KakaoProperties kakaoProperties, UserRepository userRepository, JwtUtil jwtUtil) {
         this.kakaoProperties = kakaoProperties;
@@ -58,16 +64,16 @@ public class KakaoService {
 
     /**
      * 로그인을한다.
-     * @param accessToken 카카오 엑세스 토큰
-     * @param refreshToken 카카오 리프레시 토큰
+     * @param kakaoAccessToken 카카오 엑세스 토큰
+     * @param kakaoRefreshToken 카카오 리프레시 토큰
      * @return jwt토큰
      */
     @Transactional
-    public String login(String accessToken, String refreshToken){
+    public TokenResponseDTO login(String kakaoAccessToken, String kakaoRefreshToken){
         var uri = "https://kapi.kakao.com/v2/user/me";
         var response = restClient.get()
             .uri(URI.create(uri))
-            .header("Authorization", "Bearer " + accessToken)
+            .header("Authorization", "Bearer " + kakaoAccessToken)
             .retrieve()
             .body(KakaoUserInfo.class);
         String userName = response.kakaoAccount().profile().nickname();
@@ -76,15 +82,22 @@ public class KakaoService {
         if(user.isEmpty()){
             User newUser = User.builder().kakaoId(kakaoId)
                     .userName(userName)
-                    .userImgUrl("")
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
+                    .userImgUrl(DEFAULT_IMAGE)
+                    .kakaoAccessToken(kakaoAccessToken)
+                    .kakaoRefreshToken(kakaoRefreshToken)
+                    .jwtRefreshToken("")
                     .build();
             userRepository.save(newUser);
-            return jwtUtil.createToken(newUser);
+            String accessJwtToken = jwtUtil.createToken(newUser);
+            String refreshJwtToken = jwtUtil.createRefreshToken(newUser);
+            newUser.updateJwtRefreshToken(refreshJwtToken);
+            return new TokenResponseDTO(accessJwtToken, refreshJwtToken);
         }
-        user.get().kakaoTokenUpdate(accessToken, refreshToken);
-        return jwtUtil.createToken(user.get());
+        user.get().kakaoTokenUpdate(kakaoAccessToken, kakaoRefreshToken);
+        String accessJwtToken = jwtUtil.createToken(user.get());
+        String refreshJwtToken = jwtUtil.createRefreshToken(user.get());
+        user.get().updateJwtRefreshToken(refreshJwtToken);
+        return new TokenResponseDTO(accessJwtToken, refreshJwtToken);
     }
 
     /**
@@ -101,10 +114,11 @@ public class KakaoService {
         var response = restClient.post()
                 .uri(URI.create(uri))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .header("Authorization", "Bearer " + user.getAccessToken())
+                .header("Authorization", "Bearer " + user.getKakaoAccessToken())
                 .retrieve()
                 .body(LogoutResponseDto.class);
         user.kakaoTokenUpdate("","");
+        user.updateJwtRefreshToken("");
         return response;
 
     }

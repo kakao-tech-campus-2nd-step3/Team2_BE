@@ -24,7 +24,7 @@ public class WishlistTest {
             .kakaoId("12345")
             .userName("TestUser")
             .build();
-        user.setId(1L);
+
 
         product = Product.builder()
             .id(1L)

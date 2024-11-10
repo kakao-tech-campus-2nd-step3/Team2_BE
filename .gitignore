@@ -38,3 +38,7 @@ out/
 
 ## prod optrions
 compose.yml.network.yml
+
+## dev options
+.env*
+*.network.yml

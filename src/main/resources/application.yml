@@ -1,4 +1,10 @@
 spring:
+
+  config:
+    import:
+      - .env[.properties]
+      # - optional:file:./docker/.env[.properties]
+
   application:
     name: aeatbe
 
@@ -6,17 +12,18 @@ spring:
     active: development
 
   datasource:
-    url: jdbc:mysql://localhost:3306/mydb
-    username: user
-    password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
+    # url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS}
+    # username: ${DB_USERNAME}
+    # password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create-drop}
-    show-sql: true
+    show-sql: ${SPRING_JPA_SHOW_SQL:true}
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
     defer-datasource-initialization: true
 
@@ -27,14 +34,23 @@ spring:
   docker:
     compose:
       file: ./docker/compose.yml
-
-jwt:
-  secret:
-    key: Yn2kjibddFAWtnPJ2AFlL8WXmohJMCvigQggaEypa5E
+      skip:
+        in-tests: false
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
 kakao:
-  client_id: 4d3d60da75b24635e63c62f780ab3ea9
-  redirect_url: https://kakao-team2-fe.vercel.app/login/redirect
+  client_id: ${KAKAO_CLIENT_ID}
+  redirect_url: https://${FRONTEND_DOMAIN}/login/redirect
   auth_url: https://kauth.kakao.com/oauth/authorize
   logout_url: https://kauth.kakao.com/oauth/logout
-  logout_redirect_url: http://localhost:8080/api/users/logoutWithKakao/callback
+  logout_redirect_url: https://${FRONTEND_DOMAIN}/logout/redirect
+
+haccp:
+  service_key : ${SERVICE_KEY}
+  base_url : https://apis.data.go.kr/B553748/CertImgListServiceV3
+
+default:
+  image: https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbafebf27-4e21-4ed6-99e1-983eb90ad9c0%2F75c38d1f-215b-4536-a401-18cf179bf119%2Fimage.png?table=block&id=137a63f1-9420-8046-9cb6-d218151fd876&cache=v2
