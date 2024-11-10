@@ -27,6 +27,6 @@ public class TokenController {
     public ResponseEntity<TokenResponseDTO> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
         TokenResponseDTO tokenResponseDto = userService.reissueAccessToken(refreshTokenRequestDTO.refreshToken());
         HttpHeaders httpHeaders = userService.setCookie(tokenResponseDto);
-        return ResponseEntity.ok().headers(httpHeaders).build();
+        return ResponseEntity.ok().body(tokenResponseDto);
     }
 }
