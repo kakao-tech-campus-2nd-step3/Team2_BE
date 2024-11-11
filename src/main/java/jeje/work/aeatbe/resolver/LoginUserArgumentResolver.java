@@ -29,10 +29,10 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String token = request.getHeader("Authorization");
-        if(token != null && token.startsWith("Bearer ")) {
+        if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
             LoginUserInfo loginUserInfo = jwtUtil.getLoginUserInfo(token);
             return loginUserInfo;

@@ -36,17 +36,19 @@ public class ReviewService {
 
     /**
      * 리뷰 엔티티 조회
+     *
      * @param id 리뷰 id
      * @return 리뷰 엔티티
      */
     @Transactional(readOnly = true)
     protected Review getReviewEntity(Long id) {
         return reviewRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다."));
     }
 
     /**
      * 상품에 대한 리뷰 조회
+     *
      * @param productId 상품 id
      * @return 리뷰 엔티티 리스트
      */
@@ -63,6 +65,7 @@ public class ReviewService {
 
     /**
      * 사용자를 기반으로 리뷰 조회
+     *
      * @param userId 사용자 id
      * @return list 형식의 reviewDTO
      */
@@ -80,6 +83,7 @@ public class ReviewService {
 
     /**
      * 리뷰 응답 DTO 생성
+     *
      * @param review 리뷰 DTO
      * @return 리뷰 응답 DTO
      */
@@ -91,16 +95,16 @@ public class ReviewService {
     /**
      * 리뷰 조회
      *
-     * @param productId    상품 id
+     * @param productId 상품 id
      * @return list 형식의 reviewDTO
      */
     public List<ReviewResponseDTO> getReviews(Long productId) {
         List<Review> reviews = getReviewEntitiesByProduct(productId);
 
         return reviews.stream()
-            .map(reviewMapper::toDTO)
-            .map(this::getReviewResponseDTO)
-            .collect(Collectors.toList());
+                .map(reviewMapper::toDTO)
+                .map(this::getReviewResponseDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -108,7 +112,6 @@ public class ReviewService {
      *
      * @param userId 카카오 id
      * @return 특정 유저에 대한 list 형식의 reviewDTO
-     *
      * @todo user를 사용하여 리뷰 삭제 권한 확인....
      */
     public List<ReviewResponseDTO> getReviewsByUser(Long userId) {
@@ -116,16 +119,16 @@ public class ReviewService {
         List<Review> reviews = getReviewEntitiesByUser(userId);
 
         return reviews.stream()
-            .map(reviewMapper::toDTO)
-            .map(this::getReviewResponseDTO)
-            .collect(Collectors.toList());
+                .map(reviewMapper::toDTO)
+                .map(this::getReviewResponseDTO)
+                .collect(Collectors.toList());
     }
 
     /**
      * 새 리뷰 생성
      *
      * @param reviewRequestDTO 리뷰 DTO
-     * @param userId   카카오 id
+     * @param userId           카카오 id
      */
     @Transactional
     public void createReview(ReviewRequestDTO reviewRequestDTO, Long userId) {
@@ -142,9 +145,8 @@ public class ReviewService {
     /**
      * 리뷰 수정
      *
-     * @param id        리뷰 id
+     * @param id               리뷰 id
      * @param reviewRequestDTO 리뷰 DTO
-     *
      * @todo user를 사용하여 리뷰 삭제 권한 확인....
      */
     @Transactional
@@ -167,9 +169,8 @@ public class ReviewService {
     /**
      * 리뷰 삭제
      *
-     * @param id      리뷰 id
+     * @param id     리뷰 id
      * @param userId 유저 id
-     *
      * @todo user를 사용하여 리뷰 삭제 권한 확인....
      */
     @Transactional

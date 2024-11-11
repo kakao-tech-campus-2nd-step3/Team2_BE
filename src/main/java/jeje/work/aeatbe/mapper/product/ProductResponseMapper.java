@@ -7,15 +7,16 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ProductResponseMapper{
+public class ProductResponseMapper {
 
     /**
      * ProductDTO를 ProductResponseDTO로 변환
-     * @param dto ProductDTO
+     *
+     * @param dto          ProductDTO
      * @param avergeRating 평균 평점
      * @param freeFromList 프리프롬 리스트
-     * @param allergyList 알러지 리스트
-     * @param idRequired id 필요 여부
+     * @param allergyList  알러지 리스트
+     * @param idRequired   id 필요 여부
      * @return ProductResponseDTO
      */
     public ProductResponseDTO toEntity(ProductDTO dto, Double avergeRating, List<String> freeFromList, List<String> allergyList, boolean idRequired) {

@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 /**
  * 알러지 카테고리 서비스 레이어
- *
  */
 @Service
 @RequiredArgsConstructor

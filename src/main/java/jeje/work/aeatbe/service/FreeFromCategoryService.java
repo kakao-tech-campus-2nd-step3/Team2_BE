@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 상품 알레르기 서비스 레이어
+ *
  * @see ProductAllergyService
  */
 @Service
@@ -21,6 +22,7 @@ public class FreeFromCategoryService {
 
     /**
      * id에 해당하는 상품 알레르기 엔티티를 DB에서 조회합니다.
+     *
      * @param id 조회할 상품 알레르기 엔티티의 ID
      * @return 조회된 상품 알레르기 엔티티
      * @throws FreeFromCategoryNotFoundException 조회된 상품 알레르기 엔티티가 없을 경우 예외 발생
@@ -34,6 +36,7 @@ public class FreeFromCategoryService {
 
     /**
      * 테이블에서 태그를 기반으로 상품 알레르기 카테고리를 조회하는 메서드
+     *
      * @param s 조회할 상품 알레르기 카테고리의 이름
      * @return 조회된 상품 알레르기 카테고리
      * @throws FreeFromCategoryNotFoundException 조회된 상품 알레르기 카테고리가 없을 경우 예외 발생

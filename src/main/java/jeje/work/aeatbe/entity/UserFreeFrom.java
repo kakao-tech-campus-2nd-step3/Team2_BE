@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "users_free_from")
-public class UserFreeFrom extends BaseEntity{
+public class UserFreeFrom extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,14 +22,14 @@ public class UserFreeFrom extends BaseEntity{
     @JoinColumn(name = "free_from_id", nullable = false)
     private FreeFromCategory freeFromCategory;
 
-    public void addUser(User user) {
-        this.user = user;
-    }
-
     @Builder
     public UserFreeFrom(User user, FreeFromCategory freeFromCategory) {
         this.user = user;
         this.freeFromCategory = freeFromCategory;
+    }
+
+    public void addUser(User user) {
+        this.user = user;
     }
 
 }

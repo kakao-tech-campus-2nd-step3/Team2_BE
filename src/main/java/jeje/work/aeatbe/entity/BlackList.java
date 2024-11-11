@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash(value = "blackList" , timeToLive = 3600)
+@RedisHash(value = "blackList", timeToLive = 3600)
 public class BlackList {
 
     @Id

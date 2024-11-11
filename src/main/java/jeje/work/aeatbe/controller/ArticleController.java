@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class ArticleController {
 
     private final ArticleService articleService;
+
     /**
      * 새로운 칼럼 생성
      *
@@ -34,17 +35,17 @@ public class ArticleController {
      * 필터와 페이지네이션 기반으로 칼럼 목록 반환
      *
      * @param category 칼럼의 카테고리
-     * @param title 칼럼의 제목
+     * @param title    칼럼의 제목
      * @param subtitle 칼럼의 소제목
      * @param pageable 페이지네이션 정보 (기본값: 페이지 크기 10, 날짜 기준 내림차순 정렬)
      * @return 칼럼 목록과 페이지 정보가 포함된 DTO와 상태 코드 200 (OK)
      */
     @GetMapping
     public ResponseEntity<ArticleListResponseDTO> getArticles(
-        @RequestParam(required = false) String category,
-        @RequestParam(required = false) String title,
-        @RequestParam(required = false) String subtitle,
-        @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String subtitle,
+            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
 
         ArticleListResponseDTO articles = articleService.getArticles(category, title, subtitle, pageable);
         return ResponseEntity.ok(articles);
@@ -65,7 +66,7 @@ public class ArticleController {
     /**
      * 칼럼 업데이트 (PATCH)
      *
-     * @param id 업데이트할 칼럼의 ID
+     * @param id         업데이트할 칼럼의 ID
      * @param articleDTO 업데이트할 내용이 담긴 DTO
      * @return 업데이트된 칼럼의 DTO와 상태 코드 200 (OK)
      */

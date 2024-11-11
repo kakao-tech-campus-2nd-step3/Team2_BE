@@ -1,7 +1,5 @@
 package jeje.work.aeatbe.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import jeje.work.aeatbe.dto.article.ArticleDTO;
 import jeje.work.aeatbe.dto.article.ArticleListResponseDTO;
 import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
@@ -15,6 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +33,14 @@ public class ArticleService {
      */
     public ArticleDTO createArticle(ArticleDTO articleDTO) {
         Article article = Article.builder()
-            .title(articleDTO.title())
-            .date(articleDTO.date())
-            .author(articleDTO.author())
-            .tags(articleDTO.tags())
-            .content(articleDTO.content())
-            .thumbnailUrl(articleDTO.thumbnailUrl())
-            .likes(articleDTO.likes())
-            .build();
+                .title(articleDTO.title())
+                .date(articleDTO.date())
+                .author(articleDTO.author())
+                .tags(articleDTO.tags())
+                .content(articleDTO.content())
+                .thumbnailUrl(articleDTO.thumbnailUrl())
+                .likes(articleDTO.likes())
+                .build();
 
         article = articleRepository.save(article);
         return articleMapper.toDTO(article);
@@ -49,7 +50,7 @@ public class ArticleService {
      * 필터링 및 페이지네이션이 적용된 칼럼 목록 반환
      *
      * @param category 칼럼의 카테고리
-     * @param title 칼럼의 제목
+     * @param title    칼럼의 제목
      * @param subtitle 칼럼의 소제목
      * @param pageable 페이지네이션 정보
      * @return 필터링된 칼럼 목록과 페이지 정보가 포함된 DTO
@@ -59,13 +60,13 @@ public class ArticleService {
         Page<Article> articlePage = applyFilters(category, title, subtitle, pageable);
 
         PageInfoDTO pageInfo = PageInfoDTO.builder()
-            .totalResults((int) articlePage.getTotalElements())
-            .resultsPerPage(pageable.getPageSize())
-            .build();
+                .totalResults((int) articlePage.getTotalElements())
+                .resultsPerPage(pageable.getPageSize())
+                .build();
 
         List<ArticleResponseDTO> columns = articlePage.getContent().stream()
-            .map(articleMapper::toResponseDTO)
-            .collect(Collectors.toList());
+                .map(articleMapper::toResponseDTO)
+                .collect(Collectors.toList());
 
         return new ArticleListResponseDTO(columns, pageInfo);
     }
@@ -85,7 +86,7 @@ public class ArticleService {
     /**
      * 칼럼 업데이트
      *
-     * @param id 업데이트할 칼럼의 ID
+     * @param id         업데이트할 칼럼의 ID
      * @param articleDTO 업데이트할 내용이 담긴 DTO
      * @return 업데이트된 칼럼의 DTO
      */
@@ -94,15 +95,15 @@ public class ArticleService {
         Article existingArticle = findArticle(id);
 
         existingArticle = Article.builder()
-            .id(existingArticle.getId())
-            .title(articleDTO.title() != null ? articleDTO.title() : existingArticle.getTitle())
-            .date(articleDTO.date() != null ? articleDTO.date() : existingArticle.getDate())
-            .author(articleDTO.author() != null ? articleDTO.author() : existingArticle.getAuthor())
-            .tags(articleDTO.tags() != null ? articleDTO.tags() : existingArticle.getTags())
-            .content(articleDTO.content() != null ? articleDTO.content() : existingArticle.getContent())
-            .thumbnailUrl(articleDTO.thumbnailUrl() != null ? articleDTO.thumbnailUrl() : existingArticle.getThumbnailUrl())
-            .likes(existingArticle.getLikes())
-            .build();
+                .id(existingArticle.getId())
+                .title(articleDTO.title() != null ? articleDTO.title() : existingArticle.getTitle())
+                .date(articleDTO.date() != null ? articleDTO.date() : existingArticle.getDate())
+                .author(articleDTO.author() != null ? articleDTO.author() : existingArticle.getAuthor())
+                .tags(articleDTO.tags() != null ? articleDTO.tags() : existingArticle.getTags())
+                .content(articleDTO.content() != null ? articleDTO.content() : existingArticle.getContent())
+                .thumbnailUrl(articleDTO.thumbnailUrl() != null ? articleDTO.thumbnailUrl() : existingArticle.getThumbnailUrl())
+                .likes(existingArticle.getLikes())
+                .build();
 
         articleRepository.save(existingArticle);
         return articleMapper.toDTO(existingArticle);
@@ -122,7 +123,7 @@ public class ArticleService {
     private Page<Article> applyFilters(String category, String title, String subtitle, Pageable pageable) {
         if (category != null && !category.isEmpty() && title != null && !title.isEmpty() && subtitle != null && !subtitle.isEmpty()) {
             return articleRepository.findByTagsContainingAndTitleContainingAndContentContaining(
-                category, title, subtitle, pageable
+                    category, title, subtitle, pageable
             );
         } else if ((category == null || category.isEmpty()) && (title == null || title.isEmpty()) && (subtitle == null || subtitle.isEmpty())) {
             return articleRepository.findAll(pageable);
@@ -138,7 +139,7 @@ public class ArticleService {
     @Transactional(readOnly = true)
     protected Article findArticle(Long id) {
         return articleRepository.findById(id)
-            .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
+                .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
     }
 }
 

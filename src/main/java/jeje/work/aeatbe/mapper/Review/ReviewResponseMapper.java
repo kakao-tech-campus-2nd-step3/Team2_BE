@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 public class ReviewResponseMapper {
     public ReviewResponseDTO toDTO(ReviewDTO reviewDTO, UserInfoResponseDTO userInfoResponseDTO) {
         return ReviewResponseDTO.builder()
-            .id(reviewDTO.id())
-            .rate(reviewDTO.rate())
-            .content(reviewDTO.content())
-            .user(userInfoResponseDTO)
-            .productId(reviewDTO.productId())
-            .productImgUrl(reviewDTO.productImgUrl())
-            .build();
+                .id(reviewDTO.id())
+                .rate(reviewDTO.rate())
+                .content(reviewDTO.content())
+                .user(userInfoResponseDTO)
+                .productId(reviewDTO.productId())
+                .productImgUrl(reviewDTO.productImgUrl())
+                .build();
     }
 }

@@ -10,10 +10,11 @@ import org.springframework.stereotype.Component;
  * 상품 알레르기 매퍼
  */
 @Component
-public class ProductFreeFromMapper{
+public class ProductFreeFromMapper {
 
     /**
      * Entity -> DTO
+     *
      * @param entity
      * @return DTO
      */
@@ -27,6 +28,7 @@ public class ProductFreeFromMapper{
 
     /**
      * DTO -> Entity
+     *
      * @param dto
      * @return Entity
      */
@@ -40,6 +42,7 @@ public class ProductFreeFromMapper{
 
     /**
      * DTO -> Entity
+     *
      * @param dto
      * @return Entity
      */
@@ -49,6 +52,7 @@ public class ProductFreeFromMapper{
 
     /**
      * DTO -> Entity
+     *
      * @param product
      * @return Entity
      */
