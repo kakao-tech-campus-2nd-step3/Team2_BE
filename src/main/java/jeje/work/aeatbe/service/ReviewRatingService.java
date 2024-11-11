@@ -27,11 +27,6 @@ public class ReviewRatingService {
     @Transactional(readOnly = true)
     protected List<Review> getReviewEntitiesByProduct(Long productId) {
         var ret = reviewRepository.findByProductId(productId);
-
-        if (ret.isEmpty()) {
-            throw new ReviewNotFoundException("해당 product_id로 조회된 리뷰가 없습니다.");
-        }
-
         return ret;
     }
 
