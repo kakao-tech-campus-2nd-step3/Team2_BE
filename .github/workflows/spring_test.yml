@@ -30,6 +30,9 @@ jobs:
           SERVICE_KEY = test_key
           REDIS_PORT = 1111
           REDIS_URL = jdbc:redis://aaa/superfoo:1111
+          REDIS_HOST = yeah
+          REDIS_ID = hello
+          REDIS_PASSWORD = redis
 
           EOF
 
