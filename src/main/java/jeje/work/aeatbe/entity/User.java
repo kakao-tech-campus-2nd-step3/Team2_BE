@@ -1,18 +1,22 @@
 package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 import lombok.*;
+import org.springframework.context.annotation.Profile;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User extends BaseEntity{
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(name = "kakao_id", nullable = false, unique = true)
@@ -73,7 +77,6 @@ public class User extends BaseEntity{
         this.allergies.add(userAllergy);
     }
 
-
     public void addFreeFrom(FreeFromCategory freeFromCategory) {
         UserFreeFrom userFreeFrom = UserFreeFrom.builder()
             .user(this)
@@ -82,5 +85,13 @@ public class User extends BaseEntity{
         this.freeFroms.add(userFreeFrom);
     }
 
-
+    /**
+     * 테스트용 메소드
+     * @param id id를 설정할 값
+     */
+    @Profile("test")
+    @Deprecated(forRemoval = true)
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

@@ -6,13 +6,13 @@ import jeje.work.aeatbe.dto.user.UserDTO;
 import lombok.Builder;
 
 @Builder
-public record ReviewDTO(Long id,
-                        int rate,
-                        String content,
-                        UserDTO user,
-                        Long productId,
+public record ReviewDTO(
+        Long id,
+        Long rate,
+        String content,
+        Long userId,
+        Long productId,
 
-                        @Nullable
-                        String productImgUrl) {
-
+        @Nullable
+        String productImgUrl) {
 }

@@ -33,7 +33,7 @@ public class ProductService {
     private final ProductResponseMapper productResponseMapper;
     private final ProductAllergyService productAllergyService;
     private final ProductFreeFromService productFreeFromService;
-    private final ReviewService reviewService;
+    private final ReviewRatingService reviewRatingService;
     private final AllergyCategoryService allergyCategoryService;
     private final FreeFromCategoryService freeFromCategoryService;
 
@@ -41,7 +41,7 @@ public class ProductService {
     public ProductResponseDTO getProductResponseDTO(ProductDTO productDTO) {
         return productResponseMapper.toEntity(
                 productDTO,
-                reviewService.getAverageRating(productDTO.id()),
+                reviewRatingService.getAverageRating(productDTO.id()),
                 productFreeFromService.getFreeFromTags(productDTO.id()),
                 productAllergyService.getAllergyTags(productDTO.id()),
                 true
@@ -260,7 +260,7 @@ public class ProductService {
         return products.stream()
             .map(product -> productResponseMapper.toEntity(
                 productMapper.toDTO(product),
-                reviewService.getAverageRating(product.getId()),
+                reviewRatingService.getAverageRating(product.getId()),
                 productFreeFromService.getFreeFromTags(product.getId()),
                 productAllergyService.getAllergyTags(product.getId()),
                 true
