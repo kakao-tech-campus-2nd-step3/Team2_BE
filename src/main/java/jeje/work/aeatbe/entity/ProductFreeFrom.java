@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Builder
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "products_free_from",
         uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "free_from_id"}))
 public class ProductFreeFrom extends BaseEntity{
@@ -16,11 +16,11 @@ public class ProductFreeFrom extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "free_from_id", nullable = false)
     private FreeFromCategory freeFromCategory;
 }

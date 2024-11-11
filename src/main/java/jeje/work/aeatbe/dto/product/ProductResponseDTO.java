@@ -12,6 +12,7 @@ public record ProductResponseDTO(
         String ProductUrl,
         String description,
         String[] freeFrom,
-        String[] allergy
+        String[] allergy,
+        String tag
 ) {
 }

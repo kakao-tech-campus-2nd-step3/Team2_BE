@@ -18,7 +18,6 @@ public class ProductMapper {
     public ProductDTO toDTO(Product product) {
         return ProductDTO.builder()
                 .id(product.getId())
-//                .allergens(product.getAllergens())
                 .nutritionalInfo(product.getNutritionalInfo())
                 .productImageUrl(product.getProductImageUrl())
                 .metaImageUrl(product.getMetaImageUrl())
@@ -29,6 +28,7 @@ public class ProductMapper {
                 .productName(product.getProductName())
                 .ingredients(product.getIngredients())
                 .price(product.getPrice())
+                .tag(product.getTag())
                 .build();
     }
 
@@ -40,7 +40,6 @@ public class ProductMapper {
     public Product toEntity(ProductDTO productDTO, boolean idRequired) {
         Product product = Product.builder()
                 .id(idRequired ? productDTO.id() : null)
-//                .allergens(productDTO.allergens())
                 .nutritionalInfo(productDTO.nutritionalInfo())
                 .productImageUrl(productDTO.productImageUrl())
                 .metaImageUrl(productDTO.metaImageUrl())
@@ -51,6 +50,7 @@ public class ProductMapper {
                 .productName(productDTO.productName())
                 .ingredients(productDTO.ingredients())
                 .price(productDTO.price())
+                .tag(productDTO.tag())
                 .build();
 
         return product;

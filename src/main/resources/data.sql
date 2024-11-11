@@ -18,6 +18,7 @@ VALUES ('알류'),
        ('돼지고기'),
        ('쇠고기'),
        ('아황산류'),
+       ('아몬드'),
        ('TEST');
 
 INSERT IGNORE INTO free_from_categories (free_from_type)

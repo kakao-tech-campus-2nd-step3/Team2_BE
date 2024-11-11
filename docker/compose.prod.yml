@@ -2,8 +2,6 @@
 
 # $docker compose -f compose.yml -f compose.prod.yml -p aeat_prod up --build
 
-version: '3.8'
-
 services:
   db:
     volumes:

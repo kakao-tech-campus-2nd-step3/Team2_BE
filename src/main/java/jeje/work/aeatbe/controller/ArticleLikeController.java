@@ -3,6 +3,7 @@ package jeje.work.aeatbe.controller;
 import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.dto.articleLike.ArticleLikeRequestDTO;
 import jeje.work.aeatbe.dto.articleLike.ArticleLikeResponseDTO;
+import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.entity.ArticleLike;
 import jeje.work.aeatbe.service.ArticleLikeService;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +26,14 @@ public class ArticleLikeController {
     /**
      * 좋아요를 가져온다
      * @param articleId
-     * @param loginUserId
+     * @param loginUserInfo
      * @return ArticleLikeResponseDTO
      */
     @GetMapping
-    public ResponseEntity<ArticleLikeResponseDTO> getArticleLikes(@RequestParam Long articleId, @LoginUser Long loginUserId) {
-        ArticleLike articlelike = articleLikeService.findArticleLikeByUserAndArticle(loginUserId, articleId);
+    public ResponseEntity<ArticleLikeResponseDTO> getArticleLikes(@RequestParam Long articleId, @LoginUser LoginUserInfo loginUserInfo) {
+        Long articleLikeId = articleLikeService.findArticleLikeByUserAndArticle(loginUserInfo.userId(), articleId);
         int like = articleLikeService.getArticleLikeCount(articleId);
-        return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articlelike.getId(),like));
+        return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articleLikeId,like));
     }
 
 
@@ -42,21 +43,21 @@ public class ArticleLikeController {
      * @return ArticleLikePostResponseDTO
      */
     @PostMapping
-    public ResponseEntity<ArticleLikeResponseDTO> addArticleLike(@RequestBody ArticleLikeRequestDTO articleLikeRequestDTO, @LoginUser Long loginUserId) {
-        ArticleLike articleLike = articleLikeService.likeArticle(loginUserId, articleLikeRequestDTO.articleId());
+    public ResponseEntity<ArticleLikeResponseDTO> addArticleLike(@RequestBody ArticleLikeRequestDTO articleLikeRequestDTO, @LoginUser LoginUserInfo loginUserInfo) {
+        Long articleLikeId = articleLikeService.likeArticle(loginUserInfo.userId(), articleLikeRequestDTO.articleId());
         int like = articleLikeService.getArticleLikeCount(articleLikeRequestDTO.articleId());
-        return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articleLike.getId(),like));
+        return ResponseEntity.ok().body(new ArticleLikeResponseDTO(articleLikeId,like));
     }
 
     /**
      * 좋아요 삭제
      * @param articleLikeId
-     * @param loginUserId
+     * @param loginUserInfo
      * @return HTTP.status.OK
      */
     @DeleteMapping("/{articleLikeId}")
-    public ResponseEntity<?> deleteArticleLike(@PathVariable Long articleLikeId, @LoginUser Long loginUserId) {
-        articleLikeService.deleteArticleLike(articleLikeId);
+    public ResponseEntity<?> deleteArticleLike(@PathVariable Long articleLikeId, @LoginUser LoginUserInfo loginUserInfo) {
+        articleLikeService.deleteArticleLike(loginUserInfo.userId());
         return ResponseEntity.ok().build();
     }
 

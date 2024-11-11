@@ -5,16 +5,23 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "article_likes")
+@Table(
+    name = "article_likes",
+    indexes = {
+        @Index(name = "idx_article_id",columnList ="article_id"),
+        @Index(name = "idx_user_id",columnList = "user_id")
+    })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -32,6 +39,7 @@ public class ArticleLike extends BaseEntity{
     @JoinColumn(name = "article_id", nullable = false)
     private Article article;
 
+    @Builder
     public ArticleLike(User user, Article article) {
         this.user = user;
         this.article = article;
