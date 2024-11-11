@@ -7,6 +7,7 @@ import jeje.work.aeatbe.mapper.Review.ReviewMapper;
 import jeje.work.aeatbe.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class ReviewRatingService {
      * @param productId 상품 id
      * @return 리뷰 엔티티 리스트
      */
+    @Transactional(readOnly = true)
     protected List<Review> getReviewEntitiesByProduct(Long productId) {
         var ret = reviewRepository.findByProductId(productId);
 

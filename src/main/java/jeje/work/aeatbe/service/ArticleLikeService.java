@@ -10,6 +10,7 @@ import jeje.work.aeatbe.repository.ArticleLikeRepository;
 import jeje.work.aeatbe.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,7 @@ public class ArticleLikeService {
      * @throws ColumnNotFoundException(확인 할 수 없는 칼럼)
      * @return articleLikeId
      */
+    @Transactional
     public Long likeArticle(Long userId, Long articleId) {
         User user = userService.findById(userId);
         Article article = articleRepository.findById(articleId)
@@ -45,6 +47,7 @@ public class ArticleLikeService {
      * 좋아요 삭제
      * @param likeId
      */
+    @Transactional
     public void deleteArticleLike(Long likeId) {
         ArticleLike articleLike = articleLikeRepository.findById(likeId)
             .orElseThrow(()->new ArticleLikeNotFoundException("확인할 수 없는 좋아요 입니다."));
@@ -57,6 +60,7 @@ public class ArticleLikeService {
      * @param articleId
      * @return articleLikeId
      */
+    @Transactional(readOnly = true)
     public Long findArticleLikeByUserAndArticle(Long userId, Long articleId) {
         ArticleLike articleLike = articleLikeRepository.findByUserIdAndArticleId(userId,articleId)
             .orElseThrow(()->new ArticleLikeNotFoundException("확인할 수 없는 좋아요입니다."));
@@ -68,6 +72,7 @@ public class ArticleLikeService {
      * @param articleId
      * @return 해당 컬럼의 좋아요수
      */
+    @Transactional(readOnly = true)
     public int getArticleLikeCount(Long articleId) {
         return articleLikeRepository.countByArticleId(articleId);
     }

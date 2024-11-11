@@ -14,6 +14,7 @@ import jeje.work.aeatbe.mapper.product.ProductMapper;
 import jeje.work.aeatbe.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ public class ReviewService {
      * @param id 리뷰 id
      * @return 리뷰 엔티티
      */
+    @Transactional(readOnly = true)
     protected Review getReviewEntity(Long id) {
         return reviewRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다."));
@@ -48,6 +50,7 @@ public class ReviewService {
      * @param productId 상품 id
      * @return 리뷰 엔티티 리스트
      */
+    @Transactional(readOnly = true)
     protected List<Review> getReviewEntitiesByProduct(Long productId) {
         var ret = reviewRepository.findByProductId(productId);
 
@@ -63,6 +66,7 @@ public class ReviewService {
      * @param userId 사용자 id
      * @return list 형식의 reviewDTO
      */
+    @Transactional(readOnly = true)
     protected List<Review> getReviewEntitiesByUser(Long userId) {
         userService.findById(userId);
         var ret = reviewRepository.findByUserId(userId);
@@ -123,6 +127,7 @@ public class ReviewService {
      * @param reviewRequestDTO 리뷰 DTO
      * @param userId   카카오 id
      */
+    @Transactional
     public void createReview(ReviewRequestDTO reviewRequestDTO, Long userId) {
 
         ReviewDTO reviewDTO = reviewRequestMapper.toDTO(reviewRequestDTO);
@@ -142,6 +147,7 @@ public class ReviewService {
      *
      * @todo user를 사용하여 리뷰 삭제 권한 확인....
      */
+    @Transactional
     public void updateReviews(Long id, ReviewRequestDTO reviewRequestDTO, Long userId) {
 
         ReviewDTO reviewDTO = reviewRequestMapper.toDTO(reviewRequestDTO);
@@ -166,6 +172,7 @@ public class ReviewService {
      *
      * @todo user를 사용하여 리뷰 삭제 권한 확인....
      */
+    @Transactional
     public void deleteReviews(Long id, Long userId) {
 
         userService.findById(userId);

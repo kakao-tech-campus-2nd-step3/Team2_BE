@@ -1,7 +1,6 @@
 package jeje.work.aeatbe.service;
 
 
-import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +26,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +45,7 @@ public class UserService {
      * @param kakaoId
      * @return Long 유저의 id
      */
+    @Transactional(readOnly = true)
     public Long getUserId(String kakaoId){
         Optional<User> user = userRepository.findByKakaoId(kakaoId);
         if(user.isPresent()){
@@ -58,6 +59,7 @@ public class UserService {
      * @param token
      * @return boolean 이미 존재하는 유저인지
      */
+    @Transactional(readOnly = true)
     public boolean validateToken(String token) {
         LoginUserInfo loginUserInfo= jwtUtil.getLoginUserInfo(token);
         return userRepository.findByKakaoId(loginUserInfo.kakaoId()).isPresent();
@@ -68,6 +70,7 @@ public class UserService {
      * @param userId
      * @return UserInfoResponseDto
      */
+    @Transactional(readOnly = true)
     public UserInfoResponseDTO getUserInfo(Long userId){
         User user = findById(userId);
         List<String> allergies = user.getAllergies().stream()
@@ -114,6 +117,7 @@ public class UserService {
      * @param refreshToken
      * @return boolean 올바른 리프레시 토큰인지
      */
+    @Transactional(readOnly = true)
     public boolean validateRefreshToken(String refreshToken){
         Long userId = jwtUtil.getUserIdForRefreshToken(refreshToken);
         User user = findById(userId);
@@ -125,6 +129,7 @@ public class UserService {
      * @param userId
      * @return user
      */
+    @Transactional(readOnly = true)
     public User findById(Long userId){
         return userRepository.findById(userId)
             .orElseThrow(()->new UserNotFoundException("잘못된 유저입니다."));
@@ -148,36 +153,6 @@ public class UserService {
             .accessToken(accessToken)
             .refreshToken(refreshToken)
             .build();
-    }
-
-
-    /**
-     * 토큰들을 쿠키에 담는다.
-     * @param tokenResponseDTO
-     * @return HttpHeaders
-     */
-    public HttpHeaders setCookie(TokenResponseDTO tokenResponseDTO){
-        ResponseCookie refreshCookie = ResponseCookie.from("Authorization-refreshToken", tokenResponseDTO.refreshToken())
-            .httpOnly(true)
-            .secure(true)
-            .path("/")
-            .maxAge(3600*24*14)
-            .domain(".jeje.work")
-            .sameSite("None")
-            .build();
-        ResponseCookie accessCookie = ResponseCookie.from("Authorization-accessToken", tokenResponseDTO.accessToken())
-            .httpOnly(true)
-            .secure(true)
-            .path("/")
-            .maxAge(3600)
-            .domain(".jeje.work")
-            .sameSite("None")
-            .build();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
-        headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
-        return headers;
-
     }
 
 

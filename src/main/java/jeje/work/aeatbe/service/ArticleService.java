@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +54,7 @@ public class ArticleService {
      * @param pageable 페이지네이션 정보
      * @return 필터링된 칼럼 목록과 페이지 정보가 포함된 DTO
      */
+    @Transactional(readOnly = true)
     public ArticleListResponseDTO getArticles(String category, String title, String subtitle, Pageable pageable) {
         Page<Article> articlePage = applyFilters(category, title, subtitle, pageable);
 
@@ -74,6 +76,7 @@ public class ArticleService {
      * @param id 반환할 칼럼의 ID
      * @return 요청된 칼럼의 세부 정보가 포함된 DTO
      */
+    @Transactional(readOnly = true)
     public ArticleResponseDTO getArticleById(Long id) {
         Article article = findArticle(id);
         return articleMapper.toResponseDTO(article);
@@ -86,6 +89,7 @@ public class ArticleService {
      * @param articleDTO 업데이트할 내용이 담긴 DTO
      * @return 업데이트된 칼럼의 DTO
      */
+    @Transactional
     public ArticleDTO updateArticle(Long id, ArticleDTO articleDTO) {
         Article existingArticle = findArticle(id);
 
@@ -109,6 +113,7 @@ public class ArticleService {
      *
      * @param id 삭제할 칼럼의 ID
      */
+    @Transactional
     public void deleteArticle(Long id) {
         Article article = findArticle(id);
         articleRepository.delete(article);
@@ -130,7 +135,8 @@ public class ArticleService {
         }
     }
 
-    private Article findArticle(Long id) {
+    @Transactional(readOnly = true)
+    protected Article findArticle(Long id) {
         return articleRepository.findById(id)
             .orElseThrow(() -> new ColumnNotFoundException("Article with id " + id + " not found"));
     }

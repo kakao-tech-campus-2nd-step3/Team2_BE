@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Haccp api 파싱 서비스
@@ -107,7 +108,8 @@ public class HaccpParsingService {
             .build();
     }
 
-    private void saveProductDTO(ProductDTO productDTO) {
+    @Transactional
+    protected void saveProductDTO(ProductDTO productDTO) {
         productRepository.save(productMapper.toEntity(productDTO, true));
     }
 

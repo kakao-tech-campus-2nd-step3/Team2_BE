@@ -33,6 +33,7 @@ public class WishListService {
      * @return 생성된 WishDTO 객체
      * @throws WishlistNotFoundException 사용자를 찾지 못하거나, 상품을 찾지 못할 경우 예외 발생
      */
+    @Transactional
     public WishDTO createWish(Long loginUserId, Long productId) {
         User user = findUser(loginUserId);
 
@@ -60,6 +61,7 @@ public class WishListService {
      * @return 사용자의 모든 위시리스트 항목을 포함한 List<WishDTO>
      * @throws WishlistNotFoundException 사용자 ID를 추출할 수 없거나, 위시리스트 항목을 찾지 못할 경우 예외 발생
      */
+    @Transactional(readOnly = true)
     public List<WishDTO> getWishlist(Long loginUserId) {
         User user = findUser(loginUserId);
         List<Wishlist> wishlistItems = wishlistRepository.findByUserId(user.getId());
@@ -104,6 +106,7 @@ public class WishListService {
      * @param wishId 삭제할 위시리스트 항목의 ID
      * @throws WishlistNotFoundException 위시리스트 항목을 찾지 못하거나 권한이 없을 경우 예외 발생
      */
+    @Transactional
     public void deleteWish(Long loginUserId, Long wishId) {
         User user = findUser(loginUserId);
         Wishlist wishlist = findWishlist(wishId, user.getId());

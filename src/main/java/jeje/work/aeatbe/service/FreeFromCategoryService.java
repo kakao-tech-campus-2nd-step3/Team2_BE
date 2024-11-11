@@ -7,6 +7,7 @@ import jeje.work.aeatbe.mapper.freeFromCategory.FreeFromCategoryMapper;
 import jeje.work.aeatbe.repository.FreeFromCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 상품 알레르기 서비스 레이어
@@ -24,6 +25,7 @@ public class FreeFromCategoryService {
      * @return 조회된 상품 알레르기 엔티티
      * @throws FreeFromCategoryNotFoundException 조회된 상품 알레르기 엔티티가 없을 경우 예외 발생
      */
+    @Transactional(readOnly = true)
     protected FreeFromCategory findById(Long id) {
         return freeFromCategoryRepository.findById(id).orElseThrow(
                 () -> new FreeFromCategoryNotFoundException("해당 id의 상품 알레르기가 존재하지 않습니다." + id)
@@ -36,6 +38,7 @@ public class FreeFromCategoryService {
      * @return 조회된 상품 알레르기 카테고리
      * @throws FreeFromCategoryNotFoundException 조회된 상품 알레르기 카테고리가 없을 경우 예외 발생
      */
+    @Transactional(readOnly = true)
     public FreeFromCategoryDTO getProductFreeFromByType(String s) {
         FreeFromCategory freeFromCategory = freeFromCategoryRepository.findByFreeFromType(s)
                 .orElseThrow(() -> new FreeFromCategoryNotFoundException("해당 알레르기 카테고리가 존재하지 않습니다."));

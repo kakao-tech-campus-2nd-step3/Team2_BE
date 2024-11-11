@@ -6,6 +6,7 @@ import jeje.work.aeatbe.repository.BlackListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +43,7 @@ public class TokenService {
      * @param accessToken
      * @return 유무
      */
+    @Transactional(readOnly = true)
     public boolean isInBlackList(String accessToken){
         Optional<BlackList> blackList = blackListRepository.findById(accessToken);
 
