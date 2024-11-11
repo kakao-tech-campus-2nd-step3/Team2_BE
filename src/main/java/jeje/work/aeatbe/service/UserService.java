@@ -12,6 +12,8 @@ import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.*;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -153,4 +155,37 @@ public class UserService {
     }
 
 
+
+    /**
+     * 토큰들을 쿠키에 담는다.
+     *
+     * @param tokenResponseDTO
+     * @return HttpHeaders
+     *
+     * @todo 적용 여부 고려중
+     */
+    @Deprecated(forRemoval = true)
+    public HttpHeaders setCookie(TokenResponseDTO tokenResponseDTO){
+        ResponseCookie refreshCookie = ResponseCookie.from("Authorization-refreshToken", tokenResponseDTO.refreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(3600*24*14)
+                .domain(".jeje.work")
+                .sameSite("None")
+                .build();
+        ResponseCookie accessCookie = ResponseCookie.from("Authorization-accessToken", tokenResponseDTO.accessToken())
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(3600)
+                .domain(".jeje.work")
+                .sameSite("None")
+                .build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
+        headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+        return headers;
+
+    }
 }

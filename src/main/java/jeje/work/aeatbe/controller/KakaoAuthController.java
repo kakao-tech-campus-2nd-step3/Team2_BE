@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.domian.KakaoProperties;
 import jeje.work.aeatbe.domian.KakaoTokenResponsed;
-import jeje.work.aeatbe.dto.Kakao.LogoutResponseDto;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.dto.user.TokenResponseDTO;
 import jeje.work.aeatbe.service.KakaoService;
@@ -12,7 +11,6 @@ import jeje.work.aeatbe.service.TokenService;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +51,7 @@ public class KakaoAuthController {
     public ResponseEntity<TokenResponseDTO> getAccessToken(@RequestParam String code) {
         KakaoTokenResponsed token = kakaoService.getKakaoTokenResponse(code);
         TokenResponseDTO tokenResponseDto = kakaoService.login(token.accessToken(), token.refreshToken());
-        HttpHeaders httpHeaders = userService.setCookie(tokenResponseDto);
+//        HttpHeaders httpHeaders = userService.setCookie(tokenResponseDto);
         return ResponseEntity.ok().body(tokenResponseDto);
     }
 
@@ -69,7 +67,7 @@ public class KakaoAuthController {
         String url = kakaoProperties.logoutUrl() +
                 "?client_id=" + kakaoProperties.clientId() + "&logout_redirect_uri=" + kakaoProperties.logoutRedirectUrl();
         tokenService.addBlackList(tokenService.removePrefix(token), loginUserInfo.userId().toString());
-        LogoutResponseDto logoutResponseDto = kakaoService.logout(loginUserInfo.userId());
+//        LogoutResponseDto logoutResponseDto = kakaoService.logout(loginUserInfo.userId());
         response.sendRedirect(url);
     }
 
@@ -82,5 +80,4 @@ public class KakaoAuthController {
     public ResponseEntity<?> logoutWithKakao() {
         return ResponseEntity.ok().build();
     }
-
 }
