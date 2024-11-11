@@ -27,7 +27,8 @@ public class WebConfig implements WebMvcConfigurer {
             .addPathPatterns("/api/article/likes/**")
                 .addPathPatterns("/api/users/logout/**")
                 . addPathPatterns("/api/wishlist/**")
-                .addPathPatterns("/api/reviews/my/**");
+                .addPathPatterns("/api/reviews/my/**")
+                .addPathPatterns("/api/users/info/**");
     }
 
     @Override
@@ -38,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOriginPatterns("https://aeat.jeje.work", "http://localhost")
+            .allowedOriginPatterns("https://aeat.jeje.work", "http://localhost","*")
             .allowedMethods("*")
             .allowedHeaders("*")
             .allowCredentials(true)

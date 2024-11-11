@@ -9,6 +9,7 @@ import jeje.work.aeatbe.dto.Kakao.LogoutResponseDto;
 import jeje.work.aeatbe.dto.user.TokenResponseDTO;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.service.KakaoService;
+import jeje.work.aeatbe.service.TokenService;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +31,7 @@ public class KakaoAuthController {
     private final JwtUtil jwtUtil;
     private final KakaoProperties kakaoProperties;
     private final KakaoService kakaoService;
+    private final TokenService tokenService;
 
     /**
      * 카카오 로그인페이지로 리다이렉션
@@ -49,11 +52,11 @@ public class KakaoAuthController {
      * @return httpHeader(Cookie)
      */
     @GetMapping("/callback")
-    public ResponseEntity<?> getAccessToken(@RequestParam String code) {
+    public ResponseEntity<TokenResponseDTO> getAccessToken(@RequestParam String code) {
         KakaoTokenResponsed token = kakaoService.getKakaoTokenResponse(code);
         TokenResponseDTO tokenResponseDto = kakaoService.login(token.accessToken(), token.refreshToken());
         HttpHeaders httpHeaders = userService.setCookie(tokenResponseDto);
-        return ResponseEntity.ok().headers(httpHeaders).build();
+        return ResponseEntity.ok().body(tokenResponseDto);
     }
 
     /**
@@ -63,9 +66,10 @@ public class KakaoAuthController {
      * @throws IOException
      */
     @PostMapping("/logout")
-    public void logout(HttpServletResponse response, @LoginUser LoginUserInfo loginUserInfo) throws IOException{
+    public void logout(HttpServletResponse response, @RequestHeader("Authorization") String token, @LoginUser LoginUserInfo loginUserInfo) throws IOException{
         String url = kakaoProperties.logoutUrl() +
                 "?client_id=" + kakaoProperties.clientId() + "&logout_redirect_uri=" + kakaoProperties.logoutRedirectUrl();
+        tokenService.addBlackList(tokenService.removePrefix(token), loginUserInfo.userId().toString());
         LogoutResponseDto logoutResponseDto = kakaoService.logout(loginUserInfo.userId());
         response.sendRedirect(url);
     }
