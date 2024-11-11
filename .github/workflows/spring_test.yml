@@ -28,6 +28,9 @@ jobs:
           DB_CONTAINER_NAME=super_poo_container
           JWT_SECRET_KEY=top_secret_key_for_ci
           SERVICE_KEY = test_key
+          REDIS_PORT = 1111
+          REDIS_URL = jdbc:redis://aaa/superfoo:1111
+
           EOF
 
       - name: Set up JDK 21
