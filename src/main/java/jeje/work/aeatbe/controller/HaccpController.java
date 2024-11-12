@@ -30,7 +30,7 @@
 ////        String apiUrl = haccpService.getProductApiUrl(); // 생성된 URL 가져오기
 ////        System.out.println("Redirecting to: " + apiUrl); // 리다이렉트할 URL 로그 출력
 //
-//        haccpService.getProductApi();
+//        haccpService.getAllProducts();
 ////        return new RedirectView(apiUrl); // 해당 URL로 리다이렉트
 //    }
 //}
