@@ -1,10 +1,10 @@
 package jeje.work.aeatbe.dto.wishlist;
 
-import lombok.*;
+import lombok.Builder;
 
 @Builder
 public record WishDTO(
-    Long id,
-    WishProductDTO product
+        Long id,
+        WishProductDTO product
 ) {
 }

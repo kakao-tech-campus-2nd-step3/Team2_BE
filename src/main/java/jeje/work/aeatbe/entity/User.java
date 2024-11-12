@@ -22,10 +22,10 @@ public class User extends BaseEntity {
     @Column(name = "kakao_id", nullable = false, unique = true)
     private String kakaoId;
 
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserAllergy> allergies;
 
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserFreeFrom> freeFroms;
 
     @Column(name = "user_name", length = 15)
@@ -46,7 +46,7 @@ public class User extends BaseEntity {
 
     @Builder
     public User(String kakaoId, String userName, String userImgUrl,
-        String kakaoAccessToken, String kakaoRefreshToken, String jwtRefreshToken) {
+                String kakaoAccessToken, String kakaoRefreshToken, String jwtRefreshToken) {
         this.kakaoId = kakaoId;
         this.userName = userName;
         this.userImgUrl = userImgUrl;
@@ -64,29 +64,30 @@ public class User extends BaseEntity {
         this.jwtRefreshToken = jwtRefreshToken;
     }
 
-    public void updateInfo(String userName, String userImgUrl){
+    public void updateInfo(String userName, String userImgUrl) {
         this.userName = userName;
         this.userImgUrl = userImgUrl;
     }
 
     public void addAllergy(AllergyCategory allergyCategory) {
         UserAllergy userAllergy = UserAllergy.builder()
-            .user(this)
-            .allergy(allergyCategory)
-            .build();
+                .user(this)
+                .allergy(allergyCategory)
+                .build();
         this.allergies.add(userAllergy);
     }
 
     public void addFreeFrom(FreeFromCategory freeFromCategory) {
         UserFreeFrom userFreeFrom = UserFreeFrom.builder()
-            .user(this)
-            .freeFromCategory(freeFromCategory)
-            .build();
+                .user(this)
+                .freeFromCategory(freeFromCategory)
+                .build();
         this.freeFroms.add(userFreeFrom);
     }
 
     /**
      * 테스트용 메소드
+     *
      * @param id id를 설정할 값
      */
     @Profile("test")

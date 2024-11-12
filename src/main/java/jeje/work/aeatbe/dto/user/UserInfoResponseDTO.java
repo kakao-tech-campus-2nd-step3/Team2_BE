@@ -1,8 +1,8 @@
 package jeje.work.aeatbe.dto.user;
 
-import java.util.List;
-import jeje.work.aeatbe.entity.UserAllergy;
 import lombok.Builder;
+
+import java.util.List;
 
 @Builder
 public record UserInfoResponseDTO(

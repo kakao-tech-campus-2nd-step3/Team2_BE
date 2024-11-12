@@ -12,6 +12,7 @@ public class ProductMapper {
 
     /**
      * Entity -> DTO
+     *
      * @param product
      * @return DTO
      */
@@ -34,6 +35,7 @@ public class ProductMapper {
 
     /**
      * DTO -> Entity
+     *
      * @param productDTO
      * @return Entity
      */
@@ -58,6 +60,7 @@ public class ProductMapper {
 
     /**
      * DTO -> Entity
+     *
      * @param productDTO
      * @return Entity
      */

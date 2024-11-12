@@ -10,10 +10,11 @@ import org.springframework.stereotype.Component;
  * 상품 알레르기 매퍼
  */
 @Component
-public class ProductAllergyMapper{
+public class ProductAllergyMapper {
 
     /**
      * Entity -> DTO
+     *
      * @param productAllergy
      * @return DTO
      */
@@ -27,6 +28,7 @@ public class ProductAllergyMapper{
 
     /**
      * DTO -> Entity
+     *
      * @param productAllergyDTO
      * @return Entity
      */
@@ -42,6 +44,7 @@ public class ProductAllergyMapper{
 
     /**
      * DTO -> Entity
+     *
      * @param productAllergyDTO
      * @return Entity
      */
@@ -51,10 +54,11 @@ public class ProductAllergyMapper{
 
     /**
      * DTO -> Entity
+     *
      * @param product
      * @return Entity
      */
     public ProductAllergy toEntity(Product product, AllergyCategory allergyCategory) {
-        return toEntity(null , product, allergyCategory, false);
+        return toEntity(null, product, allergyCategory, false);
     }
 }

@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * 상품 알레르기 서비스 레이어
+ *
  * @see ProductAllergyService
  */
 @Service
@@ -65,6 +66,7 @@ public class ProductFreeFromService {
 
     /**
      * 상품 ID로 상품 알레르기 태그 리스트를 조회하는 메서드
+     *
      * @param productId
      * @return
      */
@@ -78,6 +80,7 @@ public class ProductFreeFromService {
 
     /**
      * 상품에 프리프롬 정보를 추가하는 메서드
+     *
      * @param product
      * @param freeFrom
      */
@@ -89,6 +92,7 @@ public class ProductFreeFromService {
 
     /**
      * 상품 프리프롬 정보를 삭제하는 메서드
+     *
      * @param id
      */
     @Transactional

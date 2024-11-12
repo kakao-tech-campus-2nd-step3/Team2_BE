@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface AllergyCategoryRepository extends JpaRepository<AllergyCategory, Long> {
-   Optional<AllergyCategory> findByAllergyType(String allergyType);
+    Optional<AllergyCategory> findByAllergyType(String allergyType);
 }
