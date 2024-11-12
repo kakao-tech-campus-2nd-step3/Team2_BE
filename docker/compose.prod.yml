@@ -2,18 +2,7 @@
 
 # $docker compose -f compose.yml -f compose.prod.yml -p aeat_prod up --build
 
-version: '3.8'
-
 services:
-  db:
-    volumes:
-      - aeatbe-data-prod:/var/lib/mysql  # 볼륨 연결
-    ports: []
-    deploy:
-      resources:
-        limits:
-          memory: ${DB_CONTAINER_MAX_MEM}
- 
   app:
     build:
       context: ..
@@ -24,9 +13,6 @@ services:
       resources:
         limits:
           memory: ${SPRING_CONTAINER_MAX_MEM}
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: production
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
@@ -38,7 +24,3 @@ services:
       JAVA_MAX_METASPACE: ${JAVA_MAX_METASPACE}
     ports:
       - ${SPRING_HOST_PORT}:${SPRING_CONTAINER_PORT}
-
-volumes:
-  aeatbe-data-prod:
-    driver: local

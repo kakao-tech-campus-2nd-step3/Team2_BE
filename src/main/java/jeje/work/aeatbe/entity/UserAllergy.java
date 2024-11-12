@@ -7,9 +7,9 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "users_allergies")
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Getter
-public class UserAllergy extends BaseEntity{
+public class UserAllergy extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,9 +22,14 @@ public class UserAllergy extends BaseEntity{
     @JoinColumn(name = "allergy_id", nullable = false)
     private AllergyCategory allergy;
 
-    public void addUserAllergy(User user, AllergyCategory allergy) {
+    @Builder
+    public UserAllergy(User user, AllergyCategory allergy) {
         this.user = user;
         this.allergy = allergy;
-        user.getAllergies().add(this);
     }
+
+    public void addUser(User user) {
+        this.user = user;
+    }
+
 }

@@ -8,19 +8,19 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Builder
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Table(name = "products_allergies",
         uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "allergy_id"}))
-public class ProductAllergy extends BaseEntity{
+public class ProductAllergy extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "allergy_id", nullable = false)
     private AllergyCategory allergy;
 }

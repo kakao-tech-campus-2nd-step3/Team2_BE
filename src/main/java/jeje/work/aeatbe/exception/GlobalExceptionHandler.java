@@ -8,18 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity userNotFoundException(UserNotFoundException e){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
-
-    @ExceptionHandler(ColumnNotFoundException.class)
-    public ResponseEntity columnNotFoundException(ColumnNotFoundException e){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
-
-    @ExceptionHandler(ArticleLikeNotFoundException.class)
-    public ResponseEntity articleLikeNotFoundException(ArticleLikeNotFoundException e){
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity NotFoundException(NotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
@@ -29,12 +19,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity illegalStateException(IllegalStateException e) {
+    public ResponseEntity<String> illegalStateException(IllegalStateException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
     @ExceptionHandler(WishlistNotFoundException.class)
-    public ResponseEntity wishlistNotFoundException(WishlistNotFoundException e) {
+    public ResponseEntity<String> wishlistNotFoundException(WishlistNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(TokenExpException.class)
+    public ResponseEntity<String> tokenExpException(TokenExpException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 

@@ -28,6 +28,6 @@ COPY --from=build /app/build/libs/*.jar app.jar
 USER appuser
 
 HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://localhost:8080 || exit 1
+  CMD nc -z localhost 8080 || exit 1
 
 ENTRYPOINT sh -c "java -Xms${JAVA_MIN_MEM} -Xmx${JAVA_MAX_MEM} -XX:MaxMetaspaceSize=${JAVA_MAX_METASPACE} -jar app.jar"

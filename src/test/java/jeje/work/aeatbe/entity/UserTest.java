@@ -40,8 +40,9 @@
 //            .build();
 //
 //
+//
+//
 //        assertThat(newUser.getKakaoId()).isEqualTo("12345");
-//        assertThat(newUser.getAllergies()).isEqualTo("Peanut, Dairy");
 //        assertThat(newUser.getUserName()).isEqualTo("TestUser");
 //        assertThat(newUser.getUserImgUrl()).isEqualTo("http://example.com/user.jpg");
 //        assertThat(newUser.getAccessToken()).isEqualTo("initialAccessToken");

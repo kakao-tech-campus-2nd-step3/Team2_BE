@@ -24,6 +24,9 @@ repositories {
 }
 
 dependencies {
+	implementation ("com.googlecode.json-simple:json-simple:1.1")
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation ("io.netty:netty-resolver-dns-native-macos:4.1.70.Final:osx-aarch_64")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	compileOnly("org.projectlombok:lombok")
@@ -34,9 +37,15 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	//jwt
 	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+
+
+	//redis
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 }
 
 tasks.withType<Test> {

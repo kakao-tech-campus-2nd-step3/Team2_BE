@@ -11,6 +11,7 @@ import jeje.work.aeatbe.mapper.product.ProductAllergyMapper;
 import jeje.work.aeatbe.repository.ProductAllergyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class ProductAllergyService {
      * @return 조회된 상품 알레르기 정보
      * @throws ProductAllergyNotFoundException 조회된 상품 알레르기 정보가 없을 경우 예외 발생
      */
+    @Transactional(readOnly = true)
     protected ProductAllergy findById(Long id) {
         return productAllergyRepository.findById(id).orElseThrow(
                 () -> new ProductAllergyNotFoundException("해당 id의 상품 알레르기가 존재하지 않습니다." + id)
@@ -45,6 +47,7 @@ public class ProductAllergyService {
      * @param productId 조회할 상품 ID
      * @return 조회된 상품 알레르기 정보 리스트
      */
+    @Transactional(readOnly = true)
     public List<ProductAllergy> getAllergyListByProductId(Long productId) {
         return productAllergyRepository.findByProductId(productId);
     }
@@ -55,6 +58,7 @@ public class ProductAllergyService {
      * @param productId 조회할 상품 ID
      * @return 조회된 상품 알레르기 정보 DTO 리스트
      */
+    @Transactional(readOnly = true)
     public List<ProductAllergyDTO> getAllergyDTOList(Long productId) {
         return getAllergyListByProductId(productId).stream()
                 .map(productAllergyMapper::toDTO)
@@ -67,6 +71,7 @@ public class ProductAllergyService {
      * @param productId 조회할 상품 ID
      * @return 조회된 상품 알레르기 태그 리스트
      */
+    @Transactional(readOnly = true)
     public List<String> getAllergyTags(Long productId) {
         return getAllergyListByProductId(productId).stream()
                 .map(ProductAllergy::getAllergy)
@@ -80,6 +85,7 @@ public class ProductAllergyService {
      * @param product
      * @param allergyCategory
      */
+    @Transactional
     public void createProductAllergy(Product product, AllergyCategoryDTO allergyCategory) {
         productAllergyRepository.save(productAllergyMapper.toEntity(product, allergyCategoryMapper.toEntity(allergyCategory)));
     }
@@ -89,6 +95,7 @@ public class ProductAllergyService {
      *
      * @param id 삭제할 상품 알레르기 정보의 ID
      */
+    @Transactional
     public void deleteProductAllergy(Long id) {
         findById(id);
         productAllergyRepository.deleteById(id);
