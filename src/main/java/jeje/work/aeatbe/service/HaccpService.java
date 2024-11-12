@@ -9,11 +9,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ * The type Haccp service.
+ */
 @Service
 public class HaccpService {
     private final String serviceKey;
     private final String baseUrl;
     private final HaccpParsingService haccpParsingService;
+
 
     public HaccpService(@Value("${haccp.service_key}") String serviceKey,
         @Value("${haccp.base_url}") String baseUrl,
@@ -23,6 +27,9 @@ public class HaccpService {
         this.haccpParsingService = haccpParsingService;
     }
 
+    /**
+     * haccp api내 상품 호출
+     */
     public void getAllProducts() {
 //        int totalDataCount = 14881;
         int totalDataCount = 4000;
