@@ -49,10 +49,10 @@ spring:
 
 kakao:
   client_id: ${KAKAO_CLIENT_ID}
-  redirect_url: http://localhost:8080/api/users/callback
+  redirect_url: https://${FRONTEND_DOMAIN}/login/redirect
   auth_url: https://kauth.kakao.com/oauth/authorize
   logout_url: https://kauth.kakao.com/oauth/logout
-  logout_redirect_url: http://localhost:8080/api/users/logoutWithKakao/callback
+  logout_redirect_url: https://${FRONTEND_DOMAIN}/logout/redirect
 
 haccp:
   service_key: ${SERVICE_KEY}
