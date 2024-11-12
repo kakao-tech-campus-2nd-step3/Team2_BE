@@ -88,7 +88,6 @@ public class HaccpParsingService {
             throw new RuntimeException("JSON 파싱 중 에러 발생", e);
         }
 
-//        System.out.println("파싱된 상품 수: " + productDTOList.size());
         return productDTOList;
     }
 
@@ -114,8 +113,6 @@ public class HaccpParsingService {
                 if (allergyType.equals("없음")) continue;
 
                 AllergyCategoryDTO allergyCategoryDTO = allergyCategoryService.getProductAllergyByType(allergyType);
-
-//                System.out.println("이 부분이 null인가요?" + allergyCategoryDTO);
 
                 ProductAllergyDTO allergyDTO = ProductAllergyDTO.builder()
                     .allergyId(allergyCategoryDTO.id())
@@ -162,7 +159,7 @@ public class HaccpParsingService {
     /**
      * 파싱된 정보로 ProductDTO를 생성
      *
-     * @param item      JSON 아이템 객체
+     * @param item      상품 정보가 담긴 객체
      * @param allergies ProductAllergyDTO 리스트
      * @return ProductDTO
      */
