@@ -35,13 +35,13 @@ public class Product extends BaseEntity{
     @Column(name = "type_name", length = 200)
     private String typeName;
 
-    @Column(length = 50)
+    @Column(length = 200)
     private String manufacturer;
 
     @Column(length = 50)
     private String seller;
 
-    @Column(length = 20)
+    @Column(length = 100)
     private String capacity;
 
     @Column(name = "product_name", nullable = false, length = 50)
