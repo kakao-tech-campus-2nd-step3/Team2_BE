@@ -248,7 +248,7 @@ public class ProductService {
             return productRepository.findByProductNameContaining(q, pageable);
         }
         if (allergies != null && !allergies.isEmpty()) {
-            return productRepository.findByAllergy(allergies, pageable);
+            return productRepository.findByAllergyNotIn(allergies, pageable);
         }
         if (freeFroms != null && !freeFroms.isEmpty()) {
             return productRepository.findByFreeFrom(freeFroms, pageable);
