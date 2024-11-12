@@ -5,8 +5,8 @@ import lombok.Builder;
 
 @Builder
 public record UserAllergyDTO(
-    Long id,
-    Long UserId,
-    Long allergyId
+        Long id,
+        Long UserId,
+        Long allergyId
 ) {
 }

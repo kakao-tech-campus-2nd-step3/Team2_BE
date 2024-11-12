@@ -12,6 +12,7 @@ public class FreeFromCategoryMapper {
 
     /**
      * Entity -> DTO
+     *
      * @param freeFromCategory
      * @return DTO
      */
@@ -24,6 +25,7 @@ public class FreeFromCategoryMapper {
 
     /**
      * DTO -> Entity
+     *
      * @param freeFromCategoryDTO
      * @return Entity
      */
@@ -38,10 +40,11 @@ public class FreeFromCategoryMapper {
 
     /**
      * DTO -> Entity
+     *
      * @param freeFromCategoryDTO
      * @return Entity
      */
-    public FreeFromCategory toEntity(FreeFromCategoryDTO freeFromCategoryDTO){
+    public FreeFromCategory toEntity(FreeFromCategoryDTO freeFromCategoryDTO) {
         return toEntity(freeFromCategoryDTO, false);
     }
 }

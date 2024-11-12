@@ -7,6 +7,7 @@ import jeje.work.aeatbe.mapper.Review.ReviewMapper;
 import jeje.work.aeatbe.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,21 +20,19 @@ public class ReviewRatingService {
 
     /**
      * 상품에 대한 리뷰 조회
+     *
      * @param productId 상품 id
      * @return 리뷰 엔티티 리스트
      */
+    @Transactional(readOnly = true)
     protected List<Review> getReviewEntitiesByProduct(Long productId) {
         var ret = reviewRepository.findByProductId(productId);
-
-        if (ret.isEmpty()) {
-            throw new ReviewNotFoundException("해당 product_id로 조회된 리뷰가 없습니다.");
-        }
-
         return ret;
     }
 
     /**
      * 해당 상품의 리뷰 평균 평점 조회
+     *
      * @param productId 상품 id
      * @return 리뷰 평균 평점
      */

@@ -1,7 +1,10 @@
+# docker-compose.override.yml
 services:
   db:
+    volumes:
+      - aeatbe-data:/var/lib/mysql
     env_file:
-     - .env
+      - .env
     image: mysql:latest
     container_name: ${DB_CONTAINER_NAME}
     environment:
@@ -17,10 +20,8 @@ services:
       start_period: 30s
     ports:
       - ${DB_HOST_PORT}:${DB_CONTAINER_PORT}
-    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--lower_case_table_names=1']
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--lower_case_table_names=1' ]
 
-#  app:
-#    depends_on:
-#      - db
-#    env_file:
-#      - .env
+volumes:
+  aeatbe-data:
+    driver: local
