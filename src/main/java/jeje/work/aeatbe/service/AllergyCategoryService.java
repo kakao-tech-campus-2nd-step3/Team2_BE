@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 알러지 카테고리 서비스 레이어
@@ -41,6 +42,7 @@ public class AllergyCategoryService {
      * @return 조회된 알러지 카테고리
      * @throws AllergyCategoryNotFoundException 조회된 알러지 카테고리가 없을 경우 예외 발생
      */
+    @Transactional
     public AllergyCategoryDTO getProductAllergyByType(String allergyType) {
         AllergyCategory allergyCategory = allergyCategoryRepository.findByAllergyType(allergyType)
                 .orElseThrow(() -> new AllergyCategoryNotFoundException("해당 알러지 카테고리가 존재하지 않습니다."));
