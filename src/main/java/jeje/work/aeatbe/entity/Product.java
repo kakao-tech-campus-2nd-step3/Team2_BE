@@ -1,9 +1,9 @@
 package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,12 +12,12 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(
-    name = "products",
-    indexes = {
-        @Index(name = "idx_product_name",columnList ="product_name"),
-        @Index(name = "idx_price", columnList = "price")
-    })
-public class Product extends BaseEntity{
+        name = "products",
+        indexes = {
+                @Index(name = "idx_product_name", columnList = "product_name"),
+                @Index(name = "idx_price", columnList = "price")
+        })
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

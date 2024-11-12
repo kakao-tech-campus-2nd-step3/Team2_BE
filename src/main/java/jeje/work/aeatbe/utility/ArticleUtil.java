@@ -1,9 +1,10 @@
 package jeje.work.aeatbe.utility;
 
+import jeje.work.aeatbe.dto.article.ContentDTO;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import jeje.work.aeatbe.dto.article.ContentDTO;
 
 public class ArticleUtil {
     public static String extractSubtitle(String content) {

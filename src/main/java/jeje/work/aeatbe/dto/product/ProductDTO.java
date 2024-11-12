@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.List;
 import lombok.Builder;
+
+import java.util.List;
 
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)

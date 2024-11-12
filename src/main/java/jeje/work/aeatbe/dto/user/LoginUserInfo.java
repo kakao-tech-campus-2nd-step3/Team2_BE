@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record LoginUserInfo(
-    Long userId,
-    String kakaoId
+        Long userId,
+        String kakaoId
 ) {
 }

@@ -9,12 +9,12 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(
-    name = "reviews",
-    indexes = {
-        @Index(name = "idx_user_id",columnList ="user_id"),
-        @Index(name = "idx_product_id", columnList = "product_id")
-    })
-public class Review extends BaseEntity{
+        name = "reviews",
+        indexes = {
+                @Index(name = "idx_user_id", columnList = "user_id"),
+                @Index(name = "idx_product_id", columnList = "product_id")
+        })
+public class Review extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

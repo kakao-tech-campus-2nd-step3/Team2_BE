@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 public class ReviewRequestMapper {
     public ReviewDTO toDTO(ReviewRequestDTO reviewRequestDTO) {
         return ReviewDTO.builder()
-            .rate(reviewRequestDTO.rate())
-            .content(reviewRequestDTO.content())
-            .productId(reviewRequestDTO.productId())
-            .build();
+                .rate(reviewRequestDTO.rate())
+                .content(reviewRequestDTO.content())
+                .productId(reviewRequestDTO.productId())
+                .build();
     }
 }

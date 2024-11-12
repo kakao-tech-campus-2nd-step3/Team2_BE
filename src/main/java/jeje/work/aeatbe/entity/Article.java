@@ -2,6 +2,7 @@ package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.sql.Timestamp;
 
 @Entity
@@ -11,11 +12,11 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Builder
 @Table(
-    name = "articles",
-    indexes = {
-        @Index(name = "idx_title",columnList ="title"),
-    })
-public class Article extends BaseEntity{
+        name = "articles",
+        indexes = {
+                @Index(name = "idx_title", columnList = "title"),
+        })
+public class Article extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,24 +46,23 @@ public class Article extends BaseEntity{
     private int likes;
 
 
-    public void upLike(){
-        this.likes ++;
-    }
-
-
-    public void downLike(){
-        this.likes --;
-    }
-
     @Builder
     public Article(String title, String author, String tags,
-        String content, String thumbnailUrl, int likes) {
+                   String content, String thumbnailUrl, int likes) {
         this.title = title;
         this.author = author;
         this.tags = tags;
         this.content = content;
         this.thumbnailUrl = thumbnailUrl;
         this.likes = likes;
+    }
+
+    public void upLike() {
+        this.likes++;
+    }
+
+    public void downLike() {
+        this.likes--;
     }
 
 }
