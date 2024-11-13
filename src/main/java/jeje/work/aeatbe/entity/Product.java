@@ -16,7 +16,12 @@ import java.util.List;
         indexes = {
                 @Index(name = "idx_product_name", columnList = "product_name"),
                 @Index(name = "idx_price", columnList = "price")
-        })
+        },
+    uniqueConstraints = {
+    @UniqueConstraint(name = "unique_product_name_manufacturer", columnNames = {"product_name", "manufacturer"})
+}
+
+)
 public class Product extends BaseEntity {
 
     @Id
@@ -38,8 +43,11 @@ public class Product extends BaseEntity {
     @Column(length = 200)
     private String manufacturer;
 
-    @Column(length = 50)
+    @Column(columnDefinition = "TEXT")
     private String seller;
+
+    @Column(length = 20)
+    private String mallName;
 
     @Column(length = 100)
     private String capacity;
@@ -73,4 +81,28 @@ public class Product extends BaseEntity {
     private void prePersist() {
         this.price = 99990000L;
     }
+
+    // 쇼핑 api를 호출하여 아래 네개의 필드만을 업데이트하는 메서드
+//
+//    @Profile("test")
+//    @Deprecated(forRemoval = true)
+    public void updateField(String mallName, Long price, String seller, String productImageUrl) {
+        this.mallName = mallName;
+        this.price = price;
+        this.seller = seller;
+        this.productImageUrl = productImageUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+            "id=" + id +
+            ", productImageUrl='" + productImageUrl + '\'' +
+            ", seller='" + seller + '\'' +
+            ", productName='" + productName + '\'' +
+            ", price=" + price +
+            ", mallName='" + mallName + '\'' +
+            '}';
+    }
+
 }
