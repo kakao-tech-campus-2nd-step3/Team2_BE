@@ -8,6 +8,7 @@ import jeje.work.aeatbe.dto.user.UserInfoUpdateReqeustDTO;
 import jeje.work.aeatbe.entity.AllergyCategory;
 import jeje.work.aeatbe.entity.FreeFromCategory;
 import jeje.work.aeatbe.entity.User;
+import jeje.work.aeatbe.exception.TokenException;
 import jeje.work.aeatbe.exception.UserNotFoundException;
 import jeje.work.aeatbe.repository.*;
 import jeje.work.aeatbe.utility.JwtUtil;
@@ -55,7 +56,7 @@ public class UserService {
      * @return boolean 이미 존재하는 유저인지
      */
     @Transactional(readOnly = true)
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) throws TokenException {
         LoginUserInfo loginUserInfo = jwtUtil.getLoginUserInfo(token);
         return userRepository.findByKakaoId(loginUserInfo.kakaoId()).isPresent();
     }
@@ -115,7 +116,7 @@ public class UserService {
      * @return boolean 올바른 리프레시 토큰인지
      */
     @Transactional(readOnly = true)
-    public boolean validateRefreshToken(String refreshToken) {
+    public boolean validateRefreshToken(String refreshToken) throws TokenException {
         Long userId = jwtUtil.getUserIdForRefreshToken(refreshToken);
         User user = findById(userId);
         return refreshToken.equals(user.getJwtRefreshToken());
@@ -140,7 +141,7 @@ public class UserService {
      * @return TokenResponseDTO
      */
     @Transactional
-    public TokenResponseDTO reissueAccessToken(String refreshToken) {
+    public TokenResponseDTO reissueAccessToken(String refreshToken) throws TokenException {
         Long userId = jwtUtil.getUserIdForRefreshToken(refreshToken);
         User user = findById(userId);
         String accessToken = jwtUtil.createToken(user);
