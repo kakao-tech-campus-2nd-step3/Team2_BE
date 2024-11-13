@@ -31,14 +31,14 @@ public class HaccpService {
      * haccp api내 상품 호출
      */
     public void getAllProducts() {
-//        int totalDataCount = 14881;
-        int totalDataCount = 4000;
+        int totalDataCount = 14881;
+//        int totalDataCount = 4000;
         int numOfRows = 100;
 
         int totalPages = (int) Math.ceil((double) totalDataCount / numOfRows);
 
         for (int pageNo = 1; pageNo <= totalPages; pageNo++) {
-            infinityChallengeCount(pageNo, 3);
+            infinityChallengeCount(pageNo, 1);
         }
     }
 
