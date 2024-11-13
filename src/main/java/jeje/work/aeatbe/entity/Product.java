@@ -82,9 +82,6 @@ public class Product extends BaseEntity {
         this.price = 99990000L;
     }
 
-    // 쇼핑 api를 호출하여 아래 네개의 필드만을 업데이트하는 메서드
-//
-//    @Profile("test")
 //    @Deprecated(forRemoval = true)
     public void updateField(String mallName, Long price, String seller, String productImageUrl) {
         this.mallName = mallName;
@@ -93,16 +90,21 @@ public class Product extends BaseEntity {
         this.productImageUrl = productImageUrl;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-            "id=" + id +
-            ", productImageUrl='" + productImageUrl + '\'' +
-            ", seller='" + seller + '\'' +
-            ", productName='" + productName + '\'' +
-            ", price=" + price +
-            ", mallName='" + mallName + '\'' +
-            '}';
+    //    @Deprecated(forRemoval = true)
+    public void updateTag(String tag) {
+        this.tag = tag;
     }
+
+//    @Override
+//    public String toString() {
+//        return "Product{" +
+//            "id=" + id +
+//            ", productImageUrl='" + productImageUrl + '\'' +
+//            ", seller='" + seller + '\'' +
+//            ", productName='" + productName + '\'' +
+//            ", price=" + price +
+//            ", mallName='" + mallName + '\'' +
+//            '}';
+//    }
 
 }
