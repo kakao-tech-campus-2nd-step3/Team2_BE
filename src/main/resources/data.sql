@@ -1,6 +1,3 @@
---ALTER TABLE products
---ADD CONSTRAINT unique_product_name_manufacturer UNIQUE (product_name, manufacturer);
-
 INSERT IGNORE INTO allergy_categories (allergy_type)
 VALUES ('난류'),
        ('우유'),
