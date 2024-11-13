@@ -1,5 +1,6 @@
 package jeje.work.aeatbe.repository;
 
+import java.util.Map;
 import jeje.work.aeatbe.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findByFreeFrom(List<String> freeFroms, Pageable pageable);
 
     Page<Product> findByPriceBetween(int priceMin, int priceMax, Pageable pageable);
+
+    @Query("SELECT new map(p.id as id, p.productName as name) FROM Product p")
+    List<Map<Long, String>> findByProductIdAndName();
+
 }
