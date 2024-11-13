@@ -1,7 +1,5 @@
 package jeje.work.aeatbe.service;
 
-
-import java.util.Optional;
 import jeje.work.aeatbe.entity.Product;
 import jeje.work.aeatbe.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +27,13 @@ public class SearchShpParsingService {
 
         try {
             JSONObject jsonObject = (JSONObject) jsonParser.parse(response);
+
+            // 해당 Product는 반드시 존재한다고 가정
+            Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalStateException("상품 ID를 찾을 수 없습니다: " + productId));
+
             JSONArray itemsArray = (JSONArray) jsonObject.get("items");
+            boolean updated = false;
 
             for (Object itemObj : itemsArray) {
                 JSONObject item = (JSONObject) itemObj;
@@ -41,17 +45,17 @@ public class SearchShpParsingService {
                     String image = (String) item.get("image");
                     String shopName = mallName;
 
-                    Optional<Product> optionalProduct = productRepository.findById(productId);
-                    if (optionalProduct.isPresent()) {
-                        Product product = optionalProduct.get();
-                        System.out.println("객체 출력 확인용 : " + product.toString());
-                        product.updateField(shopName, price, link, image);
-                        productRepository.save(product);  
-                    }
-                    break;  // 네이버가 아닌 첫 번째 mallName을 찾으면 루프 종료
+                    product.updateField(shopName, price, link, image);
+                    productRepository.save(product);
+                    updated = true;
+                    break;
                 }
             }
 
+            if (!updated) {
+                product.updateTag("상품 준비 중");
+                productRepository.save(product);
+            }
 
         } catch (ParseException e) {
             throw new RuntimeException("JSON 파싱 중 에러 발생 : ", e);
