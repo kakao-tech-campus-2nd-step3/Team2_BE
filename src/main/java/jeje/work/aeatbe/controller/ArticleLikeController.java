@@ -52,7 +52,7 @@ public class ArticleLikeController {
      */
     @DeleteMapping("/{articleLikeId}")
     public ResponseEntity<?> deleteArticleLike(@PathVariable Long articleLikeId, @LoginUser LoginUserInfo loginUserInfo) {
-        articleLikeService.deleteArticleLike(loginUserInfo.userId());
+        articleLikeService.deleteArticleLike(articleLikeId);
         return ResponseEntity.ok().build();
     }
 
