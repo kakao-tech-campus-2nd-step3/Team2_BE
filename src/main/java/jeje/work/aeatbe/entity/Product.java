@@ -16,7 +16,12 @@ import java.util.List;
         indexes = {
                 @Index(name = "idx_product_name", columnList = "product_name"),
                 @Index(name = "idx_price", columnList = "price")
-        })
+        },
+    uniqueConstraints = {
+    @UniqueConstraint(name = "unique_product_name_manufacturer", columnNames = {"product_name", "manufacturer"})
+}
+
+)
 public class Product extends BaseEntity {
 
     @Id
@@ -35,13 +40,16 @@ public class Product extends BaseEntity {
     @Column(name = "type_name", length = 200)
     private String typeName;
 
-    @Column(length = 50)
+    @Column(length = 200)
     private String manufacturer;
 
-    @Column(length = 50)
+    @Column(columnDefinition = "TEXT")
     private String seller;
 
     @Column(length = 20)
+    private String mallName;
+
+    @Column(length = 100)
     private String capacity;
 
     @Column(name = "product_name", nullable = false, length = 50)
@@ -73,4 +81,17 @@ public class Product extends BaseEntity {
     private void prePersist() {
         this.price = 99990000L;
     }
+
+
+    public void updateField(String mallName, Long price, String seller, String productImageUrl) {
+        this.mallName = mallName;
+        this.price = price;
+        this.seller = seller;
+        this.productImageUrl = productImageUrl;
+    }
+
+    public void updateTag(String tag) {
+        this.tag = tag;
+    }
+
 }

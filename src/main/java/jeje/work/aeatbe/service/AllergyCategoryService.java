@@ -7,13 +7,14 @@ import jeje.work.aeatbe.mapper.allergyCategory.AllergyCategoryMapper;
 import jeje.work.aeatbe.repository.AllergyCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 알러지 카테고리 서비스 레이어
+ *
  */
 @Service
 @RequiredArgsConstructor

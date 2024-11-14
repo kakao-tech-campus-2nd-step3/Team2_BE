@@ -1,5 +1,5 @@
 INSERT IGNORE INTO allergy_categories (allergy_type)
-VALUES ('알류'),
+VALUES ('난류'),
        ('우유'),
        ('메밀'),
        ('땅콩'),
@@ -18,8 +18,11 @@ VALUES ('알류'),
        ('돼지고기'),
        ('쇠고기'),
        ('아황산류'),
-       ('아몬드'),
-       ('TEST');
+       ('홍합'),
+       ('전복'),
+       ('굴'),
+       ('콩류'),
+       ('아몬드');
 
 INSERT IGNORE INTO free_from_categories (free_from_type)
 VALUES ('글루텐 프리'),
@@ -31,7 +34,7 @@ VALUES ('글루텐 프리'),
        ('콜리스테롤 프리'),
        ('슈가 프리'),
        ('디카페인'),
-       ('TEST');
+       ('당뇨식');
 
 INSERT IGNORE INTO articles (title, date, author, tags, content, thumbnail_url, likes)
 VALUES
@@ -132,29 +135,29 @@ VALUES
      'https://img.notionusercontent.com/s3/prod-files-secure%2Fbafebf27-4e21-4ed6-99e1-983eb90ad9c0%2F501815fb-2f91-46db-a7f9-2e7c302f64d5%2Fimage_5.jpg/size/?exp=1731392590&sig=cBODhM7CCLr1omaNd-GDdoRl68PTVRZUgBlunnGr2Vs', 0);
 
 
--- products 테이블 초기 데이터 삽입
-INSERT IGNORE INTO products (id, nutritional_info, product_image_url, meta_image_url, type_name, manufacturer, seller,
-                             capacity, product_name, ingredients, price, created_at, updated_at)
-VALUES (1, '칼로리 200kcal, 탄수화물 30g, 단백질 5g', 'https://example.com/product1.jpg', 'https://example.com/meta1.jpg', '식품',
-        '건강한 식품제조사', '헬시몰', '500ml', '헬시 글루텐 프리 주스', '물, 설탕, 향료', 12000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       (2, '칼로리 150kcal, 지방 10g, 단백질 3g', 'https://example.com/product2.jpg', 'https://example.com/meta2.jpg', '식품',
-        '자연우유', '푸드파이터', '250g', '락토 프리 요구르트', '락토 프리 우유, 천연 과일 농축액', 8000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       (3, '칼로리 100kcal, 탄수화물 20g, 단백질 2g', 'https://example.com/product3.jpg', 'https://example.com/meta3.jpg', '식품',
-        '에코넛츠', '그린샵', '100g', '피넛 프리 땅콩버터 대체품', '아몬드, 소금', 9500, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       (4, '칼로리 50kcal, 탄수화물 10g', 'https://example.com/product4.jpg', 'https://example.com/meta4.jpg', '식품', '베지테리언키친',
-        '비건마켓', '300ml', '비건 콩 단백 음료', '콩 추출물, 감미료', 5000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- allergy_categories 테이블 초기화 데이터와 매핑된 products_allergies 테이블 초기 데이터 삽입
-INSERT IGNORE INTO products_allergies (product_id, allergy_id, created_at, updated_at)
-VALUES (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 헬시 글루텐 프리 주스는 '알류' 알레르기를 가짐
-       (2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 락토 프리 요구르트는 '우유' 알레르기를 가짐
-       (3, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 피넛 프리 땅콩버터 대체품은 '땅콩' 알레르기를 가짐
-       (4, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
--- 비건 콩 단백 음료는 '대두' 알레르기를 가짐
-
--- free_from_categories 테이블 초기화 데이터와 매핑된 products_free_from 테이블 초기 데이터 삽입
-INSERT IGNORE INTO products_free_from (product_id, free_from_id, created_at, updated_at)
-VALUES (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 헬시 글루텐 프리 주스는 '글루텐 프리'
-       (2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 락토 프리 요구르트는 '락토 프리'
-       (3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 피넛 프리 땅콩버터 대체품은 '피넛 프리'
-       (4, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP); -- 비건 콩 단백 음료는 '비건'
+---- products 테이블 초기 데이터 삽입
+--INSERT IGNORE INTO products (id, nutritional_info, product_image_url, meta_image_url, type_name, manufacturer, seller,
+--                             capacity, product_name, ingredients, price, created_at, updated_at)
+--VALUES (1, '칼로리 200kcal, 탄수화물 30g, 단백질 5g', 'https://example.com/product1.jpg', 'https://example.com/meta1.jpg', '식품',
+--        '건강한 식품제조사', '헬시몰', '500ml', '헬시 글루텐 프리 주스', '물, 설탕, 향료', 12000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+--       (2, '칼로리 150kcal, 지방 10g, 단백질 3g', 'https://example.com/product2.jpg', 'https://example.com/meta2.jpg', '식품',
+--        '자연우유', '푸드파이터', '250g', '락토 프리 요구르트', '락토 프리 우유, 천연 과일 농축액', 8000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+--       (3, '칼로리 100kcal, 탄수화물 20g, 단백질 2g', 'https://example.com/product3.jpg', 'https://example.com/meta3.jpg', '식품',
+--        '에코넛츠', '그린샵', '100g', '피넛 프리 땅콩버터 대체품', '아몬드, 소금', 9500, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+--       (4, '칼로리 50kcal, 탄수화물 10g', 'https://example.com/product4.jpg', 'https://example.com/meta4.jpg', '식품', '베지테리언키친',
+--        '비건마켓', '300ml', '비건 콩 단백 음료', '콩 추출물, 감미료', 5000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+--
+------ allergy_categories 테이블 초기화 데이터와 매핑된 products_allergies 테이블 초기 데이터 삽입
+----INSERT IGNORE INTO products_allergies (product_id, allergy_id, created_at, updated_at)
+----VALUES (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 헬시 글루텐 프리 주스는 '알류' 알레르기를 가짐
+----       (2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 락토 프리 요구르트는 '우유' 알레르기를 가짐
+----       (3, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 피넛 프리 땅콩버터 대체품은 '땅콩' 알레르기를 가짐
+----       (4, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+------ 비건 콩 단백 음료는 '대두' 알레르기를 가짐
+----
+------ free_from_categories 테이블 초기화 데이터와 매핑된 products_free_from 테이블 초기 데이터 삽입
+----INSERT IGNORE INTO products_free_from (product_id, free_from_id, created_at, updated_at)
+----VALUES (1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 헬시 글루텐 프리 주스는 '글루텐 프리'
+----       (2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 락토 프리 요구르트는 '락토 프리'
+----       (3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP), -- 피넛 프리 땅콩버터 대체품은 '피넛 프리'
+----       (4, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP); -- 비건 콩 단백 음료는 '비건'
