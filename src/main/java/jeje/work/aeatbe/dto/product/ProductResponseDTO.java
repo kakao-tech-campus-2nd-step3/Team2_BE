@@ -13,6 +13,11 @@ public record ProductResponseDTO(
         String description,
         String[] freeFrom,
         String[] allergy,
-        String tag
+        String tag,
+        String mallName,               // 쇼핑몰 이름
+        String nutritionalInfo,      // 영양성분
+        String manufacturer,         // 제조사
+        String capacity,             // 용량
+        String ingredients          // 원재료
 ) {
 }

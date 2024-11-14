@@ -19,7 +19,8 @@ public class ProductResponseMapper {
      * @param idRequired   id 필요 여부
      * @return ProductResponseDTO
      */
-    public ProductResponseDTO toEntity(ProductDTO dto, Double avergeRating, List<String> freeFromList, List<String> allergyList, boolean idRequired) {
+    public ProductResponseDTO toEntity(ProductDTO dto, Double avergeRating,
+        List<String> freeFromList, List<String> allergyList, boolean idRequired) {
         return ProductResponseDTO.builder()
                 .id(idRequired ? dto.id() : null)
                 .name(dto.productName())
@@ -30,6 +31,12 @@ public class ProductResponseMapper {
                 .description(dto.metaImageUrl())
                 .freeFrom(freeFromList.toArray(new String[0]))
                 .allergy(allergyList.toArray(new String[0]))
+                .mallName(dto.mallName())
+                .manufacturer(dto.manufacturer())
+                .capacity(dto.capacity())
+                .ingredients(dto.ingredients())
+                .nutritionalInfo(dto.nutritionalInfo())
+                .tag(dto.tag())
                 .build();
     }
 }
