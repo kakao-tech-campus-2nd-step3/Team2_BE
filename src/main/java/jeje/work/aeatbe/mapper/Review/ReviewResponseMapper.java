@@ -16,6 +16,7 @@ public class ReviewResponseMapper {
                 .user(userInfoResponseDTO)
                 .productId(reviewDTO.productId())
                 .productImgUrl(productDto.productImageUrl())
+                .productName(productDto.productName())
                 .date(reviewDTO.date())
                 .build();
     }
