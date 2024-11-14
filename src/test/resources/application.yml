@@ -44,3 +44,8 @@ default:
 haccp:
   service_key : ${SERVICE_KEY}
   base_url : https://apis.data.go.kr/B553748/CertImgListServiceV3
+
+shop:
+  client_id: ${SHOP_CLIENT_ID}
+  client_secret: ${SHOP_CLIENT_SECRET}
+  base_url : https://openapi.naver.com/v1/search/shop.json
