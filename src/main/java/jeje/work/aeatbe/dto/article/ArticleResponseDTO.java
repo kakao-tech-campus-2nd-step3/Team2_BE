@@ -16,7 +16,7 @@ public record ArticleResponseDTO(
         Timestamp createdAt,
         String auth,
         List<String> keyword,
-        List<ContentDTO> content,
+        String content,
         String subtitle
 ) {
 }
