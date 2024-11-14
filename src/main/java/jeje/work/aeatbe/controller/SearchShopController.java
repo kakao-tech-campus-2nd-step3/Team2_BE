@@ -19,7 +19,6 @@
 //
 //    @GetMapping
 //    public void getSellerApi() {
-////        searchShopService.getShopApi(); // 단순 호출 테스트
 //        searchShopService.fetchProductsFromApi();
 //    }
 //
