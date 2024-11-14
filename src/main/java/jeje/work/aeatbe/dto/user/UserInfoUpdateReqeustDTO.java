@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.URL;
 
 @Builder
 public record UserInfoUpdateReqeustDTO(
-        @Size(max = 15)
+        @Size(max = 15, message = "유저 이름이 15자를 초과할 수 없습니다.")
         String userName,
         @URL(message = "유효하지 않는 URL 형식입니다.")
         String userImageUrl,

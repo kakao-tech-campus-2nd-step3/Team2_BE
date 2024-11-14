@@ -14,8 +14,8 @@ import org.hibernate.validator.constraints.URL;
 @Builder
 public record ArticleResponseDTO(
         Long id,
-        @NotNull
-        @Size(max = 100)
+        @NotNull(message = "제목이 존재해야 합니다.")
+        @Size(max = 100, message = "제목이 100자를 초과할 수 없습니다.")
         String title,
         @URL(message = "유효하지 않는 URL 형식입니다.")
         String imgurl,
