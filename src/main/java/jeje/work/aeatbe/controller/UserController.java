@@ -1,5 +1,6 @@
 package jeje.work.aeatbe.controller;
 
+import jakarta.validation.Valid;
 import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.dto.user.UserInfoResponseDTO;
@@ -36,7 +37,7 @@ public class UserController {
      * @return 업데이트 된 정보
      */
     @PatchMapping("/info/update")
-    public ResponseEntity<UserInfoResponseDTO> updateUserInfo(@RequestBody UserInfoUpdateReqeustDTO userInfoUpdateReqeustDto,
+    public ResponseEntity<UserInfoResponseDTO> updateUserInfo(@RequestBody @Valid UserInfoUpdateReqeustDTO userInfoUpdateReqeustDto,
                                                               @LoginUser LoginUserInfo loginUserInfo) {
         userService.updateUserInfo(userInfoUpdateReqeustDto, loginUserInfo.userId());
         UserInfoResponseDTO userInfoResponseDto = userService.getUserInfo(loginUserInfo.userId());
