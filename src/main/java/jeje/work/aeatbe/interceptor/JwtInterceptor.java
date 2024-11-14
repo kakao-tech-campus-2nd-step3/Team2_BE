@@ -24,11 +24,6 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler)
             throws Exception {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String requestURI = request.getRequestURI();
-        if (requestURI.startsWith("/api/article/likes")) {
-            // 해당 경로에 대한 별도 로직 추가
-            return true;
-        }
 
 
         if (header == null || !header.startsWith("Bearer ")) {

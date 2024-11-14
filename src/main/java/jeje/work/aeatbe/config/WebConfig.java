@@ -27,6 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/api/article/likes/**")
+                .excludePathPatterns("/api/article/likes/count/**")
                 .addPathPatterns("/api/users/logout/**")
                 .addPathPatterns("/api/wishlist/**")
                 .addPathPatterns("/api/reviews/my/**")
@@ -35,7 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new LoginUserArgumentResolver(jwtUtil, userService, tokenService));
+        argumentResolvers.add(new LoginUserArgumentResolver(jwtUtil));
     }
 
     @Override
