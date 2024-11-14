@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 import java.util.List;
+import org.hibernate.validator.constraints.URL;
 
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -16,17 +19,26 @@ public record ProductDTO(
         @JsonProperty("allergy")
         @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY) List<ProductAllergyDTO> allergy,
         @JsonProperty("nutrient") String nutritionalInfo, // 영양성분
+        @URL(message = "유효하지 않는 URL 형식입니다.")
         @JsonProperty("imgurl1") String productImageUrl, // 상품 이미지
+        @URL(message = "유효하지 않는 URL 형식입니다.")
         @JsonProperty("imgurl2") String metaImageUrl, // 상품 상세 설명 이미지
+        @Size(max = 200)
         @JsonProperty("prdkind") String typeName, // 제품 종류(유형명)
+        @Size(max = 200)
         @JsonProperty("manufacture") String manufacturer, // 제조사
         String seller,                                         // todo: 판매 링크(추후에 사용 될 예정)
+        @Size(max = 100)
         @JsonProperty("capacity") String capacity, // 용량
+        @NotNull
+        @Size(max = 50)
         @JsonProperty("prdlstNm") String productName, // 상품명
+        @Size(min = 0)
         @JsonProperty("rawmtrl") String ingredients, // 원재료
         Long price,  // 가격(추후에 사용 될 예정)
         @JsonProperty("barcode") String productBarcode, // 상품 바코드(현재 미사용중)
         String tag,
+        @Size(max = 20)
         String mallName                 // 상품 판매처 이름
 ) {
 }
