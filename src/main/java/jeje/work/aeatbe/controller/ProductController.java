@@ -41,7 +41,7 @@ public class ProductController {
      * @return 전체 상품 목록
      */
     @GetMapping
-    public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(@RequestParam(required = false)String q,
+    public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(@RequestParam(required = false) String q,
                                                                    @RequestParam(required = false) List<String> allergy,
                                                                    @RequestParam(required = false) List<String> freeFroms,
                                                                    @RequestParam(required = false, defaultValue = "0") int priceMin,
