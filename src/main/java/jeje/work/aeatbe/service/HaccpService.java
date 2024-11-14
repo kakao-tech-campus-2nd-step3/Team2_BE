@@ -1,75 +1,110 @@
 package jeje.work.aeatbe.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Mono;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 /**
- * Haccp Service
+ * The type Haccp service.
  */
 @Service
 public class HaccpService {
     private final String serviceKey;
     private final String baseUrl;
     private final HaccpParsingService haccpParsingService;
-    private final ObjectMapper objectMapper;
 
 
     public HaccpService(@Value("${haccp.service_key}") String serviceKey,
-                        @Value("${haccp.base_url}") String baseUrl,
-                        HaccpParsingService haccpParsingService,
-                        ObjectMapper objectMapper) {
+        @Value("${haccp.base_url}") String baseUrl,
+        HaccpParsingService haccpParsingService) {
         this.serviceKey = URLEncoder.encode(serviceKey, StandardCharsets.UTF_8);
         this.baseUrl = baseUrl;
         this.haccpParsingService = haccpParsingService;
-        this.objectMapper = objectMapper;
     }
 
     /**
-     * Gets product api.
+     * haccp api내 상품 호출
      */
-    public void getProductApi() {
+    public void getAllProducts() {
+//        int totalDataCount = 14881;
+        int totalDataCount = 4000;
+        int numOfRows = 100;
+
+        int totalPages = (int) Math.ceil((double) totalDataCount / numOfRows);
+
+        for (int pageNo = 1; pageNo <= totalPages; pageNo++) {
+            infinityChallengeCount(pageNo, 3);
+        }
+    }
+
+    private void infinityChallengeCount(int pageNo, int retry) {
+        while (retry > 0) {
+            if (fetchPageData(pageNo)) return;
+            retry--;
+            if (retry > 0) delayForRetry(pageNo, retry);
+        }
+        System.out.println("페이지 : " + pageNo + " 데이터 가져오기를 포기했어요");
+    }
+
+    private boolean fetchPageData(int pageNo) {
+        try {
+            String uriString = createUriString(pageNo);
+            String responseBody = callApi(uriString);
+            if (responseBody == null || responseBody.isEmpty()) {
+                System.out.println("API 응답이 비어 있습니다.");
+                return false;
+            }
+
+            System.out.println("응답 내용: " + responseBody); // 응답 내용 로그 출력
+
+            haccpParsingService.jsonParsing(responseBody);
+            return true;
+        } catch (Exception e) {
+            System.out.println("API 요청 중 오류 발생: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private String callApi(String uriString) {
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory();
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE);
 
         WebClient webClient = WebClient.builder()
-                .uriBuilderFactory(factory)
-                .baseUrl(baseUrl)
-                .build();
+            .uriBuilderFactory(factory)
+            .baseUrl(baseUrl)
+            .build();
 
-        String uriString = UriComponentsBuilder.fromUriString(baseUrl)
-                .path("/getCertImgListServiceV3")
-                .queryParam("ServiceKey", serviceKey)
-                .queryParam("returnType", "json")
-//            .queryParam("pageNo", "1")       // 페이지 번호
-//            .queryParam("numOfRows", "100")  // 한 페이지 결과 수
-                .build(true)  // query parameter도 인코딩된 형태로 빌드
-                .toUriString();
+        return webClient.get()
+            .uri(uriString)
+            .accept(MediaType.APPLICATION_JSON, MediaType.valueOf("text/json"))
+            .retrieve()
+            .bodyToMono(String.class)
+            .doOnError(error -> System.out.println("API 요청 중 오류 발생1 : " + error.getMessage()))
+            .block();
+    }
 
-        System.out.println("Constructed URL: " + uriString);
+    private String createUriString(int pageNo) {
+        return UriComponentsBuilder.fromUriString(baseUrl)
+            .path("/getCertImgListServiceV3")
+            .queryParam("ServiceKey", serviceKey)
+            .queryParam("returnType", "json")
+            .queryParam("pageNo", pageNo)
+            .queryParam("numOfRows", "100")
+            .build(true)
+            .toUriString();
+    }
 
-        Mono<String> response = webClient.get()
-                .uri(uriString)
-                .accept(MediaType.APPLICATION_JSON, MediaType.valueOf("text/json"))
-                .retrieve()
-                .bodyToMono(String.class)
-                .doOnError(error -> System.out.println("API 요청 중 오류 발생 : " + error.getMessage()))
-                .doOnNext(responseBody -> System.out.println("Response Body: " + responseBody))  // 응답 출력(확인용)
-                .doOnNext(haccpParsingService::jsonParsing)
-                .onErrorResume(error -> {
-                    System.out.println("API 요청 중 오류 발생 : " + error.getMessage());
-                    return Mono.empty();  // 에러 발생 시 빈 Mono를 반환
-                });
-
-        response.subscribe();
+    private void delayForRetry(int pageNo, int retries) {
+//        System.out.println("재시도 중 페이지 " + pageNo + ", 남은 시도 횟수: " + retries);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
-

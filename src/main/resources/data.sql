@@ -1,5 +1,5 @@
 INSERT IGNORE INTO allergy_categories (allergy_type)
-VALUES ('알류'),
+VALUES ('난류'),
        ('우유'),
        ('메밀'),
        ('땅콩'),
@@ -18,8 +18,11 @@ VALUES ('알류'),
        ('돼지고기'),
        ('쇠고기'),
        ('아황산류'),
-       ('아몬드'),
-       ('TEST');
+       ('홍합'),
+       ('전복'),
+       ('굴'),
+       ('콩류'),
+       ('아몬드');
 
 INSERT IGNORE INTO free_from_categories (free_from_type)
 VALUES ('글루텐 프리'),

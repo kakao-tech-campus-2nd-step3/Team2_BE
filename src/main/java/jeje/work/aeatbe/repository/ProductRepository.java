@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findByProductNameContaining(String q, Pageable pageable);
-
-    @Query("SELECT p FROM Product p JOIN p.productAllergies a WHERE a.allergy IN :allergies")
-    Page<Product> findByAllergy(List<String> allergies, Pageable pageable);
+    
+    @Query("SELECT p FROM Product p WHERE NOT EXISTS (SELECT a FROM p.productAllergies a WHERE a.allergy IN :allergies)")
+    Page<Product> findByAllergyNotIn(List<String> allergies, Pageable pageable);
 
     @Query("SELECT p FROM Product p JOIN p.productFreeFroms f WHERE f.freeFromCategory IN :freeFroms")
     Page<Product> findByFreeFrom(List<String> freeFroms, Pageable pageable);
