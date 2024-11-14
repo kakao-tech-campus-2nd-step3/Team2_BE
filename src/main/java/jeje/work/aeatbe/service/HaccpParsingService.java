@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 import jeje.work.aeatbe.dto.allergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.dto.product.ProductAllergyDTO;
 import jeje.work.aeatbe.dto.product.ProductDTO;
@@ -52,7 +51,7 @@ public class HaccpParsingService {
             throw new IllegalArgumentException("API 응답이 비어 있습니다.");
         }
 
-        List<ProductDTO> productDTOList = parseJsonToProductDTOs(response);
+        List<ProductDTO> productDTOList = parseJsonToProductDTO(response);
 
         System.out.println("상품 목록 저장 시작");
         for (ProductDTO productDTO : productDTOList) {
@@ -66,7 +65,7 @@ public class HaccpParsingService {
      * @param response API 응답 JSON 문자열
      * @return 파싱된 ProductDTO 목록
      */
-    private List<ProductDTO> parseJsonToProductDTOs(String response) {
+    private List<ProductDTO> parseJsonToProductDTO(String response) {
         JSONParser jsonParser = new JSONParser();
         List<ProductDTO> productDTOList = new ArrayList<>();
 
@@ -193,7 +192,7 @@ public class HaccpParsingService {
 
         List<Long> allergyIds = productDTO.allergy() != null ? productDTO.allergy().stream()
             .map(ProductAllergyDTO::allergyId)
-            .collect(Collectors.toList()) : new ArrayList<>();
+            .toList() : new ArrayList<>();
 
         for (Long allergyId : allergyIds) {
             AllergyCategory allergyCategory = allergyCategoryRepository.findById(allergyId)
