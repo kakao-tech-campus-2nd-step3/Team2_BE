@@ -9,11 +9,20 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
+/**
+ * Search Shop Parsing Service
+ */
 @Service
 @RequiredArgsConstructor
 public class SearchShpParsingService {
     private final ProductRepository productRepository;
 
+    /**
+     * Json parsing
+     *
+     * @param response  JSON 형식의 response
+     * @param productId 상품 id
+     */
     public void jsonParsing(String response, Long productId) {
         if (response == null || response.isEmpty()) {
             throw new IllegalArgumentException("API 응답이 비어있습니다.");
@@ -28,7 +37,6 @@ public class SearchShpParsingService {
         try {
             JSONObject jsonObject = (JSONObject) jsonParser.parse(response);
 
-            // 해당 Product는 반드시 존재한다고 가정
             Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalStateException("상품 ID를 찾을 수 없습니다: " + productId));
 
