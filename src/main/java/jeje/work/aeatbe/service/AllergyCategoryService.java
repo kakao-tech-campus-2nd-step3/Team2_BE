@@ -19,7 +19,6 @@ import org.springframework.validation.annotation.Validated;
  */
 @Service
 @RequiredArgsConstructor
-@Validated
 public class AllergyCategoryService {
 
     private final AllergyCategoryRepository allergyCategoryRepository;
