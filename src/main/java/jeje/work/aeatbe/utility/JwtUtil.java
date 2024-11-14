@@ -5,8 +5,10 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.entity.User;
+import jeje.work.aeatbe.exception.TokenException;
 import jeje.work.aeatbe.exception.TokenExpException;
 import org.springframework.stereotype.Component;
 
@@ -63,7 +65,7 @@ public class JwtUtil {
      * @param accessToken
      * @return userId
      */
-    public Long getUserIdForAccessToken(String accessToken) {
+    public Long getUserIdForAccessToken(String accessToken) throws TokenException {
         Claims claims = parseToken(accessToken, true);
         return claims.get("userId", Long.class);
     }
@@ -74,7 +76,7 @@ public class JwtUtil {
      * @param refreshToken
      * @return userId
      */
-    public Long getUserIdForRefreshToken(String refreshToken) {
+    public Long getUserIdForRefreshToken(String refreshToken) throws TokenException{
         Claims claims = parseToken(refreshToken, false);
         return claims.get("userId", Long.class);
     }
@@ -85,7 +87,7 @@ public class JwtUtil {
      * @param token
      * @return LoginUserInfo
      */
-    public LoginUserInfo getLoginUserInfo(String token) {
+    public LoginUserInfo getLoginUserInfo(String token) throws TokenException{
         Claims claims = parseToken(token, true);
         return LoginUserInfo.builder()
                 .userId(claims.get("userId", Long.class))
@@ -119,22 +121,27 @@ public class JwtUtil {
      * @param isAccessToken
      * @return claims
      */
-    private Claims parseToken(String token, boolean isAccessToken) {
-        if (token.startsWith("Bearer ")) {
-            token = token.substring(7);
-        }
-        if (isAccessToken) {
+    private Claims parseToken(String token, boolean isAccessToken) throws TokenException {
+        try {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            if (isAccessToken) {
+                return Jwts.parser()
+                        .setSigningKey(secretKey)
+                        .build()
+                        .parseSignedClaims(token)
+                        .getBody();
+            }
             return Jwts.parser()
-                    .setSigningKey(secretKey)
+                    .setSigningKey(refreshSecretKey)
                     .build()
                     .parseSignedClaims(token)
                     .getBody();
         }
-        return Jwts.parser()
-                .setSigningKey(refreshSecretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getBody();
+        catch(SignatureException e){
+            throw new TokenException("인식 할 수 없는 토큰입니다.");
+        }
     }
 
     /**
@@ -161,7 +168,7 @@ public class JwtUtil {
      * @param refreshToken
      * @return boolean 3일이상이면 true
      */
-    public boolean enoughRefreshToken(String refreshToken) {
+    public boolean enoughRefreshToken(String refreshToken) throws TokenException{
         Claims claims = parseToken(refreshToken, false);
         Date expiration = claims.getExpiration();
         Date nowTime = new Date();
