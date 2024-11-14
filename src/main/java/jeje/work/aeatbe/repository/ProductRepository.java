@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findByPriceBetween(int priceMin, int priceMax, Pageable pageable);
 
-    @Query("SELECT new map(p.id as id, p.productName as name) FROM Product p")
-    List<Map<Long, String>> findByProductIdAndName();
+    @Query("SELECT new map(p.id as id, p.productName as product_name) FROM Product p")
+    List<Map<String, Object>> findByProductIdAndName();
 
 }
