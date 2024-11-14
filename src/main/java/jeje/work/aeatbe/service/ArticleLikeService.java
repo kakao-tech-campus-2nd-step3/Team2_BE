@@ -1,5 +1,6 @@
 package jeje.work.aeatbe.service;
 
+import java.util.Optional;
 import jeje.work.aeatbe.entity.Article;
 import jeje.work.aeatbe.entity.ArticleLike;
 import jeje.work.aeatbe.entity.User;
@@ -64,9 +65,11 @@ public class ArticleLikeService {
      */
     @Transactional(readOnly = true)
     public Long findArticleLikeByUserAndArticle(Long userId, Long articleId) {
-        ArticleLike articleLike = articleLikeRepository.findByUserIdAndArticleId(userId, articleId)
-                .orElseThrow(() -> new ArticleLikeNotFoundException("확인할 수 없는 좋아요입니다."));
-        return articleLike.getId();
+        Optional<ArticleLike> articleLike = articleLikeRepository.findByUserIdAndArticleId(userId, articleId);
+        if(articleLike.isEmpty()){
+            return -1L;
+        }
+        return articleLike.get().getId();
     }
 
     /**
