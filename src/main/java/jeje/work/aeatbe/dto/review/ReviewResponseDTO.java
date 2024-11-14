@@ -1,5 +1,6 @@
 package jeje.work.aeatbe.dto.review;
 
+import java.time.LocalDateTime;
 import jeje.work.aeatbe.dto.user.UserInfoResponseDTO;
 import lombok.Builder;
 
@@ -10,6 +11,8 @@ public record ReviewResponseDTO(
         String content,
         UserInfoResponseDTO user,
         Long productId,
-        String productImgUrl
+        String productImgUrl,
+        String productName,
+        LocalDateTime date
 ) {
 }

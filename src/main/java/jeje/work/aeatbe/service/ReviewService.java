@@ -89,7 +89,8 @@ public class ReviewService {
      */
     public ReviewResponseDTO getReviewResponseDTO(ReviewDTO review) {
         var userDTO = userService.getUserInfo(review.userId());
-        return reviewResponseMapper.toDTO(review, userDTO);
+        var productDTO = productService.getProductDTO(review.productId());
+        return reviewResponseMapper.toDTO(review, userDTO, productDTO);
     }
 
     /**

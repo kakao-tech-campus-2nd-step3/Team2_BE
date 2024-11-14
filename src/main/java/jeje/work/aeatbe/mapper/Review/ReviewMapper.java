@@ -16,6 +16,7 @@ public class ReviewMapper {
                 .userId(review.getUser().getId())
                 .productId(review.getProduct().getId())
                 .productImgUrl(review.getProduct().getProductImageUrl())
+                .date(review.getUpdatedAt())
                 .build();
     }
 
