@@ -203,8 +203,12 @@ public class HaccpParsingService {
                 .allergy(allergyCategory)
                 .build();
 
-            productAllergyRepository.save(productAllergy);
+            product.getProductAllergies().add(productAllergy);
+
+            System.out.println("product Allergy 채워졌는지 확인: " + product.getProductAllergies());
+//            productAllergyRepository.save(productAllergy);
         }
+        productRepository.save(product);
     }
 
     private String randomTagGenerator() {
