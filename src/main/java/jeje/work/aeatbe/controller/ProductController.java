@@ -125,4 +125,17 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @PostMapping("/initialize-allergies")
+    public ResponseEntity<String> initializeAllergiesMapping() {
+        productService.initializeProductAllergiesMapping();
+        return ResponseEntity.ok("Product-Allergy 연관 관계가 초기화되었습니다.");
+    }
+
+    @PostMapping("/initialize-freeFrom")
+    public ResponseEntity<String> initializeFreeFromMapping() {
+        productService.initializeProductFreeFromMapping();
+        return ResponseEntity.ok("Product-Allergy 연관 관계가 초기화되었습니다.");
+    }
 }

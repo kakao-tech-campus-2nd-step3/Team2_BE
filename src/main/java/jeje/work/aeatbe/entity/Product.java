@@ -94,4 +94,11 @@ public class Product extends BaseEntity {
         this.tag = tag;
     }
 
+    public void addProductAllergy(ProductAllergy productAllergy) {
+        productAllergies.add(productAllergy);
+    }
+
+    public void addProductFreeFrom(ProductFreeFrom productFreeFrom) {
+        productFreeFroms.add(productFreeFrom);
+    }
 }

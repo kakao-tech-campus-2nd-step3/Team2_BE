@@ -203,6 +203,8 @@ public class HaccpParsingService {
                 .allergy(allergyCategory)
                 .build();
 
+            product.getProductAllergies().add(productAllergy);
+
             productAllergyRepository.save(productAllergy);
         }
     }

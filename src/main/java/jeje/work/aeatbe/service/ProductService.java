@@ -8,9 +8,13 @@ import jakarta.persistence.criteria.*;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
 import jeje.work.aeatbe.entity.Product;
+import jeje.work.aeatbe.entity.ProductAllergy;
+import jeje.work.aeatbe.entity.ProductFreeFrom;
 import jeje.work.aeatbe.exception.ProductNotFoundException;
 import jeje.work.aeatbe.mapper.product.ProductMapper;
 import jeje.work.aeatbe.mapper.product.ProductResponseMapper;
+import jeje.work.aeatbe.repository.ProductAllergyRepository;
+import jeje.work.aeatbe.repository.ProductFreeFromRepository;
 import jeje.work.aeatbe.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -41,6 +45,8 @@ public class ProductService {
     private final ReviewRatingService reviewRatingService;
     private final AllergyCategoryService allergyCategoryService;
     private final FreeFromCategoryService freeFromCategoryService;
+    private final ProductAllergyRepository productAllergyRepository;
+    private final ProductFreeFromRepository productFreeFromRepository;
 
 
     public ProductResponseDTO getProductResponseDTO(ProductDTO productDTO) {
@@ -71,7 +77,7 @@ public class ProductService {
                                                    List<String> freeFroms, int priceMin, int priceMax, String sortBy, Pageable pageable) {
         Pageable sortedPageable = createSortedPageable(pageable, sortBy);
 
-        Page<Product> productsPage = findProductsByCriteria(q, allergies, freeFroms, priceMin, priceMax, sortedPageable);
+        Page<Product> productsPage = findProductsByFiltering(q, allergies, freeFroms, priceMin, priceMax, sortedPageable);
 
         List<ProductResponseDTO> productDTOs = mapToResponseDTO(productsPage.getContent());
 
@@ -369,24 +375,38 @@ public class ProductService {
         return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
     }
 
-    private Page<Product> findProductsByCriteria(String q, List<String> allergies,
+    private Page<Product> findProductsByFiltering(String q, List<String> allergies,
                                                  List<String> freeFroms, int priceMin, int priceMax, Pageable pageable) {
 
-        if ((allergies == null || allergies.isEmpty()) && (freeFroms == null || freeFroms.isEmpty())) {
-            Pageable sortedByProductName = PageRequest.of(pageable.getPageNumber(),
-                    pageable.getPageSize(), Sort.by("productName").ascending());
-            return productRepository.findByPriceBetween(priceMin, priceMax, sortedByProductName);
+
+        if (q != null && !q.isEmpty() && allergies != null && !allergies.isEmpty() && freeFroms != null && !freeFroms.isEmpty()) {
+            return productRepository.findByAll(q, allergies, freeFroms, priceMin, priceMax, pageable);
         }
 
-        if (q != null) {
-            return productRepository.findByProductNameContaining(q, pageable);
+        if (q != null && !q.isEmpty() && allergies != null && !allergies.isEmpty()) {
+            return productRepository.findByProductNameAndAllergy(q, allergies, priceMin, priceMax, pageable);
         }
+
+        if (q != null && !q.isEmpty() && freeFroms != null && !freeFroms.isEmpty()) {
+            return productRepository.findByProductNameAndFreeFrom(q, freeFroms, priceMin, priceMax, pageable);
+        }
+
+        if (q != null && !q.isEmpty()) {
+            return productRepository.findByProductName(q, priceMin, priceMax, pageable);
+        }
+
+        if (allergies != null && !allergies.isEmpty() && freeFroms != null && !freeFroms.isEmpty()) {
+            return productRepository.findByAllergyAndFreeFrom(allergies, freeFroms, priceMin, priceMax, pageable);
+        }
+
         if (allergies != null && !allergies.isEmpty()) {
-            return productRepository.findByAllergyNotIn(allergies, pageable);
+            return productRepository.findByAllergy(allergies, priceMin, priceMax, pageable);
         }
+
         if (freeFroms != null && !freeFroms.isEmpty()) {
-            return productRepository.findByFreeFrom(freeFroms, pageable);
+            return productRepository.findByFreeFrom(freeFroms, priceMin, priceMax, pageable);
         }
+
         return productRepository.findByPriceBetween(priceMin, priceMax, pageable);
     }
 
@@ -401,4 +421,32 @@ public class ProductService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void initializeProductAllergiesMapping() {
+        List<Product> allProducts = productRepository.findAll();
+
+        for (Product product : allProducts) {
+            List<ProductAllergy> allergies = productAllergyRepository.findByProductId(product.getId());
+
+            for (ProductAllergy allergy : allergies) {
+                product.addProductAllergy(allergy);
+            }
+        }
+    }
+
+    @Transactional
+    public void initializeProductFreeFromMapping() {
+        List<Product> allProducts = productRepository.findAll();
+
+        for (Product product : allProducts) {
+
+            List<ProductFreeFrom> freeFroms = productFreeFromRepository.findByProductId(product.getId());
+
+            for (ProductFreeFrom freeFrom : freeFroms) {
+                product.addProductFreeFrom(freeFrom);
+            }
+        }
+    }
+
 }
