@@ -1,10 +1,10 @@
 package jeje.work.aeatbe.controller;
 
 import jeje.work.aeatbe.dto.article.ArticleDTO;
-import jeje.work.aeatbe.dto.article.ArticleListResponseDTO;
 import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
 import jeje.work.aeatbe.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -41,13 +41,13 @@ public class ArticleController {
      * @return 칼럼 목록과 페이지 정보가 포함된 DTO와 상태 코드 200 (OK)
      */
     @GetMapping
-    public ResponseEntity<ArticleListResponseDTO> getArticles(
+    public ResponseEntity<Page<ArticleResponseDTO>> getArticles(
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String subtitle,
-            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        ArticleListResponseDTO articles = articleService.getArticles(category, title, subtitle, pageable);
+        Page<ArticleResponseDTO> articles = articleService.getArticles(category, title, subtitle, pageable);
         return ResponseEntity.ok(articles);
     }
 

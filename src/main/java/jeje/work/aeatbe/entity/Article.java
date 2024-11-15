@@ -1,12 +1,10 @@
 package jeje.work.aeatbe.entity;
 
 import jakarta.persistence.*;
+import jeje.work.aeatbe.dto.article.ArticleDTO;
 import lombok.*;
 
-import java.sql.Timestamp;
-
 @Entity
-//@Table(name = "articles")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -25,8 +23,8 @@ public class Article extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Timestamp date;
+    @Column(length = 10)
+    private String subTitle;
 
     @Column(nullable = false, length = 50)
     private String author;
@@ -42,27 +40,13 @@ public class Article extends BaseEntity {
     @Column(name = "thumbnail_url", columnDefinition = "TEXT")
     private String thumbnailUrl;
 
-
-    private int likes;
-
-
-    @Builder
-    public Article(String title, String author, String tags,
-                   String content, String thumbnailUrl, int likes) {
-        this.title = title;
-        this.author = author;
-        this.tags = tags;
-        this.content = content;
-        this.thumbnailUrl = thumbnailUrl;
-        this.likes = likes;
-    }
-
-    public void upLike() {
-        this.likes++;
-    }
-
-    public void downLike() {
-        this.likes--;
+    public void updateEntity(ArticleDTO articleDTO){
+        this.title = articleDTO.title() == null ? this.title : articleDTO.title();
+        this.author = articleDTO.author() == null ? this.author : articleDTO.author();
+        this.tags = articleDTO.tags() == null ? this.tags : articleDTO.tags();
+        this.content = articleDTO.content() == null ? this.content : articleDTO.content();
+        this.thumbnailUrl = articleDTO.thumbnailUrl() == null ? this.thumbnailUrl : articleDTO.thumbnailUrl();
+        this.subTitle = articleDTO.subTitle() == null ? this.subTitle : articleDTO.subTitle();
     }
 
 }
