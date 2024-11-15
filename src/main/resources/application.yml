@@ -13,9 +13,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS}
-    # username: ${DB_USERNAME}
-    # password: ${DB_PASSWORD}
+    url: jdbc:mysql://ls-38256e2c709eb673a54cb785292b2b146d8c8bd6.ch2008eu6uht.ap-northeast-2.rds.amazonaws.com:3306/785292b2b
+    username: dbaeatbedb
+    password: s5gpw{67h}aL|+Z<gC~7rw)5iz9J]HGV
 
   servlet:
       multipart:
@@ -27,18 +27,18 @@ spring:
 
   jpa:
     hibernate:
-#      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create-drop}
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+      #      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create-drop}
+      ddl-auto: none
     show-sql: ${SPRING_JPA_SHOW_SQL:true}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: true
+        format_sql: false
     defer-datasource-initialization: true
 
   sql:
     init:
-#      mode: always
+  #      mode: always
 
   docker:
     compose:

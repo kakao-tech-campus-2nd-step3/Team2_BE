@@ -205,8 +205,6 @@ public class HaccpParsingService {
 
             product.getProductAllergies().add(productAllergy);
 
-            System.out.println("product Allergy 채워졌는지 확인: " + product.getProductAllergies());
-//            productAllergyRepository.save(productAllergy);
         }
         productRepository.save(product);
     }
