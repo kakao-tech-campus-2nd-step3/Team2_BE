@@ -1,5 +1,6 @@
 package jeje.work.aeatbe.controller;
 
+import jakarta.validation.Valid;
 import jeje.work.aeatbe.dto.article.ArticleDTO;
 import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
 import jeje.work.aeatbe.service.ArticleService;
@@ -26,7 +27,7 @@ public class ArticleController {
      * @return 생성된 칼럼의 DTO와 상태 코드 201 (Created)
      */
     @PostMapping
-    public ResponseEntity<ArticleDTO> createArticle(@RequestBody ArticleDTO articleDTO) {
+    public ResponseEntity<ArticleDTO> createArticle(@RequestBody @Valid ArticleDTO articleDTO) {
         ArticleDTO createdArticle = articleService.createArticle(articleDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdArticle);
     }
@@ -71,7 +72,7 @@ public class ArticleController {
      * @return 업데이트된 칼럼의 DTO와 상태 코드 200 (OK)
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id, @RequestBody ArticleDTO articleDTO) {
+    public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id, @RequestBody @Valid ArticleDTO articleDTO) {
         ArticleDTO updatedArticle = articleService.updateArticle(id, articleDTO);
         return ResponseEntity.ok(updatedArticle);
     }
