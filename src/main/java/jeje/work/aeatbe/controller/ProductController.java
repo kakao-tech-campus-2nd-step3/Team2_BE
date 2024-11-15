@@ -137,6 +137,6 @@ public class ProductController {
     @PostMapping("/initialize-freeFrom")
     public ResponseEntity<String> initializeFreeFromMapping() {
         productService.initializeProductFreeFromMapping();
-        return ResponseEntity.ok("Product-Allergy 연관 관계가 초기화되었습니다.");
+        return ResponseEntity.ok("Product-FreeFrom 연관 관계가 초기화되었습니다.");
     }
 }
