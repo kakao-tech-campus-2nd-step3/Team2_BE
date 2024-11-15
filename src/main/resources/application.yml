@@ -18,16 +18,16 @@ spring:
     # password: ${DB_PASSWORD}
 
   servlet:
-      multipart:
-        file-size-threshold: 1MB
-        location : .
-        max-file-size: 10MB
-        max-request-size : 50MB
-        enabled : true
+    multipart:
+      file-size-threshold: 1MB
+      location : .
+      max-file-size: 10MB
+      max-request-size : 50MB
+      enabled : true
 
   jpa:
     hibernate:
-#      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create-drop}
+      #      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create-drop}
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
     show-sql: ${SPRING_JPA_SHOW_SQL:true}
     properties:
@@ -38,7 +38,7 @@ spring:
 
   sql:
     init:
-#      mode: always
+  #      mode: always
 
   docker:
     compose:

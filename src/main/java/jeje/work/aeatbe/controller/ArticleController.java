@@ -23,6 +23,7 @@ public class ArticleController {
     /**
      * 새로운 칼럼 생성
      *
+     *
      * @param articleDTO 생성할 칼럼의 세부 정보가 포함된 DTO
      * @return 생성된 칼럼의 DTO와 상태 코드 201 (Created)
      */
