@@ -2,7 +2,6 @@ package jeje.work.aeatbe.mapper.article;
 
 import jeje.work.aeatbe.dto.article.ArticleResponseDTO;
 import jeje.work.aeatbe.entity.Article;
-import jeje.work.aeatbe.utility.ArticleUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

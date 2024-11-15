@@ -22,7 +22,6 @@ public class ArticleTest {
         article = Article.builder()
             .id(1L)
             .title("Sample Article")
-            .date(Timestamp.valueOf("2023-10-31 10:00:00"))
             .author("Author Name")
             .tags("test, article")
             .content("This is a sample article content.")
@@ -36,7 +35,6 @@ public class ArticleTest {
         Article newArticle = Article.builder()
             .id(1L)
             .title("Sample Article")
-//            .date(Timestamp.valueOf("2023-10-31 10:00:00"))
             .author("Author Name")
             .tags("test, article")
             .content("This is a sample article content.")
@@ -58,27 +56,6 @@ public class ArticleTest {
         assertNull(article.getAuthor());
         assertNull(article.getContent());
     }
-
-    /*
-     * @see ArticleLike
-     */
-//    @Test
-//    @DisplayName("좋아요 증가 메서드 테스트")
-//    void testUpLike() {
-//        article.upLike();
-//        assertThat(article.getLikes()).isEqualTo(1);
-//    }
-
-    /*
-     * @see ArticleLike
-     */
-//    @Test
-//    @DisplayName("좋아요 감소 메서드 테스트")
-//    void testDownLike() {
-//        article.upLike();
-//        article.downLike();
-//        assertThat(article.getLikes()).isEqualTo(0);
-//    }
 
     @Test
     @DisplayName("Null 필드 허용 검증 테스트")
