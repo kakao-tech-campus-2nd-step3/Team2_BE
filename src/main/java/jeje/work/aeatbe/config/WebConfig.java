@@ -31,7 +31,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/users/logout/**")
                 .addPathPatterns("/api/wishlist/**")
                 .addPathPatterns("/api/reviews/my/**")
-                .addPathPatterns("/api/users/info/**");
+                .addPathPatterns("/api/users/info/**")
+                .addPathPatterns("/api/chatgpt");
     }
 
     @Override
