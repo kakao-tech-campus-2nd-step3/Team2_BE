@@ -143,11 +143,11 @@ public class EntityRepositoryTests {
 
     @Test
     public void testCreateAllergyCategory() {
-        AllergyCategoryDTO categoryDTO = AllergyCategoryDTO.builder().allergyType("TEST").build();
+        AllergyCategoryDTO categoryDTO = AllergyCategoryDTO.builder().type("TEST").build();
 
         AllergyCategory category = new AllergyCategory(
             categoryDTO.id(),
-            categoryDTO.allergyType()
+            categoryDTO.type()
         );
 
         AllergyCategory savedCategory = allergyCategoryRepository.save(category);
