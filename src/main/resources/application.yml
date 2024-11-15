@@ -13,24 +13,23 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://ls-38256e2c709eb673a54cb785292b2b146d8c8bd6.ch2008eu6uht.ap-northeast-2.rds.amazonaws.com:3306/785292b2b
-    username: dbaeatbedb
-    password: s5gpw{67h}aL|+Z<gC~7rw)5iz9J]HGV
+    # url: jdbc:mysql://localhost:3306/${DB_NAME}${DB_PARAMS}
+    # username: ${DB_USERNAME}
+    # password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
-      #      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create-drop}
-      ddl-auto: none
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:create-drop}
     show-sql: ${SPRING_JPA_SHOW_SQL:true}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: false
+        format_sql: true
     defer-datasource-initialization: true
 
   sql:
     init:
-  #      mode: always
+      mode: always
 
   docker:
     compose:
@@ -50,10 +49,10 @@ spring:
 
 kakao:
   client_id: ${KAKAO_CLIENT_ID}
-  redirect_url: https://${FRONTEND_DOMAIN}/login/redirect
+  redirect_url: http://localhost:8080/api/users/callback
   auth_url: https://kauth.kakao.com/oauth/authorize
   logout_url: https://kauth.kakao.com/oauth/logout
-  logout_redirect_url: https://${FRONTEND_DOMAIN}/logout/redirect
+  logout_redirect_url: http://localhost:8080/api/users/logoutWithKakao/callback
 
 haccp:
   service_key: ${SERVICE_KEY}
@@ -61,8 +60,3 @@ haccp:
 
 default:
   image: https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fbafebf27-4e21-4ed6-99e1-983eb90ad9c0%2F75c38d1f-215b-4536-a401-18cf179bf119%2Fimage.png?table=block&id=137a63f1-9420-8046-9cb6-d218151fd876&cache=v2
-
-shop:
-  client_id: ${SHOP_CLIENT_ID}
-  client_secret: ${SHOP_CLIENT_SECRET}
-  base_url : https://openapi.naver.com/v1/search/shop.json
