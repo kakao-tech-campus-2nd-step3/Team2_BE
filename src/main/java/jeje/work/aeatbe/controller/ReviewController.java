@@ -1,5 +1,6 @@
 package jeje.work.aeatbe.controller;
 
+import jakarta.validation.Valid;
 import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.dto.review.ReviewRequestDTO;
 import jeje.work.aeatbe.dto.review.ReviewResponseDTO;
@@ -62,7 +63,7 @@ public class ReviewController {
      * @return 201 created 응답 코드
      */
     @PostMapping
-    public ResponseEntity<?> postReviews(@RequestBody ReviewRequestDTO reviewDTO,
+    public ResponseEntity<?> postReviews(@RequestBody @Valid ReviewRequestDTO reviewDTO,
                                          @LoginUser LoginUserInfo loginUserInfo) {
         reviewService.createReview(reviewDTO, loginUserInfo.userId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -79,7 +80,7 @@ public class ReviewController {
      */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateReviews(@PathVariable Long id,
-                                           @RequestBody ReviewRequestDTO reviewDTO,
+                                           @RequestBody @Valid ReviewRequestDTO reviewDTO,
                                            @LoginUser LoginUserInfo loginUserInfo) {
         reviewService.updateReviews(id, reviewDTO, loginUserInfo.userId());
         return ResponseEntity.ok().build();

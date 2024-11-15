@@ -1,6 +1,7 @@
 package jeje.work.aeatbe.controller;
 
 
+import jakarta.validation.Valid;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
 import jeje.work.aeatbe.service.ProductService;
@@ -79,7 +80,7 @@ public class ProductController {
      */
     @PostMapping
     public ResponseEntity<?> postProducts(
-            @RequestBody ProductDTO productDTO,
+            @RequestBody @Valid ProductDTO productDTO,
             @RequestParam List<String> allergies,
             @RequestParam List<String> freeFroms
 //        ,@LoginUser Long userId
@@ -100,7 +101,7 @@ public class ProductController {
      */
     @PatchMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProducts(@PathVariable Long id,
-                                                             @RequestBody ProductDTO productDTO,
+                                                             @RequestBody @Valid ProductDTO productDTO,
                                                              @RequestParam List<String> allergies,
                                                              @RequestParam List<String> freeFroms
                                                              //        ,@LoginUser Long userId

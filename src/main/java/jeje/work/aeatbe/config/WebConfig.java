@@ -2,6 +2,7 @@ package jeje.work.aeatbe.config;
 
 import jeje.work.aeatbe.interceptor.JwtInterceptor;
 import jeje.work.aeatbe.resolver.LoginUserArgumentResolver;
+import jeje.work.aeatbe.service.TokenService;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,13 @@ public class WebConfig implements WebMvcConfigurer {
     private final UserService userService;
     private final JwtInterceptor jwtInterceptor;
     private final JwtUtil jwtUtil;
+    private final TokenService tokenService;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/api/article/likes/**")
+                .excludePathPatterns("/api/article/likes/count/**")
                 .addPathPatterns("/api/users/logout/**")
                 .addPathPatterns("/api/wishlist/**")
                 .addPathPatterns("/api/reviews/my/**")
@@ -34,7 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new LoginUserArgumentResolver(jwtUtil, userService));
+        argumentResolvers.add(new LoginUserArgumentResolver(jwtUtil));
     }
 
     @Override

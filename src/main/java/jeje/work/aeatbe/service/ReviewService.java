@@ -89,7 +89,8 @@ public class ReviewService {
      */
     public ReviewResponseDTO getReviewResponseDTO(ReviewDTO review) {
         var userDTO = userService.getUserInfo(review.userId());
-        return reviewResponseMapper.toDTO(review, userDTO);
+        var productDTO = productService.getProductDTO(review.productId());
+        return reviewResponseMapper.toDTO(review, userDTO, productDTO);
     }
 
     /**
@@ -132,15 +133,18 @@ public class ReviewService {
      */
     @Transactional
     public void createReview(ReviewRequestDTO reviewRequestDTO, Long userId) {
-
         ReviewDTO reviewDTO = reviewRequestMapper.toDTO(reviewRequestDTO);
 
         User user = userService.findById(userId);
         Product product = productMapper.toEntity(productService.getProductDTO(reviewDTO.productId()), true);
 
         Review review = reviewMapper.toEntity(reviewDTO, user, product, false);
+
+        product.addReview(review);
+
         reviewRepository.save(review);
     }
+
 
     /**
      * 리뷰 수정

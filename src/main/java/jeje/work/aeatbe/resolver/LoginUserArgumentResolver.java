@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jeje.work.aeatbe.annotation.LoginUser;
 import jeje.work.aeatbe.dto.user.LoginUserInfo;
 import jeje.work.aeatbe.exception.TokenException;
+import jeje.work.aeatbe.exception.TokenExpException;
+import jeje.work.aeatbe.service.TokenService;
 import jeje.work.aeatbe.service.UserService;
 import jeje.work.aeatbe.utility.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final JwtUtil jwtUtil;
-    private final UserService userService;
 
 
     @Override
@@ -31,6 +32,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+
         String token = request.getHeader("Authorization");
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
