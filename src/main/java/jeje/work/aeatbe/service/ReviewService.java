@@ -132,15 +132,18 @@ public class ReviewService {
      */
     @Transactional
     public void createReview(ReviewRequestDTO reviewRequestDTO, Long userId) {
-
         ReviewDTO reviewDTO = reviewRequestMapper.toDTO(reviewRequestDTO);
 
         User user = userService.findById(userId);
         Product product = productMapper.toEntity(productService.getProductDTO(reviewDTO.productId()), true);
 
         Review review = reviewMapper.toEntity(reviewDTO, user, product, false);
+
+        product.addReview(review);
+
         reviewRepository.save(review);
     }
+
 
     /**
      * 리뷰 수정
