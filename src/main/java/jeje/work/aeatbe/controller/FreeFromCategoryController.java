@@ -20,6 +20,10 @@ public class FreeFromCategoryController {
     @Autowired
     private FreeFromCategoryService freeFromCategoryService;
 
+    /**
+     * 프리프롬 카테고리 전부 반환하는 기능
+     * @return 프리프롬 카테고리 dto
+     */
     @GetMapping("/all")
     public ResponseEntity<List<FreeFromCategoryDTO>> all() {
         return ResponseEntity.ok().body(freeFromCategoryService.getAllFreeFromCategory());
