@@ -26,7 +26,7 @@ public class FreeFromCategoryMapperTest {
         // Assert
         assertNotNull(dto, "DTO는 null이 아님");
         assertEquals(entity.getId(), dto.id(), "ID 일치");
-        assertEquals(entity.getFreeFromType(), dto.freeFromType(), "freeFromType 일치");
+        assertEquals(entity.getFreeFromType(), dto.type(), "freeFromType 일치");
     }
 
     @Test
@@ -35,7 +35,7 @@ public class FreeFromCategoryMapperTest {
         // Arrange
         FreeFromCategoryDTO dto = FreeFromCategoryDTO.builder()
                 .id(1L)
-                .freeFromType("Gluten")
+                .type("Gluten")
                 .build();
 
         // Act
@@ -44,7 +44,7 @@ public class FreeFromCategoryMapperTest {
         // Assert
         assertNotNull(entity, "엔티티는 null이 아님");
         assertEquals(dto.id(), entity.getId(), "ID 일치");
-        assertEquals(dto.freeFromType(), entity.getFreeFromType(), "freeFromType 일치");
+        assertEquals(dto.type(), entity.getFreeFromType(), "freeFromType 일치");
     }
 
     @Test
@@ -53,7 +53,7 @@ public class FreeFromCategoryMapperTest {
         // Arrange
         FreeFromCategoryDTO dto = FreeFromCategoryDTO.builder()
                 .id(1L)
-                .freeFromType("Gluten")
+                .type("Gluten")
                 .build();
 
         // Act
@@ -62,6 +62,6 @@ public class FreeFromCategoryMapperTest {
         // Assert
         assertNotNull(entity, "엔티티는 null이 아님");
         assertNull(entity.getId(), "idRequired가 false인 경우 ID는 null");
-        assertEquals(dto.freeFromType(), entity.getFreeFromType(), "freeFromType 일치");
+        assertEquals(dto.type(), entity.getFreeFromType(), "freeFromType 일치");
     }
 }

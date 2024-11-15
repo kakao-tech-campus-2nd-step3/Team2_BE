@@ -61,7 +61,7 @@ public class AllergyCategoryService {
         return allergyCategories.stream()
                 .map(data -> AllergyCategoryDTO.builder()
                         .id(data.getId())
-                        .allergyType(data.getAllergyType())
+                        .type(data.getAllergyType())
                         .build())
                 .collect(Collectors.toList());
     }
