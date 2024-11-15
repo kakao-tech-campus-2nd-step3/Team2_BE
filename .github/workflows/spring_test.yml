@@ -33,6 +33,9 @@ jobs:
           REDIS_HOST = yeah
           REDIS_ID = hello
           REDIS_PASSWORD = redis
+          SHOP_CLIENT_ID = whatthe
+          SHOP_CLIENT_SECRET = hotpotato
+          GPT_SECRET_KEY = last_secret_key
 
           EOF
 

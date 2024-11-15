@@ -2,6 +2,7 @@ package jeje.work.aeatbe.controller;
 
 import jeje.work.aeatbe.dto.user.RefreshTokenRequestDTO;
 import jeje.work.aeatbe.dto.user.TokenResponseDTO;
+import jeje.work.aeatbe.exception.TokenException;
 import jeje.work.aeatbe.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -25,9 +26,10 @@ public class TokenController {
      * @return 헤더에 토큰 재발급
      */
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponseDTO> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO) {
+    public ResponseEntity<TokenResponseDTO> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO)
+            throws TokenException {
         TokenResponseDTO tokenResponseDto = userService.reissueAccessToken(refreshTokenRequestDTO.refreshToken());
-        HttpHeaders httpHeaders = userService.setCookie(tokenResponseDto);
+//        HttpHeaders httpHeaders = userService.setCookie(tokenResponseDto);
         return ResponseEntity.ok().body(tokenResponseDto);
     }
 }

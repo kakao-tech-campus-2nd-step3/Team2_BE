@@ -19,7 +19,7 @@ public class FreeFromCategoryMapper {
     public FreeFromCategoryDTO toDTO(FreeFromCategory freeFromCategory) {
         return FreeFromCategoryDTO.builder()
                 .id(freeFromCategory.getId())
-                .freeFromType(freeFromCategory.getFreeFromType())
+                .type(freeFromCategory.getFreeFromType())
                 .build();
     }
 
@@ -32,7 +32,7 @@ public class FreeFromCategoryMapper {
     public FreeFromCategory toEntity(FreeFromCategoryDTO freeFromCategoryDTO, boolean idRequired) {
         FreeFromCategory freeFromCategory = FreeFromCategory.builder()
                 .id(idRequired ? freeFromCategoryDTO.id() : null)
-                .freeFromType(freeFromCategoryDTO.freeFromType())
+                .freeFromType(freeFromCategoryDTO.type())
                 .build();
 
         return freeFromCategory;

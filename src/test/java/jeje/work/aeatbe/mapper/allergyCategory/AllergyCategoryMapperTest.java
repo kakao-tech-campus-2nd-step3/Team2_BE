@@ -25,7 +25,7 @@ public class AllergyCategoryMapperTest {
         // Assert
         assertNotNull(dto, "DTO는 null이 아님");
         assertEquals(entity.getId(), dto.id(), "ID 일치");
-        assertEquals(entity.getAllergyType(), dto.allergyType(), "알레르기 유형 일치");
+        assertEquals(entity.getAllergyType(), dto.type(), "알레르기 유형 일치");
     }
 
     @Test
@@ -34,7 +34,7 @@ public class AllergyCategoryMapperTest {
         // Arrange
         AllergyCategoryDTO dto = AllergyCategoryDTO.builder()
                 .id(1L)
-                .allergyType("Peanut")
+                .type("Peanut")
                 .build();
 
         // Act
@@ -43,7 +43,7 @@ public class AllergyCategoryMapperTest {
         // Assert
         assertNotNull(entity, "엔티티는 null이 아님");
         assertEquals(dto.id(), entity.getId(), "ID 일치");
-        assertEquals(dto.allergyType(), entity.getAllergyType(), "알레르기 유형 일치");
+        assertEquals(dto.type(), entity.getAllergyType(), "알레르기 유형 일치");
     }
 
     @Test
@@ -52,7 +52,7 @@ public class AllergyCategoryMapperTest {
         // Arrange
         AllergyCategoryDTO dto = AllergyCategoryDTO.builder()
                 .id(1L)
-                .allergyType("Peanut")
+                .type("Peanut")
                 .build();
 
         // Act
@@ -61,6 +61,6 @@ public class AllergyCategoryMapperTest {
         // Assert
         assertNotNull(entity, "엔티티는 null이 아님");
         assertNull(entity.getId(), "idRequired가 false인 경우 ID는 null");
-        assertEquals(dto.allergyType(), entity.getAllergyType(), "알레르기 유형 일치");
+        assertEquals(dto.type(), entity.getAllergyType(), "알레르기 유형 일치");
     }
 }

@@ -5,11 +5,10 @@ import lombok.*;
 
 @Entity
 @Table(
-        name = "article_likes",
-        indexes = {
-                @Index(name = "idx_article_id", columnList = "article_id"),
-                @Index(name = "idx_user_id", columnList = "user_id")
-        })
+    name = "article_likes",
+    indexes = {
+        @Index(name = "idx_article_user",columnList ="article_id, user_id"),
+    })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

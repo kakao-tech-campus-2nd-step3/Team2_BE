@@ -25,6 +25,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             throws Exception {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+
         if (header == null || !header.startsWith("Bearer ")) {
             throw new TokenException("헤더에 올바른 인증 토큰이 필요합니다.(Bearer )");
         }

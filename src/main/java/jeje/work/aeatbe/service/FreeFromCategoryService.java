@@ -1,6 +1,10 @@
 package jeje.work.aeatbe.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import jeje.work.aeatbe.dto.allergyCategory.AllergyCategoryDTO;
 import jeje.work.aeatbe.dto.freeFromCategory.FreeFromCategoryDTO;
+import jeje.work.aeatbe.entity.AllergyCategory;
 import jeje.work.aeatbe.entity.FreeFromCategory;
 import jeje.work.aeatbe.exception.FreeFromCategoryNotFoundException;
 import jeje.work.aeatbe.mapper.freeFromCategory.FreeFromCategoryMapper;
@@ -46,5 +50,16 @@ public class FreeFromCategoryService {
         FreeFromCategory freeFromCategory = freeFromCategoryRepository.findByFreeFromType(s)
                 .orElseThrow(() -> new FreeFromCategoryNotFoundException("해당 알레르기 카테고리가 존재하지 않습니다."));
         return freeFromCategoryMapper.toDTO(freeFromCategory);
+    }
+
+    @Transactional(readOnly = true)
+    public List<FreeFromCategoryDTO> getAllFreeFromCategory() {
+        List<FreeFromCategory> freeFromCategories = freeFromCategoryRepository.findAll();
+        return freeFromCategories.stream()
+            .map(data -> FreeFromCategoryDTO.builder()
+                .id(data.getId())
+                .type(data.getFreeFromType())
+                .build())
+            .collect(Collectors.toList());
     }
 }

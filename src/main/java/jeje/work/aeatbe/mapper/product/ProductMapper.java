@@ -30,6 +30,7 @@ public class ProductMapper {
                 .ingredients(product.getIngredients())
                 .price(product.getPrice())
                 .tag(product.getTag())
+                .mallName(product.getMallName())
                 .build();
     }
 
@@ -53,6 +54,7 @@ public class ProductMapper {
                 .ingredients(productDTO.ingredients())
                 .price(productDTO.price())
                 .tag(productDTO.tag())
+                .mallName(productDTO.mallName())
                 .build();
 
         return product;

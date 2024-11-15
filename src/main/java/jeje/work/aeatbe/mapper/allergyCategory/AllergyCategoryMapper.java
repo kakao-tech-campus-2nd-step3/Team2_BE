@@ -19,7 +19,7 @@ public class AllergyCategoryMapper {
     public AllergyCategoryDTO toDTO(AllergyCategory entity) {
         return AllergyCategoryDTO.builder()
                 .id(entity.getId())
-                .allergyType(entity.getAllergyType())
+                .type(entity.getAllergyType())
                 .build();
     }
 
@@ -32,7 +32,7 @@ public class AllergyCategoryMapper {
     public AllergyCategory toEntity(AllergyCategoryDTO dto, boolean idRequired) {
         return AllergyCategory.builder()
                 .id(idRequired ? dto.id() : null)
-                .allergyType(dto.allergyType())
+                .allergyType(dto.type())
                 .build();
     }
 

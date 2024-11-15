@@ -1,6 +1,7 @@
 package jeje.work.aeatbe.controller;
 
 
+import jakarta.validation.Valid;
 import jeje.work.aeatbe.dto.product.ProductDTO;
 import jeje.work.aeatbe.dto.product.ProductResponseDTO;
 import jeje.work.aeatbe.service.ProductService;
@@ -41,7 +42,7 @@ public class ProductController {
      * @return 전체 상품 목록
      */
     @GetMapping
-    public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(@RequestParam String q,
+    public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(@RequestParam(required = false) String q,
                                                                    @RequestParam(required = false) List<String> allergy,
                                                                    @RequestParam(required = false) List<String> freeFroms,
                                                                    @RequestParam(required = false, defaultValue = "0") int priceMin,
@@ -79,7 +80,7 @@ public class ProductController {
      */
     @PostMapping
     public ResponseEntity<?> postProducts(
-            @RequestBody ProductDTO productDTO,
+            @RequestBody @Valid ProductDTO productDTO,
             @RequestParam List<String> allergies,
             @RequestParam List<String> freeFroms
 //        ,@LoginUser Long userId
@@ -100,7 +101,7 @@ public class ProductController {
      */
     @PatchMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProducts(@PathVariable Long id,
-                                                             @RequestBody ProductDTO productDTO,
+                                                             @RequestBody @Valid ProductDTO productDTO,
                                                              @RequestParam List<String> allergies,
                                                              @RequestParam List<String> freeFroms
                                                              //        ,@LoginUser Long userId
@@ -124,5 +125,18 @@ public class ProductController {
     ) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PostMapping("/initialize-allergies")
+    public ResponseEntity<String> initializeAllergiesMapping() {
+        productService.initializeProductAllergiesMapping();
+        return ResponseEntity.ok("Product-Allergy 연관 관계가 초기화되었습니다.");
+    }
+
+    @PostMapping("/initialize-freeFrom")
+    public ResponseEntity<String> initializeFreeFromMapping() {
+        productService.initializeProductFreeFromMapping();
+        return ResponseEntity.ok("Product-FreeFrom 연관 관계가 초기화되었습니다.");
     }
 }
