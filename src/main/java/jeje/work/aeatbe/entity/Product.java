@@ -94,4 +94,8 @@ public class Product extends BaseEntity {
         this.tag = tag;
     }
 
+    public void addReview(Review review) {
+        this.reviews.add(review);
+    }
+
 }

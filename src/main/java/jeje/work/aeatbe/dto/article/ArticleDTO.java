@@ -13,6 +13,7 @@ public record ArticleDTO(
         @NotNull(message = "제목이 존재해야 합니다.")
         @Size(max = 100, message = "제목이 100자를 초과할 수 없습니다.")
         String title,
+        String subTitle,
         Timestamp date,
         @NotNull(message = "저자가 존재해야 합니다.")
         @Size(max = 50, message = "저자의 이름이 50자를 초과할 수 없습니다.")
@@ -24,5 +25,6 @@ public record ArticleDTO(
         int likes,
         @URL(message = "유효하지 않는 URL 형식입니다.")
         String thumbnailUrl
+
 ) {
 }
