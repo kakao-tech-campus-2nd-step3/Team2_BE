@@ -27,7 +27,6 @@ public class ArticleTest {
             .tags("test, article")
             .content("This is a sample article content.")
             .thumbnailUrl("http://example.com/image.jpg")
-            .likes(0)
             .build();
     }
 
@@ -37,18 +36,16 @@ public class ArticleTest {
         Article newArticle = Article.builder()
             .id(1L)
             .title("Sample Article")
-            .date(Timestamp.valueOf("2023-10-31 10:00:00"))
+//            .date(Timestamp.valueOf("2023-10-31 10:00:00"))
             .author("Author Name")
             .tags("test, article")
             .content("This is a sample article content.")
             .thumbnailUrl("http://example.com/image.jpg")
-            .likes(0)
             .build();
 
         assertThat(newArticle.getId()).isEqualTo(1L);
         assertThat(newArticle.getTitle()).isEqualTo("Sample Article");
         assertThat(newArticle.getAuthor()).isEqualTo("Author Name");
-        assertThat(newArticle.getLikes()).isEqualTo(0);
     }
 
     @Test
@@ -62,20 +59,26 @@ public class ArticleTest {
         assertNull(article.getContent());
     }
 
-    @Test
-    @DisplayName("좋아요 증가 메서드 테스트")
-    void testUpLike() {
-        article.upLike();
-        assertThat(article.getLikes()).isEqualTo(1);
-    }
+    /*
+     * @see ArticleLike
+     */
+//    @Test
+//    @DisplayName("좋아요 증가 메서드 테스트")
+//    void testUpLike() {
+//        article.upLike();
+//        assertThat(article.getLikes()).isEqualTo(1);
+//    }
 
-    @Test
-    @DisplayName("좋아요 감소 메서드 테스트")
-    void testDownLike() {
-        article.upLike();
-        article.downLike();
-        assertThat(article.getLikes()).isEqualTo(0);
-    }
+    /*
+     * @see ArticleLike
+     */
+//    @Test
+//    @DisplayName("좋아요 감소 메서드 테스트")
+//    void testDownLike() {
+//        article.upLike();
+//        article.downLike();
+//        assertThat(article.getLikes()).isEqualTo(0);
+//    }
 
     @Test
     @DisplayName("Null 필드 허용 검증 테스트")
@@ -83,7 +86,7 @@ public class ArticleTest {
         Article articleWithNullFields = Article.builder()
             .id(2L)
             .title("Another Article")
-            .date(Timestamp.valueOf("2023-11-01 12:00:00"))
+//            .date(Timestamp.valueOf("2023-11-01 12:00:00"))
             .author("Another Author")
             .content("This article has some nullable fields.")
             .build();

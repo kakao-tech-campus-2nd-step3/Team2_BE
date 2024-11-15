@@ -8,11 +8,13 @@ import java.sql.Timestamp;
 public record ArticleDTO(
         Long id,
         String title,
+        String subTitle,
         Timestamp date,
         String author,
         String tags,
         String content,
         int likes,
         String thumbnailUrl
+
 ) {
 }
